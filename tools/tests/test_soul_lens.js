@@ -2,10 +2,11 @@
 //
 // The tooltip is the game's own panel, so the behaviour that matters here is what
 // the script does with a tree it did not build: read the card, write the strip,
-// refuse an unknown item, and never throw. The panel API below is the subset the
-// script uses (FindChildTraverse, GetChildCount/GetChild, GetAttributeString,
-// GetParent, text, AddClass/RemoveClass), so a method the script calls and the
-// game does not have would show up here as a missing function first.
+// label each row with its source, refuse an unknown item, and never throw. The
+// panel API below is the subset the script uses (FindChildTraverse,
+// GetChildCount/GetChild, GetAttributeString, GetParent, text, AddClass/RemoveClass),
+// so a method the script calls and the game does not have would show up here as a
+// missing function first.
 "use strict";
 
 const fs = require("fs");
@@ -61,11 +62,20 @@ function tree(itemName, cost, hero) {
     costLabel.text = String(cost);
     const lens = new Panel("SoulLens", "SoulLens", contents);
     new Panel("SoulLensHead", "SoulLensHead", lens);
-    new Panel("SoulLensWp", "SoulLensValue", lens);
-    new Panel("SoulLensDps", "SoulLensValue", lens);
+    for (const row of [["SoulLensWp", "SoulLensWpSrc"], ["SoulLensWpa", "SoulLensWpaSrc"],
+                       ["SoulLensDps", "SoulLensDpsSrc"]]) {
+        const wrapper = new Panel("", "SoulLensRow", lens);
+        new Panel("", "SoulLensKey", wrapper);
+        new Panel(row[0], "SoulLensValue", wrapper);
+        new Panel(row[1], "SoulLensTag", wrapper);
+    }
     new Panel("SoulLensBuy", "SoulLensBuy", lens);
     new Panel("SoulLensSrc", "SoulLensSrc", lens);
     return { root, lens };
+}
+
+function clone(value) {
+    return JSON.parse(JSON.stringify(value));
 }
 
 function load(panel, dataSource) {
@@ -82,7 +92,8 @@ function load(panel, dataSource) {
     };
     vm.createContext(sandbox);
     if (dataSource !== null) {
-        vm.runInContext(fs.readFileSync(path.join(ROOT, "panorama/scripts/soul_lens_data.js"), "utf8"), sandbox);
+        const source = "window.SoulLensData = " + JSON.stringify(dataSource) + ";";
+        vm.runInContext(source, sandbox);
     } else {
         sandbox.window.SoulLensData = null;
     }
@@ -92,6 +103,9 @@ function load(panel, dataSource) {
     for (let step = 0; step < 3 && queue.length; step += 1) queue.shift()();
     return { panel, queue };
 }
+
+function rowOf(lens, id) { return lens.FindChildTraverse(id); }
+function tagOf(lens, id) { return lens.FindChildTraverse(id); }
 
 let failures = 0;
 function check(name, condition, detail) {
@@ -104,28 +118,115 @@ function check(name, condition, detail) {
 }
 
 const data = JSON.parse(fs.readFileSync(path.join(ROOT, "data/items.json"), "utf8"));
-const weapon = Object.values(data.items).find((row) => row.wp > 0 && row.souls_per_wp);
-const spirit = Object.values(data.items).find((row) => row.wp === 0 && row.cost);
+const minMatches = data.model.min_matches;
+
+// A worked example: a hero with a positive, well-sampled WPA row for a weapon item.
+const worked = (() => {
+    for (const [heroKey, hero] of Object.entries(data.heroes)) {
+        for (const [itemKey, measured] of Object.entries(hero.wpa)) {
+            const item = data.items[itemKey];
+            if (!item || measured.wpa <= 0 || measured.matches < minMatches) continue;
+            if (!item.souls_per_wp) continue;
+            return { hero, heroKey, item, measured };
+        }
+    }
+    return null;
+})();
 
 {
-    const { root, lens } = tree(weapon.name, weapon.cost);
+    check("the bake has a worked example", worked !== null);
+    const { root, lens } = tree(worked.item.name, worked.item.cost, worked.hero.name);
     load(root, data);
-    const wp = lens.FindChildTraverse("SoulLensWp").text;
-    const dps = lens.FindChildTraverse("SoulLensDps").text;
+    const wp = rowOf(lens, "SoulLensWp").text;
     check("weapon row names the ratio", wp.includes("souls / +1%"), wp);
-    check("weapon row uses the catalog number", wp.includes("+" + weapon.wp + "% power"), wp);
+    check("weapon row uses the catalog number", wp.includes("+" + worked.item.wp + "% power"), wp);
+    check("weapon row is tagged with its source", tagOf(lens, "SoulLensWpSrc").text === "dl-api",
+        tagOf(lens, "SoulLensWpSrc").text);
+
+    const wpa = rowOf(lens, "SoulLensWpa").text;
+    check("wpa row prints the measured percentage", wpa.includes("WPA"), wpa);
+    check("wpa row names souls per +1%", wpa.includes("souls / +1%"), wpa);
+    const expected = Math.round(worked.item.cost / worked.measured.wpa);
+    check("wpa ratio is cost over the measured wpa", wpa.includes(String(expected)), wpa);
+    check("wpa row is tagged dl-api", tagOf(lens, "SoulLensWpaSrc").text === "dl-api",
+        tagOf(lens, "SoulLensWpaSrc").text);
+
+    const dps = rowOf(lens, "SoulLensDps").text;
     check("dps row is present", dps.includes("souls / +1%"), dps);
-    check("price comes from the live card", wp.includes(String(Math.round(weapon.cost / weapon.wp))), wp);
-    const buy = lens.FindChildTraverse("SoulLensBuy").text;
-    check("buy line carries the measured time", buy.includes("buy ≈"), buy);
-    const src = lens.FindChildTraverse("SoulLensSrc").text;
+    check("dps row is tagged with its source", tagOf(lens, "SoulLensDpsSrc").text === "dl-api",
+        tagOf(lens, "SoulLensDpsSrc").text);
+
+    const buy = rowOf(lens, "SoulLensBuy").text;
+    check("buy line carries the hero's own measured time", buy.includes("(" + worked.hero.name + ")"), buy);
+    const src = rowOf(lens, "SoulLensSrc").text;
     check("source line names statlocker's refusal", src.includes("statlocker"), src);
 }
 
 {
+    // statlocker, when its keyed answer carries the item, is the WPA the row prints.
+    const itemKey = Object.keys(data.items).find((key) => data.items[key].souls_per_wp);
+    const item = data.items[itemKey];
+    const withStatlocker = clone(data);
+    withStatlocker.sources.statlocker = { state: "read", rows: 1, skipped: 0, reason: null };
+    withStatlocker.items[itemKey].wpa = 0.5;
+    const { root, lens } = tree(item.name, item.cost);
+    load(root, withStatlocker);
+    const wpa = rowOf(lens, "SoulLensWpa").text;
+    check("statlocker wpa is printed", wpa.includes("+0.5% WPA"), wpa);
+    check("statlocker wpa ratio uses statlocker's figure", wpa.includes(String(Math.round(item.cost / 0.5))), wpa);
+    check("statlocker row is tagged statlocker", tagOf(lens, "SoulLensWpaSrc").text === "statlocker",
+        tagOf(lens, "SoulLensWpaSrc").text);
+}
+
+{
+    // A hero the bake does not know must explain itself, not fall back to a number
+    // that belongs to another hero.
+    const itemKey = Object.keys(data.items).find((key) => data.items[key].souls_per_wp);
+    const { root, lens } = tree(data.items[itemKey].name, data.items[itemKey].cost, "Test Hero");
+    load(root, data);
+    const wpa = rowOf(lens, "SoulLensWpa").text;
+    check("an unknown hero is named in the wpa row", wpa.includes("no Test Hero rows in this bake"), wpa);
+    check("the unknown hero row is styled as missing", tagOf(lens, "SoulLensWpaSrc").HasClass("SoulLensTagNone"));
+}
+
+{
+    // An item the hero has no rows for is a sentence about that item.
+    const hero = Object.values(data.heroes)[0];
+    const missing = Object.keys(data.items).find((key) => data.items[key].souls_per_wp && !hero.wpa[key]);
+    if (missing) {
+        const { root, lens } = tree(data.items[missing].name, data.items[missing].cost, hero.name);
+        load(root, data);
+        const wpa = rowOf(lens, "SoulLensWpa").text;
+        check("a missing hero item row says so", wpa.includes("no " + hero.name + " rows for this item"), wpa);
+    } else {
+        check("a missing hero item row says so", false, "every item has a row for the first hero");
+    }
+}
+
+{
+    // A row under the sample floor prints its count and refuses the figure.
+    let small = null;
+    for (const hero of Object.values(data.heroes)) {
+        for (const [itemKey, measured] of Object.entries(hero.wpa)) {
+            if (measured.matches < minMatches && data.items[itemKey]) { small = { hero, itemKey, measured }; break; }
+        }
+        if (small) break;
+    }
+    check("the bake has an under-threshold row", small !== null);
+    if (small) {
+        const { root, lens } = tree(data.items[small.itemKey].name, data.items[small.itemKey].cost, small.hero.name);
+        load(root, data);
+        const wpa = rowOf(lens, "SoulLensWpa").text;
+        check("a small sample prints its count and the floor",
+            wpa.includes(String(small.measured.matches)) && wpa.includes("under " + minMatches), wpa);
+    }
+}
+
+{
+    const spirit = Object.values(data.items).find((row) => row.wp === 0 && row.cost);
     const { root, lens } = tree(spirit.name, spirit.cost);
     load(root, data);
-    const wp = lens.FindChildTraverse("SoulLensWp");
+    const wp = rowOf(lens, "SoulLensWp");
     check("a spirit item refuses a weapon number", wp.text.includes("no weapon power term"), wp.text);
     check("the refusal is styled as missing", wp.HasClass("SoulLensNone"));
 }
@@ -134,39 +235,23 @@ const spirit = Object.values(data.items).find((row) => row.wp === 0 && row.cost)
     const { root, lens } = tree("An Item From A Later Patch", 3200);
     load(root, data);
     check("an unknown item is named, not guessed",
-        lens.FindChildTraverse("SoulLensWp").text.includes("no stat line for this item"));
+        rowOf(lens, "SoulLensWp").text.includes("no stat line for this item"));
+    check("an unknown item has no wpa number", rowOf(lens, "SoulLensWpa").text === "",
+        rowOf(lens, "SoulLensWpa").text);
 }
 
 {
-    const { root, lens } = tree(weapon.name, weapon.cost);
+    const { root, lens } = tree(worked.item.name, worked.item.cost);
     load(root, null);
     check("a missing data file is a refusal, not a crash",
-        lens.FindChildTraverse("SoulLensWp").text.includes("did not load"));
+        rowOf(lens, "SoulLensWp").text.includes("did not load"));
 }
 
 {
-    const { root, lens } = tree(weapon.name, 9999);
+    const { root, lens } = tree(worked.item.name, 9999, worked.hero.name);
     load(root, data);
-    const src = lens.FindChildTraverse("SoulLensSrc").text;
-    check("a live price that disagrees with the bake is shown", src.includes("live 9999"), src);
-}
-
-{
-    // The hero on the shop header selects that hero's own purchase time. The
-    // harness uses the hero the catalogue actually has rows for.
-    const heroKey = Object.keys(data.heroes || {})[0];
-    if (heroKey) {
-        const hero = data.heroes[heroKey];
-        const itemKey = Object.keys(hero.buy).find((key) => data.items[key] && data.items[key].name);
-        const { root, lens } = tree(data.items[itemKey].name, data.items[itemKey].cost, hero.name);
-        load(root, data);
-        const buy = lens.FindChildTraverse("SoulLensBuy").text;
-        check("the header hero's own buy time is used", buy.includes("(" + hero.name + ")"), buy);
-        const head = lens.FindChildTraverse("SoulLensHead").text;
-        check("the header names the hero", head.includes(hero.name.toUpperCase()), head);
-    } else {
-        check("the bake has per-hero purchase times", false, "no heroes in data/items.json");
-    }
+    const src = rowOf(lens, "SoulLensSrc").text;
+    check("a live price that disagrees with the bake is shown", src.includes("live price 9999"), src);
 }
 
 {
@@ -175,7 +260,7 @@ const spirit = Object.values(data.items).find((row) => row.wp === 0 && row.cost)
     const { root, lens } = tree("", 0);
     load(root, data);
     check("an unfilled card stays on reading",
-        lens.FindChildTraverse("SoulLensWp").text.includes("reading the shop"), lens.FindChildTraverse("SoulLensWp").text);
+        rowOf(lens, "SoulLensWp").text.includes("reading the shop"), rowOf(lens, "SoulLensWp").text);
 }
 
 {

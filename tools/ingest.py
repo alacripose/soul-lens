@@ -3,17 +3,21 @@
 Three sources, each named in the output so the overlay never attributes a number to
 the wrong one:
 
-  live game     the installed build's ``steam.inf`` version and the item catalog it
-                ships; the hover itself supplies the price at the moment of reading
-  deadlock-api  ITEM_URL for cost, tier, slot and weapon terms; STATS_URL for the
-                measured average purchase time per item
-  statlocker    WPA_URL with STATLOCKER_API_KEY, or a file from --statlocker-file.
-                Without either, the statlocker column is refused by name rather
-                than filled with a guess.
+  live game       the installed build's ``steam.inf`` version; the hover itself
+                  supplies the price at the moment of reading
+  deadlock-api    ITEM_URL for cost, tier, slot and weapon terms; HERO_STATS_URL for
+                  each hero's own win rate; HERO_ITEM_URL for that hero's item rows
+                  (wins, losses, purchase time). WPA is derived from those wins and
+                  losses, so it is measured rather than modelled.
+  statlocker      WPA_URL with STATLOCKER_API_KEY, or a file from --statlocker-file.
+                  When it answers, its WPA replaces the measured one and is labelled
+                  as statlocker's; without a key the measured value stands and the
+                  absent source is recorded.
 
-The economy is item-local on purpose: souls per +1% weapon power and souls per +1%
-DPS of the hero's own current weapon. DPS is a multiplier, (1+damage)(1+fire rate)-1,
-so it does not need a base damage per hero and cannot silently invent one.
+The economy is item-local on purpose: souls per +1% weapon power, souls per +1% WPA
+and souls per +1% DPS. WPA is the item's win rate minus the hero's own win rate, in
+percentage points; DPS is a multiplier, (1+damage)(1+fire rate)-1, so it does not need
+a base damage per hero and cannot silently invent one.
 
 usage:
   python tools/ingest.py --out data/items.json --js panorama/scripts/soul_lens_data.js
@@ -24,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import hashlib
 import json
 import os
 import pathlib
@@ -34,9 +39,14 @@ import urllib.request
 ITEM_URL = "https://api.deadlock-api.com/v1/assets/items"
 STATS_URL = "https://api.deadlock-api.com/v1/analytics/item-stats"
 HERO_URL = "https://api.deadlock-api.com/v1/assets/heroes"
-HERO_STATS_URL = "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id={id}"
+HERO_STATS_URL = "https://api.deadlock-api.com/v1/analytics/hero-stats"
+HERO_ITEM_URL = "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id={id}"
 WPA_URL = "https://statlocker.gg/api/info/wpa-filtered-items"
 STEAM_INF = pathlib.Path("D:/SteamLibrary/steamapps/common/Deadlock/game/citadel/steam.inf")
+
+# A win-rate delta from fewer matches than this is a reading of noise; the client
+# prints the count and refuses the figure instead of spending souls on it.
+MIN_WPA_MATCHES = 2000
 
 # The weapon terms this economy reads. A conditional or on-active term is not a
 # standing increase, so it is excluded and named in the legend instead.
@@ -80,8 +90,8 @@ def weapon_terms(props: dict) -> dict:
 
 
 def souls_per(cost: float | None, gain: float | None) -> float | None:
-    """Souls per +1 unit of gain. Zero or missing gain has no ratio, not infinity."""
-    if not cost or not gain or gain <= 0:
+    """Souls per +1 unit of gain. Zero, missing or negative gain has no ratio."""
+    if not cost or gain is None or gain <= 0:
         return None
     return round(cost / gain, 1)
 
@@ -130,6 +140,107 @@ def item_rows(assets: list[dict], stats: list[dict]) -> dict[str, dict]:
     return rows
 
 
+def hero_baselines(hero_stats: list[dict]) -> dict[int, dict]:
+    """Each hero's overall win rate, the line WPA is measured against."""
+    out: dict[int, dict] = {}
+    for row in hero_stats:
+        hero_id = row.get("hero_id")
+        wins = row.get("wins")
+        losses = row.get("losses")
+        if isinstance(hero_id, int) and isinstance(wins, int) and isinstance(losses, int) and wins + losses > 0:
+            out[hero_id] = {
+                "wins": wins,
+                "losses": losses,
+                "winrate": round(100.0 * wins / (wins + losses), 4),
+            }
+    return out
+
+
+def wpa(item_wins: int, item_losses: int, baseline: dict | None) -> dict | None:
+    """Win probability added: the item's win rate minus the hero's own, in points."""
+    total = item_wins + item_losses
+    if total <= 0 or not baseline:
+        return None
+    item_rate = 100.0 * item_wins / total
+    return {
+        "wpa": round(item_rate - baseline["winrate"], 4),
+        "item_winrate": round(item_rate, 4),
+        "matches": total,
+    }
+
+
+def hero_analytics(heroes: list[dict], rows: dict[str, dict], baselines: dict[int, dict],
+                   cache: pathlib.Path, *, use_cache: bool, min_matches: int,
+                   progress=None) -> tuple[dict[str, dict], dict, dict]:
+    """Per-hero purchase time and WPA, one request per hero.
+
+    The same item is bought at a different minute by a Haze and by an Abrams, and its
+    win rate differs too, so the hero the player is on decides both numbers. A hero
+    the API has no rows for is left out rather than given the global average or a
+    zero under its name.
+    """
+    item_id_to_key = {row["item_id"]: key for key, row in rows.items() if row.get("item_id") is not None}
+    out: dict[str, dict] = {}
+    source = {"state": "read", "heroes": 0, "rows": 0, "wpa_rows": 0, "small": 0,
+              "skipped": 0, "reason": None, "min_matches": min_matches}
+    provenance: dict[str, dict] = {}
+    for hero in heroes:
+        hero_id = hero.get("id")
+        name = hero.get("name") or ""
+        if not isinstance(hero_id, int) or not name or hero.get("disabled"):
+            source["skipped"] += 1
+            continue
+        cache_file = cache / f"hero-{hero_id}.json"
+        try:
+            payload = fetch(HERO_ITEM_URL.format(id=hero_id), cache_file, use_cache=use_cache)
+        except Exception as error:
+            source["reason"] = f"hero {name}: {error}"
+            continue
+        if not isinstance(payload, list):
+            source["skipped"] += 1
+            continue
+        baseline = baselines.get(hero_id)
+        buy: dict[str, float] = {}
+        wpa_rows: dict[str, dict] = {}
+        for row in payload:
+            item_key = item_id_to_key.get(row.get("item_id"))
+            seconds = row.get("avg_buy_time_s")
+            if item_key and isinstance(seconds, (int, float)) and seconds > 0:
+                current = buy.get(item_key)
+                if current is None or seconds < current:
+                    buy[item_key] = float(seconds)
+            wins = row.get("wins")
+            losses = row.get("losses")
+            if item_key and isinstance(wins, int) and isinstance(losses, int):
+                measured = wpa(wins, losses, baseline)
+                if measured is not None:
+                    wpa_rows[item_key] = measured
+                    source["wpa_rows"] += 1
+                    if measured["matches"] < min_matches:
+                        source["small"] += 1
+        if not buy and not wpa_rows:
+            source["skipped"] += 1
+            continue
+        out[normalize(name)] = {"name": name, "buy": {k: round(v, 1) for k, v in buy.items()},
+                                "wpa": wpa_rows}
+        source["heroes"] += 1
+        source["rows"] += len(buy)
+        digest = hashlib.sha256(cache_file.read_bytes()).hexdigest()[:16] if cache_file.exists() else None
+        provenance[normalize(name)] = {
+            "hero_id": hero_id,
+            "url": HERO_ITEM_URL.format(id=hero_id),
+            "cache": f"data/cache/hero-{hero_id}.json",
+            "sha256_16": digest,
+            "baseline": baseline,
+        }
+        if progress:
+            progress(name, len(buy), len(wpa_rows))
+    if not out and source["state"] == "read":
+        source["state"] = "refused"
+        source["reason"] = source["reason"] or "no hero answered with item rows"
+    return out, source, provenance
+
+
 def statlocker_rows(payload, rows: dict[str, dict]) -> tuple[dict[str, dict], dict]:
     """Read statlocker's WPA listing, whatever row shape it uses, by item name.
 
@@ -157,79 +268,24 @@ def statlocker_rows(payload, rows: dict[str, dict]) -> tuple[dict[str, dict], di
             source["skipped"] += 1
             continue
         name = row.get("name") or row.get("item_name") or row.get("itemName")
-        wpa = None
+        value = None
         for key in ("wpa", "WPA", "win_probability_added", "winProbabilityAdded", "winrate_delta"):
-            value = row.get(key)
-            if isinstance(value, (int, float)):
-                wpa = float(value)
+            candidate = row.get(key)
+            if isinstance(candidate, (int, float)):
+                value = float(candidate)
                 break
-        if not name or wpa is None:
+        if not name or value is None:
             source["skipped"] += 1
             continue
         key = normalize(str(name))
         if key in rows:
-            out[key] = {"wpa": wpa}
+            out[key] = {"wpa": value}
             source["rows"] += 1
         else:
             source["skipped"] += 1
     source["state"] = "read" if out else "refused"
     if not out:
         source["reason"] = "no row named an item in the catalog"
-    return out, source
-
-
-def hero_buy_times(heroes: list[dict], rows: dict[str, dict], cache: pathlib.Path, *, use_cache: bool,
-                   progress=None) -> tuple[dict[str, dict], dict]:
-    """Per-hero purchase times, asked of the API one hero at a time.
-
-    The same item is bought at a different minute by a Haze and by an Abrams, so the
-    hero the player is on is the one that decides the buy line. A hero the API has
-    no rows for is left out rather than given the global average under its name.
-    """
-    item_id_to_key = {}
-    out: dict[str, dict] = {}
-    source = {"state": "read", "heroes": 0, "rows": 0, "skipped": 0, "reason": None}
-    for hero in heroes:
-        hero_id = hero.get("id")
-        name = hero.get("name") or ""
-        if not isinstance(hero_id, int) or not name or hero.get("disabled"):
-            source["skipped"] += 1
-            continue
-        try:
-            payload = fetch(HERO_STATS_URL.format(id=hero_id), cache / f"hero-{hero_id}.json",
-                            use_cache=use_cache)
-        except Exception as error:
-            source["reason"] = f"hero {name}: {error}"
-            continue
-        if not isinstance(payload, list):
-            source["skipped"] += 1
-            continue
-        buy: dict[str, float] = {}
-        for row in payload:
-            item_key = item_id_to_key.get(row.get("item_id"))
-            if item_key is None:
-                # The rows are keyed by the item's numeric id; resolve that id through
-                # the catalog once, before this hero's rows are read.
-                item_key = next((key for key, value in rows.items()
-                                 if value.get("item_id") == row.get("item_id")), None)
-                if item_key is not None:
-                    item_id_to_key[row["item_id"]] = item_key
-            seconds = row.get("avg_buy_time_s")
-            if item_key and isinstance(seconds, (int, float)) and seconds > 0:
-                current = buy.get(item_key)
-                if current is None or seconds < current:
-                    buy[item_key] = float(seconds)
-        if buy:
-            out[normalize(name)] = {"name": name, "buy": {k: round(v, 1) for k, v in buy.items()}}
-            source["heroes"] += 1
-            source["rows"] += len(buy)
-        else:
-            source["skipped"] += 1
-        if progress:
-            progress(name, len(buy))
-    if not out and source["state"] == "read":
-        source["state"] = "refused"
-        source["reason"] = source["reason"] or "no hero answered with purchase times"
     return out, source
 
 
@@ -252,7 +308,10 @@ def live_build() -> dict:
 
 def fetch(url: str, cache: pathlib.Path, *, headers: dict | None = None, use_cache: bool) -> object:
     if use_cache and cache.exists():
-        return json.loads(cache.read_text(encoding="utf-8"))
+        try:
+            return json.loads(cache.read_text(encoding="utf-8"))
+        except Exception:
+            pass
     request = urllib.request.Request(url, headers=headers or {"User-Agent": "soul-lens/1"})
     with urllib.request.urlopen(request, timeout=60) as response:
         body = response.read()
@@ -268,7 +327,8 @@ def main() -> int:
     parser.add_argument("--cache", default="data/cache")
     parser.add_argument("--from-cache", action="store_true")
     parser.add_argument("--no-heroes", action="store_true",
-                        help="skip the per-hero purchase times (one request per hero)")
+                        help="skip the per-hero rows (one request per hero)")
+    parser.add_argument("--min-wpa-matches", type=int, default=MIN_WPA_MATCHES)
     parser.add_argument("--statlocker-file", default="")
     args = parser.parse_args()
 
@@ -289,8 +349,32 @@ def main() -> int:
         print("REFUSED: no shopable upgrade rows in the catalog", file=sys.stderr)
         return 1
 
+    hero_source = {"state": "skipped", "heroes": 0, "rows": 0, "wpa_rows": 0, "small": 0,
+                   "skipped": 0, "reason": "--no-heroes", "min_matches": args.min_wpa_matches}
+    hero_rows: dict[str, dict] = {}
+    provenance: dict[str, dict] = {}
+    baselines: dict[int, dict] = {}
+    if not args.no_heroes:
+        try:
+            heroes = fetch(HERO_URL, cache / "heroes.json", use_cache=args.from_cache)
+            hero_stats = fetch(HERO_STATS_URL, cache / "hero-stats.json", use_cache=args.from_cache)
+            if not isinstance(heroes, list) or not isinstance(hero_stats, list):
+                raise ValueError("heroes or hero-stats was not a list")
+            baselines = hero_baselines(hero_stats)
+            hero_rows, hero_source, provenance = hero_analytics(
+                heroes, rows, baselines, cache, use_cache=args.from_cache,
+                min_matches=args.min_wpa_matches)
+            hero_source["hero_stats_url"] = HERO_STATS_URL
+            hero_source["hero_item_url"] = HERO_ITEM_URL
+            hero_source["baselines"] = len(baselines)
+        except Exception as error:
+            hero_source = {"state": "refused", "reason": str(error), "heroes": 0, "rows": 0,
+                           "wpa_rows": 0, "small": 0, "skipped": 0,
+                           "min_matches": args.min_wpa_matches}
+
     statlocker_payload = None
     key = os.environ.get("STATLOCKER_API_KEY", "").strip()
+    sl_error = ""
     if args.statlocker_file:
         statlocker_payload = json.loads(pathlib.Path(args.statlocker_file).read_text(encoding="utf-8"))
     elif key:
@@ -301,24 +385,12 @@ def main() -> int:
         except Exception as error:
             statlocker_payload = None
             sl_error = str(error)
-    hero_source = {"state": "skipped", "heroes": 0, "rows": 0, "skipped": 0,
-                   "reason": "--no-heroes"}
-    hero_rows: dict[str, dict] = {}
-    if not args.no_heroes:
-        try:
-            heroes = fetch(HERO_URL, cache / "heroes.json", use_cache=args.from_cache)
-            if isinstance(heroes, list):
-                hero_rows, hero_source = hero_buy_times(heroes, rows, cache, use_cache=args.from_cache)
-            else:
-                hero_source = {"state": "refused", "reason": "heroes asset was not a list"}
-        except Exception as error:
-            hero_source = {"state": "refused", "reason": str(error)}
-
     sl_rows, sl_source = statlocker_rows(statlocker_payload, rows)
     if statlocker_payload is None and key and not args.statlocker_file:
-        sl_source["reason"] = locals().get("sl_error", "request failed")
+        sl_source["reason"] = sl_error or "request failed"
     for item_key, extra in sl_rows.items():
         rows[item_key].update(extra)
+    sl_source["url"] = WPA_URL
 
     build = live_build()
     sources = {
@@ -335,9 +407,12 @@ def main() -> int:
         "build_date": build.get("VersionDate", ""),
         "model": {
             "wp": "sum of BaseAttackDamagePercent and WeaponPower",
+            "wpa": "item win rate minus the hero's own win rate, in percentage points, "
+                   "from the recorded wins and losses",
             "dps": "(1 + wp/100) * (1 + fire_rate/100) - 1, in percent of current weapon DPS",
-            "souls": "cost / gain, +infinity refused as null",
+            "souls": "cost / gain; a zero, missing or negative gain is refused as null",
             "buy": "measured average purchase time across the matches deadlock-api holds",
+            "min_matches": args.min_wpa_matches,
             "excluded": list(EXCLUDED_PREFIXES),
         },
         "sources": sources,
@@ -358,13 +433,32 @@ def main() -> int:
         encoding="utf-8",
     )
 
+    provenance_document = {
+        "schema": "soul-lens.provenance/1",
+        "generated": document["generated"],
+        "build": document["build"],
+        "endpoints": {
+            "items": ITEM_URL,
+            "item_stats": STATS_URL,
+            "heroes": HERO_URL,
+            "hero_stats": HERO_STATS_URL,
+            "hero_item_stats": HERO_ITEM_URL,
+            "statlocker": WPA_URL,
+        },
+        "wpa": document["model"]["wpa"],
+        "heroes": dict(sorted(provenance.items())),
+    }
+    provenance_path = out.parent / "provenance.json"
+    provenance_path.write_text(json.dumps(provenance_document, indent=1) + "\n", encoding="utf-8")
+
     with_wp = sum(1 for row in rows.values() if row["wp"] > 0)
     with_dps = sum(1 for row in rows.values() if row["dps"] > 0)
     print(f"items {len(rows)} with weapon power {with_wp} with dps {with_dps}")
+    print(f"heroes {hero_source['heroes']} rows={hero_source['rows']} wpa_rows={hero_source['wpa_rows']} "
+          f"small={hero_source['small']} ({hero_source['state']})")
     print(f"statlocker {sl_source['state']} rows={sl_source['rows']} reason={sl_source['reason']}")
-    print(f"heroes {hero_source['heroes']} with {hero_source['rows']} purchase times ({hero_source['state']})")
     print(f"live build {document['build']} {document['build_date']}")
-    print(f"wrote {out} and {js}")
+    print(f"wrote {out}, {js} and {provenance_path}")
     return 0
 
 

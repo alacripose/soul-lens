@@ -1,0 +1,1587 @@
+{
+ "schema": "soul-lens.fixture/1",
+ "recorded": "2026-11-22T15:15:00+00:00",
+ "why": "recomputation source for the WPA row; recorded from the keyless analytics endpoint",
+ "endpoints": {
+  "hero_item_stats": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=13",
+  "hero_stats": "https://api.deadlock-api.com/v1/analytics/hero-stats",
+  "items": "https://api.deadlock-api.com/v1/assets/items"
+ },
+ "cache": {
+  "file": "data/cache/hero-13.json",
+  "sha256": "46d03165554e78768c641bd234379c8d72f5621b4ce910a2c42c3bdd091989d6"
+ },
+ "hero": {
+  "hero_id": 13,
+  "name": "Haze",
+  "baseline": {
+   "wins": 1625268,
+   "losses": 1406244,
+   "winrate": 53.6125
+  },
+  "wins": 1625268,
+  "losses": 1406244
+ },
+ "items": [
+  {
+   "item_id": 7409189,
+   "name": "Improved Spirit",
+   "class_name": "upgrade_soaring_spirit",
+   "cost": 1600,
+   "wins": 89498,
+   "losses": 74776,
+   "matches": 164274,
+   "avg_buy_time_s": 1061.0147010482488
+  },
+  {
+   "item_id": 26002154,
+   "name": "Melee Charge",
+   "class_name": "upgrade_melee_charge",
+   "cost": 1600,
+   "wins": 3708,
+   "losses": 4434,
+   "matches": 8142,
+   "avg_buy_time_s": 711.9735937116187
+  },
+  {
+   "item_id": 84321454,
+   "name": "Quicksilver Reload",
+   "class_name": "upgrade_quick_silver",
+   "cost": 1600,
+   "wins": 196130,
+   "losses": 154545,
+   "matches": 350675,
+   "avg_buy_time_s": 1057.3166835388893
+  },
+  {
+   "item_id": 98582110,
+   "name": "Stalker",
+   "class_name": "upgrade_weapon_backstabber",
+   "cost": 1600,
+   "wins": 6366,
+   "losses": 6398,
+   "matches": 12764,
+   "avg_buy_time_s": 965.3259949858979
+  },
+  {
+   "item_id": 112198670,
+   "name": "Spirit Shielding",
+   "class_name": "upgrade_spirit_bubble",
+   "cost": 1600,
+   "wins": 61007,
+   "losses": 57171,
+   "matches": 118178,
+   "avg_buy_time_s": 1042.4927228418148
+  },
+  {
+   "item_id": 334300056,
+   "name": "Stamina Mastery",
+   "class_name": "upgrade_superior_stamina",
+   "cost": 3200,
+   "wins": 59000,
+   "losses": 55012,
+   "matches": 114012,
+   "avg_buy_time_s": 1487.107699189559
+  },
+  {
+   "item_id": 339443430,
+   "name": "Frenzy",
+   "class_name": "upgrade_fervor",
+   "cost": 6400,
+   "wins": 54666,
+   "losses": 31513,
+   "matches": 86179,
+   "avg_buy_time_s": 2245.9093746736444
+  },
+  {
+   "item_id": 343572757,
+   "name": "Spirit Burn",
+   "class_name": "upgrade_spirit_burn",
+   "cost": 6400,
+   "wins": 3114,
+   "losses": 2279,
+   "matches": 5393,
+   "avg_buy_time_s": 2166.0828852215836
+  },
+  {
+   "item_id": 365620721,
+   "name": "Glass Cannon",
+   "class_name": "upgrade_glass_cannon",
+   "cost": 6400,
+   "wins": 132885,
+   "losses": 79538,
+   "matches": 212423,
+   "avg_buy_time_s": 1850.9653239056036
+  },
+  {
+   "item_id": 380806748,
+   "name": "Compress Cooldown",
+   "class_name": "upgrade_magic_tempo",
+   "cost": 1600,
+   "wins": 24617,
+   "losses": 22350,
+   "matches": 46967,
+   "avg_buy_time_s": 1203.7255519833075
+  },
+  {
+   "item_id": 381961617,
+   "name": "Active Reload",
+   "class_name": "upgrade_active_reload",
+   "cost": 1600,
+   "wins": 1176755,
+   "losses": 1016887,
+   "matches": 2193642,
+   "avg_buy_time_s": 497.40348197198995
+  },
+  {
+   "item_id": 393974127,
+   "name": "Slowing Bullets",
+   "class_name": "upgrade_slowing_bullets",
+   "cost": 1600,
+   "wins": 66280,
+   "losses": 63028,
+   "matches": 129308,
+   "avg_buy_time_s": 1187.9201054845794
+  },
+  {
+   "item_id": 395867183,
+   "name": "Mystic Shot",
+   "class_name": "upgrade_crackshot",
+   "cost": 1600,
+   "wins": 13667,
+   "losses": 15088,
+   "matches": 28755,
+   "avg_buy_time_s": 1256.9684576595375
+  },
+  {
+   "item_id": 395944548,
+   "name": "Torment Pulse",
+   "class_name": "upgrade_tech_damage_pulse",
+   "cost": 3200,
+   "wins": 794,
+   "losses": 843,
+   "matches": 1637,
+   "avg_buy_time_s": 1650.4618204031765
+  },
+  {
+   "item_id": 465043967,
+   "name": "Spirit Strike",
+   "class_name": "upgrade_acolytes_glove",
+   "cost": 800,
+   "wins": 3017,
+   "losses": 3713,
+   "matches": 6730,
+   "avg_buy_time_s": 529.8793462109955
+  },
+  {
+   "item_id": 493591231,
+   "name": "Lightning Scroll",
+   "class_name": "upgrade_ultimate_burst",
+   "cost": 6400,
+   "wins": 2896,
+   "losses": 2026,
+   "matches": 4922,
+   "avg_buy_time_s": 2154.8317757009345
+  },
+  {
+   "item_id": 499683006,
+   "name": "Bullet Lifesteal",
+   "class_name": "upgrade_vampire",
+   "cost": 1600,
+   "wins": 1088963,
+   "losses": 931515,
+   "matches": 2020478,
+   "avg_buy_time_s": 849.0396980318519
+  },
+  {
+   "item_id": 600033864,
+   "name": "Majestic Leap",
+   "class_name": "upgrade_rocket_booster",
+   "cost": 3200,
+   "wins": 320,
+   "losses": 302,
+   "matches": 622,
+   "avg_buy_time_s": 1625.75884244373
+  },
+  {
+   "item_id": 619484391,
+   "name": "Silence Wave",
+   "class_name": "upgrade_targeted_silence",
+   "cost": 3200,
+   "wins": 28759,
+   "losses": 26206,
+   "matches": 54965,
+   "avg_buy_time_s": 1126.257545710907
+  },
+  {
+   "item_id": 630839635,
+   "name": "Echo Shard",
+   "class_name": "upgrade_ability_power_shard",
+   "cost": 6400,
+   "wins": 10655,
+   "losses": 7494,
+   "matches": 18149,
+   "avg_buy_time_s": 1850.645379910739
+  },
+  {
+   "item_id": 668299740,
+   "name": "Rapid Rounds",
+   "class_name": "upgrade_rapid_rounds",
+   "cost": 800,
+   "wins": 1431862,
+   "losses": 1239771,
+   "matches": 2671633,
+   "avg_buy_time_s": 229.053971110553
+  },
+  {
+   "item_id": 673001892,
+   "name": "Armor Piercer",
+   "class_name": "upgrade_aprounds",
+   "cost": 6400,
+   "wins": 203830,
+   "losses": 134824,
+   "matches": 338654,
+   "avg_buy_time_s": 2194.057388957461
+  },
+  {
+   "item_id": 677738769,
+   "name": "Refresher",
+   "class_name": "upgrade_ability_refresher",
+   "cost": 6400,
+   "wins": 7483,
+   "losses": 6413,
+   "matches": 13896,
+   "avg_buy_time_s": 2416.1060736902705
+  },
+  {
+   "item_id": 690458959,
+   "name": "Express Shot",
+   "class_name": "upgrade_express_shot",
+   "cost": 3200,
+   "wins": 8786,
+   "losses": 9476,
+   "matches": 18262,
+   "avg_buy_time_s": 1420.4099222429088
+  },
+  {
+   "item_id": 709540378,
+   "name": "Cultist Sacrifice",
+   "class_name": "upgrade_non_player_bonus_sacrifice",
+   "cost": 3200,
+   "wins": 23463,
+   "losses": 23375,
+   "matches": 46838,
+   "avg_buy_time_s": 841.3003757632691
+  },
+  {
+   "item_id": 710436191,
+   "name": "Capacitor",
+   "class_name": "upgrade_capacitor",
+   "cost": 6400,
+   "wins": 686158,
+   "losses": 518305,
+   "matches": 1204463,
+   "avg_buy_time_s": 1638.325183920137
+  },
+  {
+   "item_id": 754480263,
+   "name": "Mystic Expansion",
+   "class_name": "upgrade_magic_reach",
+   "cost": 800,
+   "wins": 11423,
+   "losses": 11028,
+   "matches": 22451,
+   "avg_buy_time_s": 1091.0527370718453
+  },
+  {
+   "item_id": 787198704,
+   "name": "Rapid Recharge",
+   "class_name": "upgrade_rapid_recharge",
+   "cost": 3200,
+   "wins": 220058,
+   "losses": 153539,
+   "matches": 373597,
+   "avg_buy_time_s": 1690.9442607943854
+  },
+  {
+   "item_id": 800008313,
+   "name": "Crushing Fists",
+   "class_name": "upgrade_crushing_fists",
+   "cost": 6400,
+   "wins": 2509,
+   "losses": 2579,
+   "matches": 5088,
+   "avg_buy_time_s": 1656.2920597484276
+  },
+  {
+   "item_id": 805079544,
+   "name": "Weapon Shielding",
+   "class_name": "upgrade_weapon_shielding",
+   "cost": 1600,
+   "wins": 9645,
+   "losses": 10550,
+   "matches": 20195,
+   "avg_buy_time_s": 1261.0041099282
+  },
+  {
+   "item_id": 811521119,
+   "name": "Tesla Bullets",
+   "class_name": "upgrade_chain_lightning",
+   "cost": 3200,
+   "wins": 758711,
+   "losses": 632757,
+   "matches": 1391468,
+   "avg_buy_time_s": 1198.6720442008009
+  },
+  {
+   "item_id": 857669956,
+   "name": "Guardian Ward",
+   "class_name": "upgrade_guardian_ward",
+   "cost": 1600,
+   "wins": 671,
+   "losses": 700,
+   "matches": 1371,
+   "avg_buy_time_s": 1540.7469000729395
+  },
+  {
+   "item_id": 865846625,
+   "name": "Leech",
+   "class_name": "upgrade_damage_recycler",
+   "cost": 6400,
+   "wins": 130086,
+   "losses": 92091,
+   "matches": 222177,
+   "avg_buy_time_s": 1851.5929596672922
+  },
+  {
+   "item_id": 865958998,
+   "name": "Veil Walker",
+   "class_name": "upgrade_veil_walker",
+   "cost": 3200,
+   "wins": 18328,
+   "losses": 16633,
+   "matches": 34961,
+   "avg_buy_time_s": 860.4140613826836
+  },
+  {
+   "item_id": 876563814,
+   "name": "Spirit Lifesteal",
+   "class_name": "upgrade_health_stealing_magic",
+   "cost": 1600,
+   "wins": 106901,
+   "losses": 75973,
+   "matches": 182874,
+   "avg_buy_time_s": 1421.1615647932456
+  },
+  {
+   "item_id": 915014646,
+   "name": "Transcendent Cooldown",
+   "class_name": "upgrade_transcendent_cooldown",
+   "cost": 6400,
+   "wins": 21253,
+   "losses": 15213,
+   "matches": 36466,
+   "avg_buy_time_s": 2034.2490264904295
+  },
+  {
+   "item_id": 951866250,
+   "name": "Indomitable",
+   "class_name": "upgrade_auto_cleanse",
+   "cost": 6400,
+   "wins": 76119,
+   "losses": 51481,
+   "matches": 127600,
+   "avg_buy_time_s": 2071.145485893417
+  },
+  {
+   "item_id": 968099481,
+   "name": "Extra Spirit",
+   "class_name": "upgrade_improved_spirit",
+   "cost": 800,
+   "wins": 1211395,
+   "losses": 1047180,
+   "matches": 2258575,
+   "avg_buy_time_s": 250.39832947765737
+  },
+  {
+   "item_id": 989206714,
+   "name": "Blood Tribute",
+   "class_name": "upgrade_blood_tribute",
+   "cost": 3200,
+   "wins": 15991,
+   "losses": 13197,
+   "matches": 29188,
+   "avg_buy_time_s": 1628.9703302727148
+  },
+  {
+   "item_id": 1009965641,
+   "name": "Monster Rounds",
+   "class_name": "upgrade_non_player_bonus",
+   "cost": 800,
+   "wins": 83152,
+   "losses": 80231,
+   "matches": 163383,
+   "avg_buy_time_s": 369.343377217948
+  },
+  {
+   "item_id": 1047818222,
+   "name": "Debuff Reducer",
+   "class_name": "upgrade_debuff_reducer",
+   "cost": 1600,
+   "wins": 155251,
+   "losses": 120235,
+   "matches": 275486,
+   "avg_buy_time_s": 1755.8953957732879
+  },
+  {
+   "item_id": 1055679805,
+   "name": "Vampiric Burst",
+   "class_name": "upgrade_surging_power",
+   "cost": 6400,
+   "wins": 621288,
+   "losses": 465766,
+   "matches": 1087054,
+   "avg_buy_time_s": 1754.8899879858775
+  },
+  {
+   "item_id": 1102081447,
+   "name": "Mystic Slow",
+   "class_name": "upgrade_magic_slow",
+   "cost": 1600,
+   "wins": 3395,
+   "losses": 3079,
+   "matches": 6474,
+   "avg_buy_time_s": 1325.196014828545
+  },
+  {
+   "item_id": 1113837674,
+   "name": "Silencer",
+   "class_name": "upgrade_proc_silence",
+   "cost": 6400,
+   "wins": 714550,
+   "losses": 425419,
+   "matches": 1139969,
+   "avg_buy_time_s": 1926.7610636780473
+  },
+  {
+   "item_id": 1144549437,
+   "name": "Spirit Shredder",
+   "class_name": "upgrade_tech_defense_shredders",
+   "cost": 1600,
+   "wins": 3970,
+   "losses": 4227,
+   "matches": 8197,
+   "avg_buy_time_s": 1281.8903257289253
+  },
+  {
+   "item_id": 1150006784,
+   "name": "Arcane Surge",
+   "class_name": "upgrade_arcane_surge",
+   "cost": 1600,
+   "wins": 1287,
+   "losses": 1542,
+   "matches": 2829,
+   "avg_buy_time_s": 1193.932131495228
+  },
+  {
+   "item_id": 1152158042,
+   "name": "Vortex Web",
+   "class_name": "upgrade_aoe_root",
+   "cost": 6400,
+   "wins": 5683,
+   "losses": 4214,
+   "matches": 9897,
+   "avg_buy_time_s": 2360.1736889966655
+  },
+  {
+   "item_id": 1193964439,
+   "name": "Greater Expansion",
+   "class_name": "upgrade_tech_range",
+   "cost": 3200,
+   "wins": 9776,
+   "losses": 8279,
+   "matches": 18055,
+   "avg_buy_time_s": 1693.655663251177
+  },
+  {
+   "item_id": 1219329868,
+   "name": "Spirit Sap",
+   "class_name": "upgrade_spirit_sap",
+   "cost": 1600,
+   "wins": 7832,
+   "losses": 6503,
+   "matches": 14335,
+   "avg_buy_time_s": 1415.5461457970002
+  },
+  {
+   "item_id": 1235347618,
+   "name": "Battle Vest",
+   "class_name": "upgrade_regenerating_bullet_shield",
+   "cost": 1600,
+   "wins": 420011,
+   "losses": 347366,
+   "matches": 767377,
+   "avg_buy_time_s": 756.4827249187817
+  },
+  {
+   "item_id": 1250307611,
+   "name": "Juggernaut",
+   "class_name": "upgrade_juggernaut",
+   "cost": 6400,
+   "wins": 101554,
+   "losses": 71325,
+   "matches": 172879,
+   "avg_buy_time_s": 2014.6439937759935
+  },
+  {
+   "item_id": 1252627263,
+   "name": "Lifestrike",
+   "class_name": "upgrade_boxing_glove",
+   "cost": 3200,
+   "wins": 2413,
+   "losses": 2915,
+   "matches": 5328,
+   "avg_buy_time_s": 1200.5448573573574
+  },
+  {
+   "item_id": 1254091416,
+   "name": "Knockdown",
+   "class_name": "upgrade_target_stun",
+   "cost": 3200,
+   "wins": 15566,
+   "losses": 19409,
+   "matches": 34975,
+   "avg_buy_time_s": 1644.4595282344533
+  },
+  {
+   "item_id": 1282141666,
+   "name": "Siphon Bullets",
+   "class_name": "upgrade_siphon_bullets",
+   "cost": 6400,
+   "wins": 398946,
+   "losses": 239443,
+   "matches": 638389,
+   "avg_buy_time_s": 2003.2154595395598
+  },
+  {
+   "item_id": 1292979587,
+   "name": "Surge of Power",
+   "class_name": "upgrade_magic_storm",
+   "cost": 3200,
+   "wins": 1090634,
+   "losses": 917422,
+   "matches": 2008056,
+   "avg_buy_time_s": 1008.1954955439489
+  },
+  {
+   "item_id": 1342610602,
+   "name": "Close Quarters",
+   "class_name": "upgrade_close_range",
+   "cost": 800,
+   "wins": 30161,
+   "losses": 29052,
+   "matches": 59213,
+   "avg_buy_time_s": 577.9290527417966
+  },
+  {
+   "item_id": 1371725689,
+   "name": "Phantom Strike",
+   "class_name": "upgrade_phantom_strike",
+   "cost": 6400,
+   "wins": 2592,
+   "losses": 1914,
+   "matches": 4506,
+   "avg_buy_time_s": 2065.1666666666665
+  },
+  {
+   "item_id": 1378931225,
+   "name": "Metal Skin",
+   "class_name": "upgrade_metal_skin",
+   "cost": 3200,
+   "wins": 10998,
+   "losses": 15483,
+   "matches": 26481,
+   "avg_buy_time_s": 1851.6796193497225
+  },
+  {
+   "item_id": 1396247347,
+   "name": "Lucky Shot",
+   "class_name": "upgrade_critshot",
+   "cost": 6400,
+   "wins": 544859,
+   "losses": 330360,
+   "matches": 875219,
+   "avg_buy_time_s": 1860.8070025902089
+  },
+  {
+   "item_id": 1409190604,
+   "name": "Fury Trance",
+   "class_name": "upgrade_fury_trance",
+   "cost": 3200,
+   "wins": 123619,
+   "losses": 119595,
+   "matches": 243214,
+   "avg_buy_time_s": 1250.3775399442466
+  },
+  {
+   "item_id": 1414025773,
+   "name": "Counterspell",
+   "class_name": "upgrade_counterspell",
+   "cost": 3200,
+   "wins": 32602,
+   "losses": 32252,
+   "matches": 64854,
+   "avg_buy_time_s": 1605.2306411323896
+  },
+  {
+   "item_id": 1414319208,
+   "name": "Berserker",
+   "class_name": "upgrade_berserker",
+   "cost": 3200,
+   "wins": 2086,
+   "losses": 2001,
+   "matches": 4087,
+   "avg_buy_time_s": 1646.9393197944703
+  },
+  {
+   "item_id": 1427630806,
+   "name": "Healing Tempo",
+   "class_name": "upgrade_healbuff",
+   "cost": 6400,
+   "wins": 35840,
+   "losses": 20284,
+   "matches": 56124,
+   "avg_buy_time_s": 2143.112091084028
+  },
+  {
+   "item_id": 1437614329,
+   "name": "Melee Lifesteal",
+   "class_name": "upgrade_lifestrike_gauntlets",
+   "cost": 800,
+   "wins": 3799,
+   "losses": 4729,
+   "matches": 8528,
+   "avg_buy_time_s": 460.49495778611634
+  },
+  {
+   "item_id": 1439347412,
+   "name": "Mystic Regeneration",
+   "class_name": "upgrade_mystic_regeneration",
+   "cost": 800,
+   "wins": 2726,
+   "losses": 2945,
+   "matches": 5671,
+   "avg_buy_time_s": 844.1116205254805
+  },
+  {
+   "item_id": 1548066885,
+   "name": "Extended Magazine",
+   "class_name": "upgrade_clip_size",
+   "cost": 800,
+   "wins": 563678,
+   "losses": 480799,
+   "matches": 1044477,
+   "avg_buy_time_s": 299.8120695812354
+  },
+  {
+   "item_id": 1644605047,
+   "name": "Reactive Barrier",
+   "class_name": "upgrade_vex_barrier",
+   "cost": 1600,
+   "wins": 60675,
+   "losses": 53850,
+   "matches": 114525,
+   "avg_buy_time_s": 1406.2756516044533
+  },
+  {
+   "item_id": 1662311306,
+   "name": "Divine Barrier",
+   "class_name": "upgrade_divine_barrier",
+   "cost": 6400,
+   "wins": 868,
+   "losses": 658,
+   "matches": 1526,
+   "avg_buy_time_s": 2293.8342070773265
+  },
+  {
+   "item_id": 1672893796,
+   "name": "Grit",
+   "class_name": "upgrade_grit",
+   "cost": 800,
+   "wins": 86885,
+   "losses": 75137,
+   "matches": 162022,
+   "avg_buy_time_s": 847.0650035180407
+  },
+  {
+   "item_id": 1710079648,
+   "name": "Healing Rite",
+   "class_name": "upgrade_health_stimpak",
+   "cost": 800,
+   "wins": 29714,
+   "losses": 29774,
+   "matches": 59488,
+   "avg_buy_time_s": 462.37816030123724
+  },
+  {
+   "item_id": 1763073141,
+   "name": "Recharging Rush",
+   "class_name": "upgrade_rechargingbullets",
+   "cost": 1600,
+   "wins": 102600,
+   "losses": 84463,
+   "matches": 187063,
+   "avg_buy_time_s": 1311.2841823342937
+  },
+  {
+   "item_id": 1770441818,
+   "name": "Weakening Headshot",
+   "class_name": "upgrade_headshot_booster2",
+   "cost": 1600,
+   "wins": 340412,
+   "losses": 267111,
+   "matches": 607523,
+   "avg_buy_time_s": 1154.8398529767596
+  },
+  {
+   "item_id": 1797283378,
+   "name": "Infuser",
+   "class_name": "upgrade_infuser",
+   "cost": 6400,
+   "wins": 547,
+   "losses": 450,
+   "matches": 997,
+   "avg_buy_time_s": 2401.097291875627
+  },
+  {
+   "item_id": 1798666702,
+   "name": "Shadow Weave",
+   "class_name": "upgrade_cloaking_device_active",
+   "cost": 3200,
+   "wins": 3419,
+   "losses": 3082,
+   "matches": 6501,
+   "avg_buy_time_s": 1400.1478234117828
+  },
+  {
+   "item_id": 1804594021,
+   "name": "Rescue Beam",
+   "class_name": "upgrade_rescue_beam",
+   "cost": 3200,
+   "wins": 416,
+   "losses": 630,
+   "matches": 1046,
+   "avg_buy_time_s": 1511.651051625239
+  },
+  {
+   "item_id": 1813726886,
+   "name": "Slowing Hex",
+   "class_name": "upgrade_containment",
+   "cost": 1600,
+   "wins": 521558,
+   "losses": 465755,
+   "matches": 987313,
+   "avg_buy_time_s": 985.1366466358693
+  },
+  {
+   "item_id": 1925087134,
+   "name": "Suppressor",
+   "class_name": "upgrade_suppressor",
+   "cost": 1600,
+   "wins": 1194,
+   "losses": 1271,
+   "matches": 2465,
+   "avg_buy_time_s": 1220.1253549695741
+  },
+  {
+   "item_id": 1932939246,
+   "name": "Alchemical Fire",
+   "class_name": "upgrade_thermal_detonator",
+   "cost": 3200,
+   "wins": 224,
+   "losses": 315,
+   "matches": 539,
+   "avg_buy_time_s": 1579.2448979591836
+  },
+  {
+   "item_id": 1955841979,
+   "name": "Spellbreaker",
+   "class_name": "upgrade_spellbreaker",
+   "cost": 6400,
+   "wins": 66238,
+   "losses": 47378,
+   "matches": 113616,
+   "avg_buy_time_s": 2211.5513131953244
+  },
+  {
+   "item_id": 1976391348,
+   "name": "Cold Front",
+   "class_name": "upgrade_cold_front",
+   "cost": 1600,
+   "wins": 1393,
+   "losses": 1497,
+   "matches": 2890,
+   "avg_buy_time_s": 1114.2840830449827
+  },
+  {
+   "item_id": 1998374645,
+   "name": "Mystic Burst",
+   "class_name": "upgrade_magic_burst",
+   "cost": 800,
+   "wins": 7553,
+   "losses": 7780,
+   "matches": 15333,
+   "avg_buy_time_s": 760.9303463118763
+  },
+  {
+   "item_id": 2010028405,
+   "name": "Headshot Booster",
+   "class_name": "upgrade_headshot_booster",
+   "cost": 800,
+   "wins": 62617,
+   "losses": 60237,
+   "matches": 122854,
+   "avg_buy_time_s": 443.67245673726535
+  },
+  {
+   "item_id": 2037039379,
+   "name": "Inhibitor",
+   "class_name": "upgrade_inhibitor",
+   "cost": 6400,
+   "wins": 204138,
+   "losses": 131948,
+   "matches": 336086,
+   "avg_buy_time_s": 2111.780922144927
+  },
+  {
+   "item_id": 2059712766,
+   "name": "Restorative Locket",
+   "class_name": "upgrade_restorative_locket",
+   "cost": 1600,
+   "wins": 341,
+   "losses": 420,
+   "matches": 761,
+   "avg_buy_time_s": 1183.9592641261497
+  },
+  {
+   "item_id": 2061878743,
+   "name": "Disarming Hex",
+   "class_name": "upgrade_greater_withering_whip",
+   "cost": 3200,
+   "wins": 7113,
+   "losses": 8236,
+   "matches": 15349,
+   "avg_buy_time_s": 1636.1339500944687
+  },
+  {
+   "item_id": 2064029594,
+   "name": "Opening Rounds",
+   "class_name": "upgrade_pristine_emblem",
+   "cost": 1600,
+   "wins": 38244,
+   "losses": 37837,
+   "matches": 76081,
+   "avg_buy_time_s": 855.0328597153034
+  },
+  {
+   "item_id": 2081037738,
+   "name": "Mystic Vulnerability",
+   "class_name": "upgrade_magic_vulnerability",
+   "cost": 1600,
+   "wins": 3366,
+   "losses": 2966,
+   "matches": 6332,
+   "avg_buy_time_s": 1384.8385975994947
+  },
+  {
+   "item_id": 2095565695,
+   "name": "Point Blank",
+   "class_name": "upgrade_close_quarter_combat",
+   "cost": 3200,
+   "wins": 29333,
+   "losses": 26535,
+   "matches": 55868,
+   "avg_buy_time_s": 1289.5991265124937
+  },
+  {
+   "item_id": 2108215830,
+   "name": "Heroic Aura",
+   "class_name": "upgrade_dps_aura",
+   "cost": 3200,
+   "wins": 8303,
+   "losses": 6501,
+   "matches": 14804,
+   "avg_buy_time_s": 1295.2382464198865
+  },
+  {
+   "item_id": 2121044373,
+   "name": "Tankbuster",
+   "class_name": "upgrade_magic_shock",
+   "cost": 3200,
+   "wins": 10225,
+   "losses": 9879,
+   "matches": 20104,
+   "avg_buy_time_s": 1494.973985276562
+  },
+  {
+   "item_id": 2142980412,
+   "name": "Focus Lens",
+   "class_name": "upgrade_focus_lens",
+   "cost": 6400,
+   "wins": 15553,
+   "losses": 11135,
+   "matches": 26688,
+   "avg_buy_time_s": 1778.3938474220624
+  },
+  {
+   "item_id": 2152872419,
+   "name": "Sharpshooter",
+   "class_name": "upgrade_sharpshooter",
+   "cost": 3200,
+   "wins": 14544,
+   "losses": 14105,
+   "matches": 28649,
+   "avg_buy_time_s": 1391.5919229292472
+  },
+  {
+   "item_id": 2163598980,
+   "name": "Spirit Resilience",
+   "class_name": "upgrade_tech_purge",
+   "cost": 3200,
+   "wins": 304359,
+   "losses": 258984,
+   "matches": 563343,
+   "avg_buy_time_s": 1700.9966059754004
+  },
+  {
+   "item_id": 2221211450,
+   "name": "Spellslinger",
+   "class_name": "upgrade_enchanted_holsters",
+   "cost": 6400,
+   "wins": 12111,
+   "losses": 7349,
+   "matches": 19460,
+   "avg_buy_time_s": 2169.9216341212746
+  },
+  {
+   "item_id": 2226497419,
+   "name": "Spiritual Overflow",
+   "class_name": "upgrade_tech_overflow",
+   "cost": 6400,
+   "wins": 123639,
+   "losses": 73737,
+   "matches": 197376,
+   "avg_buy_time_s": 1857.9315215629053
+  },
+  {
+   "item_id": 2356412290,
+   "name": "Titanic Magazine",
+   "class_name": "upgrade_titan_round",
+   "cost": 1600,
+   "wins": 610315,
+   "losses": 518152,
+   "matches": 1128467,
+   "avg_buy_time_s": 651.829458016938
+  },
+  {
+   "item_id": 2407033488,
+   "name": "Intensifying Magazine",
+   "class_name": "upgrade_intensifying_clip",
+   "cost": 1600,
+   "wins": 39597,
+   "losses": 37510,
+   "matches": 77107,
+   "avg_buy_time_s": 976.4221017547045
+  },
+  {
+   "item_id": 2407781327,
+   "name": "Colossus",
+   "class_name": "upgrade_colossus",
+   "cost": 6400,
+   "wins": 2756,
+   "losses": 2118,
+   "matches": 4874,
+   "avg_buy_time_s": 2235.9450143619206
+  },
+  {
+   "item_id": 2417568017,
+   "name": "Scourge",
+   "class_name": "upgrade_discord",
+   "cost": 6400,
+   "wins": 166,
+   "losses": 125,
+   "matches": 291,
+   "avg_buy_time_s": 2349.2474226804125
+  },
+  {
+   "item_id": 2447176615,
+   "name": "Enduring Speed",
+   "class_name": "upgrade_cardio_calibrator",
+   "cost": 1600,
+   "wins": 566779,
+   "losses": 480608,
+   "matches": 1047387,
+   "avg_buy_time_s": 985.1127462914853
+  },
+  {
+   "item_id": 2462046703,
+   "name": "Golden Goose Egg",
+   "class_name": "upgrade_goose_egg",
+   "cost": 800,
+   "wins": 39781,
+   "losses": 36918,
+   "matches": 76699,
+   "avg_buy_time_s": 157.64668378987992
+  },
+  {
+   "item_id": 2463960640,
+   "name": "Escalating Resilience",
+   "class_name": "upgrade_reinforcing_casings",
+   "cost": 3200,
+   "wins": 87881,
+   "losses": 76305,
+   "matches": 164186,
+   "avg_buy_time_s": 1547.987282715944
+  },
+  {
+   "item_id": 2480592370,
+   "name": "Ricochet",
+   "class_name": "upgrade_ricochet",
+   "cost": 6400,
+   "wins": 1167818,
+   "losses": 858654,
+   "matches": 2026472,
+   "avg_buy_time_s": 1491.3632426206727
+  },
+  {
+   "item_id": 2481177645,
+   "name": "Hunter's Aura",
+   "class_name": "upgrade_bullet_armor_reduction_aura",
+   "cost": 3200,
+   "wins": 9746,
+   "losses": 8323,
+   "matches": 18069,
+   "avg_buy_time_s": 1358.6975482871217
+  },
+  {
+   "item_id": 2519598785,
+   "name": "Boundless Spirit",
+   "class_name": "upgrade_boundless_spirit",
+   "cost": 6400,
+   "wins": 71846,
+   "losses": 44740,
+   "matches": 116586,
+   "avg_buy_time_s": 1995.191866948004
+  },
+  {
+   "item_id": 2533252781,
+   "name": "Ethereal Shift",
+   "class_name": "upgrade_self_bubble",
+   "cost": 6400,
+   "wins": 7577,
+   "losses": 5263,
+   "matches": 12840,
+   "avg_buy_time_s": 1912.393847352025
+  },
+  {
+   "item_id": 2566692615,
+   "name": "Healing Booster",
+   "class_name": "upgrade_healing_booster",
+   "cost": 1600,
+   "wins": 34554,
+   "losses": 28227,
+   "matches": 62781,
+   "avg_buy_time_s": 1239.0439782736814
+  },
+  {
+   "item_id": 2603935618,
+   "name": "Healbane",
+   "class_name": "upgrade_healbane",
+   "cost": 1600,
+   "wins": 22790,
+   "losses": 26002,
+   "matches": 48792,
+   "avg_buy_time_s": 1354.592412690605
+  },
+  {
+   "item_id": 2617435668,
+   "name": "Cursed Relic",
+   "class_name": "upgrade_glitch",
+   "cost": 6400,
+   "wins": 103774,
+   "losses": 74929,
+   "matches": 178703,
+   "avg_buy_time_s": 2083.244405522011
+  },
+  {
+   "item_id": 2678489038,
+   "name": "Hollow Point",
+   "class_name": "upgrade_hollow_point_rounds",
+   "cost": 3200,
+   "wins": 97631,
+   "losses": 78128,
+   "matches": 175759,
+   "avg_buy_time_s": 1452.5284110628759
+  },
+  {
+   "item_id": 2717651715,
+   "name": "Superior Duration",
+   "class_name": "upgrade_imbued_duration_extender",
+   "cost": 3200,
+   "wins": 161623,
+   "losses": 130632,
+   "matches": 292255,
+   "avg_buy_time_s": 1698.062979247575
+  },
+  {
+   "item_id": 2739107182,
+   "name": "Burst Fire",
+   "class_name": "upgrade_burst_fire",
+   "cost": 3200,
+   "wins": 1345461,
+   "losses": 1103329,
+   "matches": 2448790,
+   "avg_buy_time_s": 1177.6084494791305
+  },
+  {
+   "item_id": 2800629741,
+   "name": "Magic Carpet",
+   "class_name": "upgrade_magic_carpet",
+   "cost": 6400,
+   "wins": 15989,
+   "losses": 13642,
+   "matches": 29631,
+   "avg_buy_time_s": 1397.3690054334986
+  },
+  {
+   "item_id": 2820116164,
+   "name": "Diviner's Kevlar",
+   "class_name": "upgrade_diviners_kevlar",
+   "cost": 6400,
+   "wins": 11735,
+   "losses": 7735,
+   "matches": 19470,
+   "avg_buy_time_s": 2343.64072932717
+  },
+  {
+   "item_id": 2829638276,
+   "name": "Extra Regen",
+   "class_name": "upgrade_endurance",
+   "cost": 800,
+   "wins": 311416,
+   "losses": 285283,
+   "matches": 596699,
+   "avg_buy_time_s": 360.7562204729688
+  },
+  {
+   "item_id": 2922054143,
+   "name": "Rusted Barrel",
+   "class_name": "upgrade_withering_whip",
+   "cost": 800,
+   "wins": 28289,
+   "losses": 27358,
+   "matches": 55647,
+   "avg_buy_time_s": 427.00452854601326
+  },
+  {
+   "item_id": 2947183272,
+   "name": "Radiant Regeneration",
+   "class_name": "upgrade_resonant_healing",
+   "cost": 3200,
+   "wins": 2887,
+   "losses": 2751,
+   "matches": 5638,
+   "avg_buy_time_s": 1555.6594537069882
+  },
+  {
+   "item_id": 2951612397,
+   "name": "Duration Extender",
+   "class_name": "upgrade_arcane_extension",
+   "cost": 1600,
+   "wins": 158697,
+   "losses": 143941,
+   "matches": 302638,
+   "avg_buy_time_s": 1280.0999643138007
+  },
+  {
+   "item_id": 2956256701,
+   "name": "Healing Nova",
+   "class_name": "upgrade_health_nova",
+   "cost": 3200,
+   "wins": 805,
+   "losses": 836,
+   "matches": 1641,
+   "avg_buy_time_s": 1549.2132845825715
+  },
+  {
+   "item_id": 2971868509,
+   "name": "Bullet Resist Shredder",
+   "class_name": "upgrade_bullet_resist_shredder",
+   "cost": 1600,
+   "wins": 831060,
+   "losses": 665514,
+   "matches": 1496574,
+   "avg_buy_time_s": 1020.917561042755
+  },
+  {
+   "item_id": 3005970438,
+   "name": "Escalating Exposure",
+   "class_name": "upgrade_escalating_exposure",
+   "cost": 6400,
+   "wins": 3283,
+   "losses": 2107,
+   "matches": 5390,
+   "avg_buy_time_s": 2081.785899814471
+  },
+  {
+   "item_id": 3028234315,
+   "name": "Witchmail",
+   "class_name": "upgrade_absorbing_armor",
+   "cost": 6400,
+   "wins": 4725,
+   "losses": 3448,
+   "matches": 8173,
+   "avg_buy_time_s": 2394.930135813043
+  },
+  {
+   "item_id": 3074274290,
+   "name": "Trophy Collector",
+   "class_name": "upgrade_trophy_collector",
+   "cost": 1600,
+   "wins": 20627,
+   "losses": 17079,
+   "matches": 37706,
+   "avg_buy_time_s": 677.9793666790431
+  },
+  {
+   "item_id": 3077079169,
+   "name": "High-Velocity Rounds",
+   "class_name": "upgrade_high_velocity_mag",
+   "cost": 800,
+   "wins": 127158,
+   "losses": 113905,
+   "matches": 241063,
+   "avg_buy_time_s": 1116.7312735674907
+  },
+  {
+   "item_id": 3140772621,
+   "name": "Bullet Resilience",
+   "class_name": "upgrade_improved_bullet_armor",
+   "cost": 3200,
+   "wins": 17213,
+   "losses": 19048,
+   "matches": 36261,
+   "avg_buy_time_s": 1789.608394694024
+  },
+  {
+   "item_id": 3144988365,
+   "name": "Decay",
+   "class_name": "upgrade_rupture",
+   "cost": 3200,
+   "wins": 575,
+   "losses": 865,
+   "matches": 1440,
+   "avg_buy_time_s": 1726.35
+  },
+  {
+   "item_id": 3190916303,
+   "name": "Spirit Snatch",
+   "class_name": "upgrade_spirit_snatch",
+   "cost": 3200,
+   "wins": 2334,
+   "losses": 2795,
+   "matches": 5129,
+   "avg_buy_time_s": 1265.9212322090077
+  },
+  {
+   "item_id": 3261353684,
+   "name": "Superior Cooldown",
+   "class_name": "upgrade_cooldown_reduction",
+   "cost": 3200,
+   "wins": 24303,
+   "losses": 21084,
+   "matches": 45387,
+   "avg_buy_time_s": 1562.500407605702
+  },
+  {
+   "item_id": 3270001687,
+   "name": "Warp Stone",
+   "class_name": "upgrade_warp_stone",
+   "cost": 3200,
+   "wins": 19073,
+   "losses": 16992,
+   "matches": 36065,
+   "avg_buy_time_s": 1546.128296131984
+  },
+  {
+   "item_id": 3294954488,
+   "name": "Ballistic Enchantment",
+   "class_name": "upgrade_bulletshredimbue",
+   "cost": 3200,
+   "wins": 5954,
+   "losses": 5764,
+   "matches": 11718,
+   "avg_buy_time_s": 1556.5760368663593
+  },
+  {
+   "item_id": 3331811235,
+   "name": "Long Range",
+   "class_name": "upgrade_long_range",
+   "cost": 1600,
+   "wins": 7646,
+   "losses": 7519,
+   "matches": 15165,
+   "avg_buy_time_s": 947.1370919881306
+  },
+  {
+   "item_id": 3357231760,
+   "name": "Unstoppable",
+   "class_name": "upgrade_unstoppable",
+   "cost": 6400,
+   "wins": 252223,
+   "losses": 174078,
+   "matches": 426301,
+   "avg_buy_time_s": 2079.132971773465
+  },
+  {
+   "item_id": 3361075077,
+   "name": "Return Fire",
+   "class_name": "upgrade_return_fire",
+   "cost": 1600,
+   "wins": 721,
+   "losses": 1097,
+   "matches": 1818,
+   "avg_buy_time_s": 1470.7992299229923
+  },
+  {
+   "item_id": 3361811174,
+   "name": "Cheat Death",
+   "class_name": "upgrade_cheat_death",
+   "cost": 6400,
+   "wins": 31909,
+   "losses": 20717,
+   "matches": 52626,
+   "avg_buy_time_s": 2206.857864933683
+  },
+  {
+   "item_id": 3399065363,
+   "name": "Sprint Boots",
+   "class_name": "upgrade_sprint_booster",
+   "cost": 800,
+   "wins": 375161,
+   "losses": 322605,
+   "matches": 697766,
+   "avg_buy_time_s": 732.2129711106588
+  },
+  {
+   "item_id": 3403085434,
+   "name": "Fleetfoot",
+   "class_name": "upgrade_fleetfoot_boots",
+   "cost": 1600,
+   "wins": 349592,
+   "losses": 291342,
+   "matches": 640934,
+   "avg_buy_time_s": 834.6183413580806
+  },
+  {
+   "item_id": 3491236900,
+   "name": "Plated Armor",
+   "class_name": "upgrade_deflecting_armor",
+   "cost": 6400,
+   "wins": 23807,
+   "losses": 19782,
+   "matches": 43589,
+   "avg_buy_time_s": 2223.9337676936843
+  },
+  {
+   "item_id": 3577481646,
+   "name": "Mystic Reverb",
+   "class_name": "upgrade_mystic_reverb",
+   "cost": 6400,
+   "wins": 1693,
+   "losses": 1144,
+   "matches": 2837,
+   "avg_buy_time_s": 2158.58054282693
+  },
+  {
+   "item_id": 3585132399,
+   "name": "Fortitude",
+   "class_name": "upgrade_chonky",
+   "cost": 3200,
+   "wins": 843547,
+   "losses": 701982,
+   "matches": 1545529,
+   "avg_buy_time_s": 1048.2008800870124
+  },
+  {
+   "item_id": 3633614685,
+   "name": "Extra Health",
+   "class_name": "upgrade_health",
+   "cost": 800,
+   "wins": 888180,
+   "losses": 763196,
+   "matches": 1651376,
+   "avg_buy_time_s": 440.2755302244916
+  },
+  {
+   "item_id": 3647584222,
+   "name": "Split Shot",
+   "class_name": "upgrade_split_shot",
+   "cost": 1600,
+   "wins": 2867,
+   "losses": 3346,
+   "matches": 6213,
+   "avg_buy_time_s": 1415.3859649122808
+  },
+  {
+   "item_id": 3696726732,
+   "name": "Toxic Bullets",
+   "class_name": "upgrade_toxic_bullets",
+   "cost": 3200,
+   "wins": 283405,
+   "losses": 258680,
+   "matches": 542085,
+   "avg_buy_time_s": 1538.3598697621221
+  },
+  {
+   "item_id": 3731635960,
+   "name": "Dispel Magic",
+   "class_name": "upgrade_reduce_debuff_duration",
+   "cost": 3200,
+   "wins": 38323,
+   "losses": 36970,
+   "matches": 75293,
+   "avg_buy_time_s": 1638.0355942783526
+  },
+  {
+   "item_id": 3776945997,
+   "name": "Extra Charge",
+   "class_name": "upgrade_extra_charge",
+   "cost": 800,
+   "wins": 198350,
+   "losses": 149623,
+   "matches": 347973,
+   "avg_buy_time_s": 1266.1372290378852
+  },
+  {
+   "item_id": 3791587546,
+   "name": "Weighted Shots",
+   "class_name": "upgrade_weighted_shots",
+   "cost": 3200,
+   "wins": 41276,
+   "losses": 35926,
+   "matches": 77202,
+   "avg_buy_time_s": 1507.177599025932
+  },
+  {
+   "item_id": 3812615317,
+   "name": "Arctic Blast",
+   "class_name": "upgrade_arctic_blast",
+   "cost": 6400,
+   "wins": 908,
+   "losses": 783,
+   "matches": 1691,
+   "avg_buy_time_s": 1900.2454169130692
+  },
+  {
+   "item_id": 3862866912,
+   "name": "Restorative Shot",
+   "class_name": "upgrade_medic_bullets",
+   "cost": 800,
+   "wins": 41558,
+   "losses": 40165,
+   "matches": 81723,
+   "avg_buy_time_s": 367.4064094563342
+  },
+  {
+   "item_id": 3884003354,
+   "name": "Crippling Headshot",
+   "class_name": "upgrade_banshee_slugs",
+   "cost": 6400,
+   "wins": 328873,
+   "losses": 204620,
+   "matches": 533493,
+   "avg_buy_time_s": 1966.547731647838
+  },
+  {
+   "item_id": 3919289022,
+   "name": "Mercurial Magnum",
+   "class_name": "upgrade_ethereal_bullets",
+   "cost": 6400,
+   "wins": 200831,
+   "losses": 122374,
+   "matches": 323205,
+   "avg_buy_time_s": 1918.901381476153
+  },
+  {
+   "item_id": 3970837787,
+   "name": "Enchanter's Emblem",
+   "class_name": "upgrade_magic_shield",
+   "cost": 1600,
+   "wins": 117323,
+   "losses": 86584,
+   "matches": 203907,
+   "avg_buy_time_s": 632.8892681467531
+  },
+  {
+   "item_id": 3977876567,
+   "name": "Kinetic Dash",
+   "class_name": "upgrade_kinetic_sash",
+   "cost": 1600,
+   "wins": 102941,
+   "losses": 96265,
+   "matches": 199206,
+   "avg_buy_time_s": 714.3957661917814
+  },
+  {
+   "item_id": 4053935515,
+   "name": "Headhunter",
+   "class_name": "upgrade_headhunter",
+   "cost": 3200,
+   "wins": 31055,
+   "losses": 27969,
+   "matches": 59024,
+   "avg_buy_time_s": 1176.4512740580103
+  },
+  {
+   "item_id": 4075861416,
+   "name": "Spirit Rend",
+   "class_name": "upgrade_spellslinger_headshots",
+   "cost": 3200,
+   "wins": 4659,
+   "losses": 4567,
+   "matches": 9226,
+   "avg_buy_time_s": 1655.0135486668112
+  },
+  {
+   "item_id": 4104549924,
+   "name": "Swift Striker",
+   "class_name": "upgrade_blitz_bullets",
+   "cost": 1600,
+   "wins": 1522467,
+   "losses": 1305780,
+   "matches": 2828247,
+   "avg_buy_time_s": 439.27376392514515
+  },
+  {
+   "item_id": 4139877411,
+   "name": "Extra Stamina",
+   "class_name": "upgrade_improved_stamina",
+   "cost": 800,
+   "wins": 124301,
+   "losses": 121248,
+   "matches": 245549,
+   "avg_buy_time_s": 698.8851878851065
+  },
+  {
+   "item_id": 4204808176,
+   "name": "Rebuttal",
+   "class_name": "upgrade_melee_rebuttal",
+   "cost": 800,
+   "wins": 29103,
+   "losses": 31400,
+   "matches": 60503,
+   "avg_buy_time_s": 635.9549939672413
+  }
+ ]
+}

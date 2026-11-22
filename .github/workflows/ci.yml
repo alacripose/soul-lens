@@ -1,0 +1,67 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # The runner has no Deadlock install, so the live-layout comparison is the
+      # one check that skips; the gate prints it as a skip, never as a pass. The
+      # unit tests, the fake-Panorama harness and the shipped-data checks all run,
+      # and the recorded analytics fixture is in the repository so WPA is
+      # recomputed without the network.
+      - name: gate
+        run: python tools/gate.py --skip-live
+
+      - name: pack the addon
+        run: python tools/pack_vpk.py panorama dist/soul_lens/pak01_dir.vpk
+
+      - name: verify the archive
+        run: python tools/verify_vpk.py dist/soul_lens/pak01_dir.vpk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: soul-lens-vpk
+          path: dist/soul_lens/pak01_dir.vpk
+          if-no-files-found: error
+
+  release:
+    needs: gate
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: pack the addon
+        run: python tools/pack_vpk.py panorama dist/soul_lens/pak01_dir.vpk
+      - name: verify the archive
+        run: python tools/verify_vpk.py dist/soul_lens/pak01_dir.vpk
+      - name: publish the release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes="The hover strip: souls per +1% weapon power, souls per +1% WPA and per +1% DPS, each row labelled with its source, plus the hero's measured buy time. Install: copy pak01_dir.vpk to game/citadel/addons/soul_lens/ and add 'game citadel/addons/soul_lens' to SearchPaths in gameinfo.gi, or run install.ps1 from the repository."
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/soul_lens/pak01_dir.vpk --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" dist/soul_lens/pak01_dir.vpk \
+              --title "Soul Lens $GITHUB_REF_NAME" --notes "$notes"
+          fi

@@ -7,15 +7,14 @@
 // leave the card exactly as Valve drew it.
 //
 // What it reads, in order:
-//   1. the card itself (`#ModView`) - item name and price, which are live values
-//   2. window.SoulLensData, baked by tools/ingest.py - the weapon terms and the
-//      measured buy time
-//   3. the open shop, when it can be found - the hero name and the item's place in
-//      the visible list ("3 of 12 in this tab")
+//   1. the card itself (`#ModView`) - item name and price, live values
+//   2. window.SoulLensData, baked by tools/ingest.py - weapon terms, per-hero
+//      WPA from recorded wins and losses, and measured purchase times
+//   3. the open shop, when it can be found - the hero name, and the item's place
+//      in the visible list ("3 of 12 in this list")
 //
-// Nothing is computed from a hero baseline here. "souls / +1% power" and
-// "souls / +1% dps" are item-local, so a number is either in the data with a named
-// source behind it or the row says it has none.
+// Every row carries the source of its number. A number that a source cannot
+// answer for is a sentence in the row, never a zero or a blank.
 (function () {
     "use strict";
 
@@ -98,6 +97,16 @@
         return Math.round(Number(value)) + " souls";
     }
 
+    // WPA is a percentage-point figure; below one point the first decimal would
+    // read as zero, so it keeps two.
+    function points(value) {
+        var number = Number(value);
+        if (!isFinite(number)) return String(value);
+        var digits = Math.abs(number) < 0.1 ? 2 : 1;
+        var sign = number > 0 ? "+" : (number < 0 ? "" : "+");
+        return sign + number.toFixed(digits);
+    }
+
     function heroName() {
         try {
             var rootPanel = $.GetContextPanel();
@@ -168,22 +177,70 @@
         return "";
     }
 
-    function setRow(node, value, missing) {
-        if (!node) return;
-        node.text = value;
-        try {
-            node.RemoveClass("SoulLensHave");
-            node.RemoveClass("SoulLensNone");
-            node.AddClass(missing ? "SoulLensNone" : "SoulLensHave");
-        } catch (e) {}
+    function setRow(node, value, missing, tag, tagText, tagMissing) {
+        if (node) {
+            node.text = value;
+            try {
+                node.RemoveClass("SoulLensHave");
+                node.RemoveClass("SoulLensNone");
+                node.AddClass(missing ? "SoulLensNone" : "SoulLensHave");
+            } catch (e) {}
+        }
+        if (tag) {
+            tag.text = tagText || "";
+            try {
+                tag.RemoveClass("SoulLensTagNone");
+                if (tagMissing) tag.AddClass("SoulLensTagNone");
+            } catch (e) {}
+        }
+    }
+
+    // Which WPA the strip may print: statlocker's when its keyed answer carried the
+    // item, otherwise the measured one for this hero, and otherwise the reason the
+    // measured one is not there.
+    function wpaReading(document, hero, heroRow, key, row, cost) {
+        var sources = document.sources || {};
+        var sl = sources["statlocker"] || {};
+        if (sl.state === "read" && row && typeof row.wpa === "number") {
+            return {
+                source: "statlocker",
+                value: row.wpa,
+                matches: null,
+                ratio: cost && row.wpa > 0 ? Math.round(cost / row.wpa) : null,
+            };
+        }
+        if (!hero) {
+            return { refusal: "no hero on the shop header", source: "dl-api" };
+        }
+        if (!heroRow) {
+            return { refusal: "no " + hero + " rows in this bake", source: "dl-api" };
+        }
+        var measured = heroRow.wpa ? heroRow.wpa[key] : null;
+        if (!measured) {
+            return { refusal: "no " + hero + " rows for this item", source: "dl-api" };
+        }
+        var minimum = (document.model && document.model.min_matches) || 0;
+        if (measured.matches < minimum) {
+            return { refusal: measured.matches + " matches, under " + minimum, source: "dl-api" };
+        }
+        return {
+            source: "dl-api",
+            value: measured.wpa,
+            matches: measured.matches,
+            ratio: cost && measured.wpa > 0 ? Math.round(cost / measured.wpa) : null,
+        };
     }
 
     function render(block, card, document) {
         var head = byId(block, "SoulLensHead");
         var wpRow = byId(block, "SoulLensWp");
+        var wpaRow = byId(block, "SoulLensWpa");
         var dpsRow = byId(block, "SoulLensDps");
         var buyRow = byId(block, "SoulLensBuy");
         var srcRow = byId(block, "SoulLensSrc");
+        var wpTag = byId(block, "SoulLensWpSrc");
+        var wpaTag = byId(block, "SoulLensWpaSrc");
+        var dpsTag = byId(block, "SoulLensDpsSrc");
 
         var hero = heroName();
         if (head) head.text = hero ? ("SOUL LENS · " + hero.toUpperCase()) : "SOUL LENS";
@@ -191,8 +248,9 @@
         var key = normalize(card.name);
         var row = key && document && document.items ? document.items[key] : null;
         if (!row) {
-            setRow(wpRow, key ? "no stat line for this item" : "reading the shop…", true);
-            setRow(dpsRow, "", true);
+            setRow(wpRow, key ? "no stat line for this item" : "reading the shop…", true, wpTag, "dl-api");
+            setRow(wpaRow, "", true, wpaTag, "");
+            setRow(dpsRow, "", true, dpsTag, "");
             if (buyRow) buyRow.text = "";
             if (srcRow) srcRow.text = document ? "soul-lens data: " + (document.build || "unknown build") : "soul-lens data missing";
             return;
@@ -201,18 +259,31 @@
         var cost = card.cost || row.cost;
         var priceNote = "";
         if (card.cost && row.cost && card.cost !== row.cost) {
-            priceNote = " (baked " + row.cost + ", live " + card.cost + ")";
+            priceNote = "live price " + card.cost;
         }
 
         if (row.wp > 0) {
-            setRow(wpRow, "+" + row.wp + "% power · " + souls(row.souls_per_wp) + " / +1%", false);
+            setRow(wpRow, "+" + row.wp + "% power · " + souls(row.souls_per_wp) + " / +1%", false, wpTag, "dl-api");
         } else {
-            setRow(wpRow, "no weapon power term", true);
+            setRow(wpRow, "no weapon power term", true, wpTag, "dl-api");
         }
-        if (row.dps > 0) {
-            setRow(dpsRow, "+" + row.dps.toFixed(1) + "% dps · " + souls(row.souls_per_dps) + " / +1%", false);
+
+        var heroRow = hero && document.heroes ? document.heroes[normalize(hero)] : null;
+        var reading = wpaReading(document, hero, heroRow, key, row, cost);
+        if (reading.refusal) {
+            setRow(wpaRow, "WPA: " + reading.refusal, true, wpaTag, reading.source, true);
+        } else if (reading.value <= 0) {
+            setRow(wpaRow, points(reading.value) + "% WPA · no gain", true, wpaTag, reading.source);
         } else {
-            setRow(dpsRow, "no standing dps term", true);
+            setRow(wpaRow, points(reading.value) + "% WPA · " + souls(reading.ratio) + " / +1%", false,
+                wpaTag, reading.source);
+        }
+
+        if (row.dps > 0) {
+            setRow(dpsRow, "+" + row.dps.toFixed(1) + "% dps · " + souls(row.souls_per_dps) + " / +1%", false,
+                dpsTag, "dl-api");
+        } else {
+            setRow(dpsRow, "no standing dps term", true, dpsTag, "dl-api");
         }
 
         // The hero on the shop header decides the buy line. The API was asked per
@@ -220,22 +291,20 @@
         // wearing the hero's name; when the hero has no rows the average is used and
         // labelled.
         var heroKey = normalize(hero);
-        var heroRow = heroKey && document.heroes ? document.heroes[heroKey] : null;
         var heroBuy = heroRow && heroRow.buy ? heroRow.buy[key] : null;
         var parts = [];
         if (heroBuy) parts.push("buy ≈ " + clock(heroBuy) + " (" + heroRow.name + ")");
         else if (row.avg_buy_s) parts.push("buy ≈ " + clock(row.avg_buy_s) + " (average)");
-        if (row.sl_slot) parts.push("statlocker build #" + row.sl_slot);
         var place = listPosition(card.name);
         if (place) parts.push(place);
         if (buyRow) buyRow.text = parts.join(" · ");
 
-        var sources = ["deadlock-api"];
-        var sl = document.sources && document.sources["statlocker"];
-        if (sl && sl.state === "read") sources.push("statlocker");
+        var sources = ["shop price live"];
+        sources.push(heroRow ? "dl-api " + heroRow.name : "dl-api");
+        var sl = (document.sources || {})["statlocker"] || null;
+        if (sl && sl.state === "read") sources.push("statlocker WPA");
         else if (sl) sources.push("statlocker: " + (sl.reason || sl.state));
-        if (row.wpa !== undefined && row.wpa !== null) sources.push("WPA " + row.wpa);
-        if (priceNote) sources.push(priceNote.replace(/^ \(|\)$/g, ""));
+        if (priceNote) sources.push(priceNote);
         if (srcRow) srcRow.text = sources.join(" · ");
     }
 

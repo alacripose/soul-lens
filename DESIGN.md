@@ -24,7 +24,8 @@ questioned, not for the first read.
 
 - **Reading** — the card is created before the game fills it, so the strip says
   `reading the shop…` rather than showing an empty line.
-- **Reading found** — two rows with gold values and the muted buy line.
+- **Reading found** — three rows (power, WPA, DPS) with gold values, a source tag
+  at the right of each, and the muted buy line.
 - **No term** — `no weapon power term` / `no standing dps term` in the muted
   colour. This is a refusal, and it is styled like one.
 - **Unknown item** — `no stat line for this item`, with the build the bake was
@@ -43,6 +44,16 @@ questioned, not for the first read.
 - Buy time is `m:ss`, the game's own clock, not a minute count.
 - Ratios that would divide by zero are `null` in the data and a refusal in the
   strip. There is no `∞` and no `0`.
+
+## 2026-11-22 — the WPA row is the recommendation row
+
+Power and DPS price what the item does; WPA prices what happened when this hero
+bought it. It sits between them because it is the only row whose source can be a
+recommendation service rather than the game's own stat list, and the right-hand
+tag is what keeps that legible: `dl-api` for the measured win-rate delta,
+`statlocker` when the keyed service answered for that item. The tag is smaller and
+dimmer than the value, so a refusal (`under 2000` in the refusal colour) reads as
+a refusal before it is read as a number.
 
 ## 2026-11-22 — the copy is checked, not trusted
 

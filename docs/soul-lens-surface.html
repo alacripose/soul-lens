@@ -114,6 +114,15 @@
     }
     .SoulLensValue { font-family: var(--mono); font-size: 12px; color: var(--ink); }
     .SoulLensValue.SoulLensNone { color: #7a756c; }
+    .SoulLensTag {
+        margin-left: auto;
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #5f5b53;
+    }
+    .SoulLensTag.SoulLensTagNone { color: #8a5a4a; }
     .SoulLensBuy { display: block; margin-top: 5px; font-size: 11px; color: #b9b2a4; }
     .SoulLensSrc { display: block; margin-top: 2px; font-family: var(--mono); font-size: 10px; color: var(--faint); }
     .legend {
@@ -147,6 +156,8 @@
         This page runs the shipped overlay script, <code>panorama/scripts/soul_lens.js</code>, against a DOM
         stand-in for the game's panel API and the baked catalogue in <code>data/items.json</code>. It is the
         browser witness for the same code the mod packs: each card is filled by the script, not by the page.
+        Glass Cannon is the worked example — Haze's own win/loss rows give its WPA, and every row names the
+        source it came from.
     </p>
 </header>
 
@@ -154,16 +165,18 @@
     <div class="frame">
         <h2>weapon item</h2>
         <div class="ModHoverContents">
+            <span id="HeroFavoritesHeaderLabel" style="display:none">Haze's Recommended Mods</span>
             <div class="mod_view" id="ModView">
-                <div id="ModCard"><span class="tier">Tier 1</span></div>
-                <div class="mod_name_area"><span class="modName" data-item="extended magazine">Extended Magazine</span></div>
-                <div id="ItemCostContainer"><span id="ItemCost">800</span></div>
+                <div id="ModCard"><span class="tier">Tier 4</span></div>
+                <div class="mod_name_area"><span class="modName" data-item="glass cannon">Glass Cannon</span></div>
+                <div id="ItemCostContainer"><span id="ItemCost">6400</span></div>
             </div>
             <div id="SoulLens" class="SoulLens">
                 <div class="SoulLensRule"></div>
                 <span id="SoulLensHead" class="SoulLensHead">SOUL LENS</span>
-                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span></div>
-                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span><span id="SoulLensWpSrc" class="SoulLensTag"></span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">wpa</span><span id="SoulLensWpa" class="SoulLensValue"></span><span id="SoulLensWpaSrc" class="SoulLensTag"></span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span><span id="SoulLensDpsSrc" class="SoulLensTag"></span></div>
                 <span id="SoulLensBuy" class="SoulLensBuy"></span>
                 <span id="SoulLensSrc" class="SoulLensSrc"></span>
             </div>
@@ -173,6 +186,7 @@
     <div class="frame">
         <h2>no weapon terms</h2>
         <div class="ModHoverContents">
+            <span id="HeroFavoritesHeaderLabel" style="display:none">Haze's Recommended Mods</span>
             <div class="mod_view" id="ModView">
                 <div id="ModCard"><span class="tier">Tier 1</span></div>
                 <div class="mod_name_area"><span class="modName">Extra Spirit</span></div>
@@ -181,8 +195,9 @@
             <div id="SoulLens" class="SoulLens">
                 <div class="SoulLensRule"></div>
                 <span id="SoulLensHead" class="SoulLensHead">SOUL LENS</span>
-                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span></div>
-                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span><span id="SoulLensWpSrc" class="SoulLensTag"></span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">wpa</span><span id="SoulLensWpa" class="SoulLensValue"></span><span id="SoulLensWpaSrc" class="SoulLensTag"></span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span><span id="SoulLensDpsSrc" class="SoulLensTag"></span></div>
                 <span id="SoulLensBuy" class="SoulLensBuy"></span>
                 <span id="SoulLensSrc" class="SoulLensSrc"></span>
             </div>
@@ -200,8 +215,9 @@
             <div id="SoulLens" class="SoulLens">
                 <div class="SoulLensRule"></div>
                 <span id="SoulLensHead" class="SoulLensHead">SOUL LENS</span>
-                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span></div>
-                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span><span id="SoulLensWpSrc" class="SoulLensTag"></span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">wpa</span><span id="SoulLensWpa" class="SoulLensValue"></span><span id="SoulLensWpaSrc" class="SoulLensTag"></span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span><span id="SoulLensDpsSrc" class="SoulLensTag"></span></div>
                 <span id="SoulLensBuy" class="SoulLensBuy"></span>
                 <span id="SoulLensSrc" class="SoulLensSrc"></span>
             </div>
@@ -213,6 +229,7 @@
     <h3>what each line is, and what it refuses</h3>
     <table>
         <tr><td><code>power</code></td><td>souls per +1% weapon power, from the item's <code>BaseAttackDamagePercent</code> and <code>WeaponPower</code>.</td></tr>
+        <tr><td><code>wpa</code></td><td>souls per +1 percentage point of win probability added: the item's win rate for this hero minus the hero's own win rate, from the recorded wins and losses. Rows under the sample floor print their count and refuse the figure.</td></tr>
         <tr><td><code>dps</code></td><td>souls per +1% DPS of the hero's current weapon, from <code>(1 + power/100) × (1 + fire rate/100) − 1</code>.</td></tr>
         <tr><td><code>buy ≈</code></td><td>measured average purchase time across the matches the public API holds, not a recommendation.</td></tr>
         <tr><td><code>in this list</code></td><td>the item's place in the shop list that is open, read from the shop's own panels.</td></tr>
@@ -239,7 +256,13 @@
             },
             GetChildCount() { return el.children.length; },
             GetChild(index) { return el.children[index] ? wrap(el.children[index], root) : null; },
-            GetParent() { return el.parentElement ? wrap(el.parentElement, root) : null; },
+            // A game tooltip is its own tree, so the walk stops at the card: the
+            // page has three cards in one document, and one card's header must not
+            // become another's hero.
+            GetParent() {
+                if (el.classList.contains("ModHoverContents")) return null;
+                return el.parentElement ? wrap(el.parentElement, root) : null;
+            },
             GetAttributeString(key) { return key === "class" ? (el.className || "") : ""; },
             AddClass(name) { el.classList.add(name); },
             RemoveClass(name) { el.classList.remove(name); },

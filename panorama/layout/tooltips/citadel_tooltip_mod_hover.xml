@@ -32,10 +32,17 @@
 			<Panel class="SoulLensRow">
 				<Label class="SoulLensKey" text="power" />
 				<Label id="SoulLensWp" class="SoulLensValue" text="reading the shop…" />
+				<Label id="SoulLensWpSrc" class="SoulLensTag" text="" />
+			</Panel>
+			<Panel class="SoulLensRow">
+				<Label class="SoulLensKey" text="wpa" />
+				<Label id="SoulLensWpa" class="SoulLensValue" text="" />
+				<Label id="SoulLensWpaSrc" class="SoulLensTag" text="" />
 			</Panel>
 			<Panel class="SoulLensRow">
 				<Label class="SoulLensKey" text="dps" />
 				<Label id="SoulLensDps" class="SoulLensValue" text="" />
+				<Label id="SoulLensDpsSrc" class="SoulLensTag" text="" />
 			</Panel>
 			<Label id="SoulLensBuy" class="SoulLensBuy" text="" />
 			<Label id="SoulLensSrc" class="SoulLensSrc" text="" />

@@ -1,0 +1,500 @@
+{
+ "schema": "soul-lens.provenance/1",
+ "generated": "2026-11-22T15:15:03+00:00",
+ "build": "6864",
+ "endpoints": {
+  "items": "https://api.deadlock-api.com/v1/assets/items",
+  "item_stats": "https://api.deadlock-api.com/v1/analytics/item-stats",
+  "heroes": "https://api.deadlock-api.com/v1/assets/heroes",
+  "hero_stats": "https://api.deadlock-api.com/v1/analytics/hero-stats",
+  "hero_item_stats": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id={id}",
+  "statlocker": "https://statlocker.gg/api/info/wpa-filtered-items"
+ },
+ "wpa": "item win rate minus the hero's own win rate, in percentage points, from the recorded wins and losses",
+ "heroes": {
+  "abrams": {
+   "hero_id": 6,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=6",
+   "cache": "data/cache/hero-6.json",
+   "sha256_16": "78625a520ad50df8",
+   "baseline": {
+    "wins": 1182401,
+    "losses": 1089858,
+    "winrate": 52.0364
+   }
+  },
+  "apollo": {
+   "hero_id": 77,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=77",
+   "cache": "data/cache/hero-77.json",
+   "sha256_16": "118468363c43b131",
+   "baseline": {
+    "wins": 976782,
+    "losses": 997031,
+    "winrate": 49.4871
+   }
+  },
+  "baba": {
+   "hero_id": 88,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=88",
+   "cache": "data/cache/hero-88.json",
+   "sha256_16": "b2e250a20646ba31",
+   "baseline": {
+    "wins": 502968,
+    "losses": 413115,
+    "winrate": 54.9042
+   }
+  },
+  "bebop": {
+   "hero_id": 15,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=15",
+   "cache": "data/cache/hero-15.json",
+   "sha256_16": "914434dec7ad7854",
+   "baseline": {
+    "wins": 1302132,
+    "losses": 1387936,
+    "winrate": 48.4052
+   }
+  },
+  "billy": {
+   "hero_id": 72,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=72",
+   "cache": "data/cache/hero-72.json",
+   "sha256_16": "2f89de7a02be7780",
+   "baseline": {
+    "wins": 1210430,
+    "losses": 1268779,
+    "winrate": 48.8232
+   }
+  },
+  "calico": {
+   "hero_id": 16,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=16",
+   "cache": "data/cache/hero-16.json",
+   "sha256_16": "6270ac5149f86f3f",
+   "baseline": {
+    "wins": 517514,
+    "losses": 557900,
+    "winrate": 48.1223
+   }
+  },
+  "celeste": {
+   "hero_id": 81,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=81",
+   "cache": "data/cache/hero-81.json",
+   "sha256_16": "207fc80dc17f2234",
+   "baseline": {
+    "wins": 1042649,
+    "losses": 1138766,
+    "winrate": 47.7969
+   }
+  },
+  "deadman danny": {
+   "hero_id": 78,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=78",
+   "cache": "data/cache/hero-78.json",
+   "sha256_16": "ddb932998ffde7a8",
+   "baseline": {
+    "wins": 1111024,
+    "losses": 982162,
+    "winrate": 53.0781
+   }
+  },
+  "drifter": {
+   "hero_id": 64,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=64",
+   "cache": "data/cache/hero-64.json",
+   "sha256_16": "c6d602925d3b60c7",
+   "baseline": {
+    "wins": 1429464,
+    "losses": 1408593,
+    "winrate": 50.3677
+   }
+  },
+  "dynamo": {
+   "hero_id": 11,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=11",
+   "cache": "data/cache/hero-11.json",
+   "sha256_16": "031b13a93e68423e",
+   "baseline": {
+    "wins": 830005,
+    "losses": 781239,
+    "winrate": 51.5133
+   }
+  },
+  "graves": {
+   "hero_id": 76,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=76",
+   "cache": "data/cache/hero-76.json",
+   "sha256_16": "4d18206a07a91031",
+   "baseline": {
+    "wins": 1716350,
+    "losses": 1276764,
+    "winrate": 57.3433
+   }
+  },
+  "grey talon": {
+   "hero_id": 17,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=17",
+   "cache": "data/cache/hero-17.json",
+   "sha256_16": "9921ce0938247baf",
+   "baseline": {
+    "wins": 626317,
+    "losses": 682954,
+    "winrate": 47.8371
+   }
+  },
+  "haze": {
+   "hero_id": 13,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=13",
+   "cache": "data/cache/hero-13.json",
+   "sha256_16": "46d03165554e7876",
+   "baseline": {
+    "wins": 1625268,
+    "losses": 1406244,
+    "winrate": 53.6125
+   }
+  },
+  "holliday": {
+   "hero_id": 14,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=14",
+   "cache": "data/cache/hero-14.json",
+   "sha256_16": "bd085c5a538e16f5",
+   "baseline": {
+    "wins": 709755,
+    "losses": 772850,
+    "winrate": 47.8722
+   }
+  },
+  "infernus": {
+   "hero_id": 1,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=1",
+   "cache": "data/cache/hero-1.json",
+   "sha256_16": "93bae9f377ff6300",
+   "baseline": {
+    "wins": 1226845,
+    "losses": 1284242,
+    "winrate": 48.8571
+   }
+  },
+  "ivy": {
+   "hero_id": 20,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=20",
+   "cache": "data/cache/hero-20.json",
+   "sha256_16": "932ce3af6cc5a899",
+   "baseline": {
+    "wins": 764201,
+    "losses": 696015,
+    "winrate": 52.3348
+   }
+  },
+  "kelvin": {
+   "hero_id": 12,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=12",
+   "cache": "data/cache/hero-12.json",
+   "sha256_16": "98a70cac5001cecf",
+   "baseline": {
+    "wins": 585047,
+    "losses": 474349,
+    "winrate": 55.2246
+   }
+  },
+  "lady geist": {
+   "hero_id": 4,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=4",
+   "cache": "data/cache/hero-4.json",
+   "sha256_16": "462e49e84444d450",
+   "baseline": {
+    "wins": 1168626,
+    "losses": 976418,
+    "winrate": 54.4803
+   }
+  },
+  "lash": {
+   "hero_id": 31,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=31",
+   "cache": "data/cache/hero-31.json",
+   "sha256_16": "1e928b43136d27a9",
+   "baseline": {
+    "wins": 1113437,
+    "losses": 1068099,
+    "winrate": 51.0391
+   }
+  },
+  "mcginnis": {
+   "hero_id": 8,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=8",
+   "cache": "data/cache/hero-8.json",
+   "sha256_16": "8e51db9a77284a63",
+   "baseline": {
+    "wins": 489897,
+    "losses": 486949,
+    "winrate": 50.1509
+   }
+  },
+  "mina": {
+   "hero_id": 63,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=63",
+   "cache": "data/cache/hero-63.json",
+   "sha256_16": "95bb3e6167682150",
+   "baseline": {
+    "wins": 1162343,
+    "losses": 1435079,
+    "winrate": 44.7499
+   }
+  },
+  "mirage": {
+   "hero_id": 52,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=52",
+   "cache": "data/cache/hero-52.json",
+   "sha256_16": "756cf168a552be75",
+   "baseline": {
+    "wins": 359835,
+    "losses": 466910,
+    "winrate": 43.5243
+   }
+  },
+  "mo krill": {
+   "hero_id": 18,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=18",
+   "cache": "data/cache/hero-18.json",
+   "sha256_16": "556d136a5391530f",
+   "baseline": {
+    "wins": 569974,
+    "losses": 600949,
+    "winrate": 48.6773
+   }
+  },
+  "nurse harrow": {
+   "hero_id": 87,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=87",
+   "cache": "data/cache/hero-87.json",
+   "sha256_16": "257e5a8d8143cbec",
+   "baseline": {
+    "wins": 1167505,
+    "losses": 1113102,
+    "winrate": 51.1927
+   }
+  },
+  "paige": {
+   "hero_id": 67,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=67",
+   "cache": "data/cache/hero-67.json",
+   "sha256_16": "a274cc4ec5309696",
+   "baseline": {
+    "wins": 1120359,
+    "losses": 876449,
+    "winrate": 56.1075
+   }
+  },
+  "paradox": {
+   "hero_id": 10,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=10",
+   "cache": "data/cache/hero-10.json",
+   "sha256_16": "0542438463148d3c",
+   "baseline": {
+    "wins": 953652,
+    "losses": 1087049,
+    "winrate": 46.7316
+   }
+  },
+  "pocket": {
+   "hero_id": 50,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=50",
+   "cache": "data/cache/hero-50.json",
+   "sha256_16": "3a63df48dfa562d5",
+   "baseline": {
+    "wins": 564552,
+    "losses": 711305,
+    "winrate": 44.2488
+   }
+  },
+  "rat king": {
+   "hero_id": 84,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=84",
+   "cache": "data/cache/hero-84.json",
+   "sha256_16": "c0fe66ed8c9fa2d6",
+   "baseline": {
+    "wins": 1711022,
+    "losses": 1405814,
+    "winrate": 54.8961
+   }
+  },
+  "rem": {
+   "hero_id": 79,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=79",
+   "cache": "data/cache/hero-79.json",
+   "sha256_16": "3d96f84e57c439fa",
+   "baseline": {
+    "wins": 966583,
+    "losses": 1167801,
+    "winrate": 45.2863
+   }
+  },
+  "seven": {
+   "hero_id": 2,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=2",
+   "cache": "data/cache/hero-2.json",
+   "sha256_16": "b8cbf32817c48995",
+   "baseline": {
+    "wins": 1297784,
+    "losses": 1055863,
+    "winrate": 55.1393
+   }
+  },
+  "shiv": {
+   "hero_id": 19,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=19",
+   "cache": "data/cache/hero-19.json",
+   "sha256_16": "4583e4ba89602e75",
+   "baseline": {
+    "wins": 893401,
+    "losses": 1095329,
+    "winrate": 44.9232
+   }
+  },
+  "silver": {
+   "hero_id": 80,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=80",
+   "cache": "data/cache/hero-80.json",
+   "sha256_16": "2ae182246e2e44fe",
+   "baseline": {
+    "wins": 996647,
+    "losses": 1160041,
+    "winrate": 46.2119
+   }
+  },
+  "sinclair": {
+   "hero_id": 60,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=60",
+   "cache": "data/cache/hero-60.json",
+   "sha256_16": "166b235ee3a4890b",
+   "baseline": {
+    "wins": 331619,
+    "losses": 409214,
+    "winrate": 44.763
+   }
+  },
+  "solomon": {
+   "hero_id": 85,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=85",
+   "cache": "data/cache/hero-85.json",
+   "sha256_16": "4915471847568a84",
+   "baseline": {
+    "wins": 433556,
+    "losses": 485413,
+    "winrate": 47.1785
+   }
+  },
+  "the doorman": {
+   "hero_id": 69,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=69",
+   "cache": "data/cache/hero-69.json",
+   "sha256_16": "728f5aa4a54e21e3",
+   "baseline": {
+    "wins": 538299,
+    "losses": 635591,
+    "winrate": 45.856
+   }
+  },
+  "venator": {
+   "hero_id": 65,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=65",
+   "cache": "data/cache/hero-65.json",
+   "sha256_16": "2cd5b4155f2418c6",
+   "baseline": {
+    "wins": 1319997,
+    "losses": 1534009,
+    "winrate": 46.2507
+   }
+  },
+  "victor": {
+   "hero_id": 66,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=66",
+   "cache": "data/cache/hero-66.json",
+   "sha256_16": "e58dd632b28c94ca",
+   "baseline": {
+    "wins": 1185855,
+    "losses": 1015462,
+    "winrate": 53.8703
+   }
+  },
+  "vindicta": {
+   "hero_id": 3,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=3",
+   "cache": "data/cache/hero-3.json",
+   "sha256_16": "7898b57b812d96b5",
+   "baseline": {
+    "wins": 1015217,
+    "losses": 1046581,
+    "winrate": 49.2394
+   }
+  },
+  "violet": {
+   "hero_id": 86,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=86",
+   "cache": "data/cache/hero-86.json",
+   "sha256_16": "68f44fa643406a7f",
+   "baseline": {
+    "wins": 872362,
+    "losses": 902449,
+    "winrate": 49.1524
+   }
+  },
+  "viscous": {
+   "hero_id": 35,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=35",
+   "cache": "data/cache/hero-35.json",
+   "sha256_16": "ec65bb92fd47f12d",
+   "baseline": {
+    "wins": 437760,
+    "losses": 513795,
+    "winrate": 46.0047
+   }
+  },
+  "vyper": {
+   "hero_id": 58,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=58",
+   "cache": "data/cache/hero-58.json",
+   "sha256_16": "ba27d6887bc28878",
+   "baseline": {
+    "wins": 452244,
+    "losses": 532584,
+    "winrate": 45.9211
+   }
+  },
+  "warden": {
+   "hero_id": 25,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=25",
+   "cache": "data/cache/hero-25.json",
+   "sha256_16": "679ae62839d3bfa1",
+   "baseline": {
+    "wins": 547925,
+    "losses": 544924,
+    "winrate": 50.1373
+   }
+  },
+  "wraith": {
+   "hero_id": 7,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=7",
+   "cache": "data/cache/hero-7.json",
+   "sha256_16": "85f41dd5f988b85a",
+   "baseline": {
+    "wins": 1215869,
+    "losses": 1211125,
+    "winrate": 50.0977
+   }
+  },
+  "yamato": {
+   "hero_id": 27,
+   "url": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id=27",
+   "cache": "data/cache/hero-27.json",
+   "sha256_16": "ea0d903bcd86b8e7",
+   "baseline": {
+    "wins": 876208,
+    "losses": 977539,
+    "winrate": 47.2669
+   }
+  }
+ }
+}

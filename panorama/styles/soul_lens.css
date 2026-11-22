@@ -59,6 +59,21 @@
     color: #7a756c;
 }
 
+/* The source of each row, right-aligned and quieter than the value it names:
+   the number is the reading, this is where it came from. */
+.SoulLensTag {
+    margin-left: auto;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #5f5b53;
+    vertical-align: center;
+}
+
+.SoulLensTag.SoulLensTagNone {
+    color: #8a5a4a;
+}
+
 .SoulLensBuy {
     width: 100%;
     margin-top: 3px;
