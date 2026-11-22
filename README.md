@@ -272,4 +272,10 @@ a skip, never as a pass.
 - A stamped build with no snapshot was witnessed refusing before that:
   `power no 9999`, dps collapsed, wpa still drawn
   (`data/shots/stale-terms-zoom6.jpg`).
+- Six rows witnessed together, Stalker at 1600 souls: `wpa +0.35% · 4.5k/1%`,
+  `buy 6:19`, `shop #37/156`, `sl #4/165 · 90%` (`data/shots/sixrows6.jpg`). The
+  first install of those two rows drew neither: both were collapsed by the flag
+  that decides whether a row is worth drawing, which was `!!refusal` — true only
+  when the reader had *failed*. `data/probes/2026-11-22-row-hidden-on-success.md`
+  keeps the elimination chain and the `shown()` checks that now catch it.
 

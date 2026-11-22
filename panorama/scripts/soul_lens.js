@@ -393,11 +393,26 @@
         var minute = clock(heroBuy || row.avg_buy_s);
         fill(buyRow, byId(block, "SoulLensBuy"), minute, !!minute);
 
-        var shop = shopRecommendation(card.name);
-        fill(shopRow, byId(block, "SoulLensShop"), shop.refusal || shop.value, !!shop.refusal);
+        // A throw in either recommendation read must not take the card with it, and it
+        // must not leave an empty row that reads as "no opinion": the row says which
+        // reader refused.
+        var shop = null;
+        try { shop = shopRecommendation(card.name); } catch (e) {
+            shop = { refusal: "shop err" };
+            log("shop read refused: " + String(e));
+        }
+        // A row is collapsed only when it has nothing to say. Hiding it on "no refusal"
+        // collapsed every row that succeeded, which is the report it exists to make.
+        fill(shopRow, byId(block, "SoulLensShop"), shop.refusal || shop.value,
+            !!(shop.refusal || shop.value));
 
-        var locker = slReading(document, hero, heroRow, key);
-        fill(slRow, byId(block, "SoulLensSl"), locker.refusal || locker.value, !!locker.refusal);
+        var locker = null;
+        try { locker = slReading(document, hero, heroRow, key); } catch (e) {
+            locker = { refusal: "sl err" };
+            log("statlocker read refused: " + String(e));
+        }
+        fill(slRow, byId(block, "SoulLensSl"), locker.refusal || locker.value,
+            !!(locker.refusal || locker.value));
     }
 
     function start() {

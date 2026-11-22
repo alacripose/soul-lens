@@ -285,6 +285,10 @@ const worked = (() => {
     const { queue } = load(root, data, undefined, 3);
     check("the shop row is the item's place in the shop's own list",
         value(lens, "SoulLensShop") === "#1/3", value(lens, "SoulLensShop"));
+    // A reading is a report, not a refusal: the row must draw. Collapsing it on success
+    // is the same blank card as having no source at all, which is what shipped once.
+    check("the shop row draws when it has a reading", shown(lens, "SoulLensShop"),
+        value(lens, "SoulLensShop"));
 
     // The same card, reused for an item further down that list: the running loop must
     // read the card again, not keep the first item's place.
@@ -330,6 +334,8 @@ const rankedHero = (() => {
         check("the statlocker row is the hero's own rank and pick rate",
             value(lens, "SoulLensSl") === slText(rankedHero.hero, firstKey),
             value(lens, "SoulLensSl") + " expected " + slText(rankedHero.hero, firstKey));
+        check("the statlocker row draws when it has a reading", shown(lens, "SoulLensSl"),
+            value(lens, "SoulLensSl"));
 
         // The card is reused for another item: the rank must be that item's, not the
         // one the strip drew a moment ago.
