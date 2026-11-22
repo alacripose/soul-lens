@@ -3,3 +3,5 @@ data/live/
 dist/
 __pycache__/
 *.pyc
+logs/surface-server.pid
+logs/*.log
