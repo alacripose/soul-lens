@@ -1,0 +1,8 @@
+# Records
+
+One dated line per decision, refusal or fixed defect, with the command that proved it.
+
+- 2026-11-22 — built the first slice: one VPK that overrides the live `citadel_tooltip_mod_hover` layout and appends the strip. `python tools/check_live.py --write-report` matches build 6864 (digest `bb967467a1bf2a0781a1757c1f475059`); `python tools/ingest.py` baked 173 shopable items from api.deadlock-api.com plus the live `steam.inf`; statlocker recorded `absent` because its endpoints require an `X-API-Key`; `python -m unittest discover -s tests` is 17 tests; `node tools/tests/test_soul_lens.js` is 12 checks; `python tools/gate.py` passes unit, harness, live and shipped.
+- 2026-11-22 — the live-leg check first failed for two reasons worth keeping: the ingest wrote the absolute `steam.inf` path into a shipping file, and the layout comparison counted the file's own Source 2 Viewer comment as a difference. Both are fixed in place; the data test now refuses any drive path in `data/` or `panorama/`.
+- 2026-11-22 — statlocker is ingested only through its published API with `X-API-Key`, or through an export passed as `--statlocker-file`. Scraping the rendered site was rejected: its pages are client-rendered from that same keyed API, so a scrape would be a guess about a number the site itself will not publish.
+- 2026-11-22 — added the per-hero leg: the ingest asks the API for each hero's own item purchase times (44 heroes, 6831 rows) and the overlay picks the hero the shop header names, labelled; the global average is used only when a hero has no rows, and it says so. Harness grew to 14 checks including "the header hero's own buy time is used".

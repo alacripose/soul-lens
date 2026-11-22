@@ -1,0 +1,5 @@
+data/cache/
+data/live/
+dist/
+__pycache__/
+*.pyc

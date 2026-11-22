@@ -1,0 +1,74 @@
+/*
+ * Soul Lens: the strip under the built-in shop item hover card.
+ *
+ * It inherits the tooltip's own dark ground and reads as part of it: one gold rule,
+ * a tracked label, two monospaced rows, then the buy line and the source line.
+ * Numbers are gold; labels and units are muted so the eye lands on the value.
+ * Nothing here is a card inside a card, and no colour is invented per item.
+ */
+.SoulLens {
+    width: 100%;
+    flow-children: down;
+    margin-top: 4px;
+    padding: 6px 8px 7px 8px;
+    background-color: #0d0d0fE6;
+    border: 1px solid #2a2a2e;
+}
+
+.SoulLensRule {
+    width: 100%;
+    height: 1px;
+    background-color: #c8a04a;
+    margin-bottom: 5px;
+}
+
+.SoulLensHead {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #c8a04a;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+
+.SoulLensRow {
+    width: 100%;
+    flow-children: right;
+    margin-bottom: 1px;
+}
+
+.SoulLensKey {
+    width: 46px;
+    font-size: 11px;
+    color: #8d877b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    vertical-align: center;
+}
+
+.SoulLensValue {
+    font-size: 12px;
+    color: #e9e3d6;
+    vertical-align: center;
+}
+
+.SoulLensValue.SoulLensHave {
+    color: #e9e3d6;
+}
+
+.SoulLensValue.SoulLensNone {
+    color: #7a756c;
+}
+
+.SoulLensBuy {
+    width: 100%;
+    margin-top: 3px;
+    font-size: 11px;
+    color: #b9b2a4;
+}
+
+.SoulLensSrc {
+    width: 100%;
+    margin-top: 1px;
+    font-size: 10px;
+    color: #6d6960;
+}

@@ -1,0 +1,45 @@
+<!--
+    The built-in shop item hover overlay, kept byte-for-byte in structure and given
+    one addition: the Soul Lens block under the item card, plus the script that
+    fills it.
+
+    This file is a copy of the live `panorama/layout/tooltips/citadel_tooltip_mod_hover.xml`
+    from the installed build (see data/live-layout.json for the build and the copy's
+    digest). tools/check_live.py compares it against the running build and refuses
+    when Valve has changed the base layout, because a stale copy would replace the
+    stock tooltip with an older one. The additions are the <scripts> element, the
+    stylesheet include and the #SoulLens panel; nothing above them is edited.
+-->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/citadel_base_styles.vcss" />
+		<include src="s2r://panorama/styles/tooltips/citadel_tooltip_mod_hover.vcss" />
+		<include src="file://{resources}/styles/soul_lens.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/soul_lens_data.js" />
+		<include src="file://{resources}/scripts/soul_lens.js" />
+	</scripts>
+	<Panel class="ModHoverContents" hittest="false" hittestchildren="false">
+		<GlobalClassListener classes="gStreetBrawl" />
+		<Panel id="BackgroundTexture" />
+		<Panel id="BackgroundTexture2" />
+		<CitadelShopMod id="ModView" />
+		<!-- soul-lens:begin (tools/check_live.py removes this block before comparing) -->
+		<Panel id="SoulLens" class="SoulLens" hittest="false" hittestchildren="false">
+			<Panel class="SoulLensRule" />
+			<Label id="SoulLensHead" class="SoulLensHead" text="SOUL LENS" />
+			<Panel class="SoulLensRow">
+				<Label class="SoulLensKey" text="power" />
+				<Label id="SoulLensWp" class="SoulLensValue" text="reading the shop…" />
+			</Panel>
+			<Panel class="SoulLensRow">
+				<Label class="SoulLensKey" text="dps" />
+				<Label id="SoulLensDps" class="SoulLensValue" text="" />
+			</Panel>
+			<Label id="SoulLensBuy" class="SoulLensBuy" text="" />
+			<Label id="SoulLensSrc" class="SoulLensSrc" text="" />
+		</Panel>
+		<!-- soul-lens:end -->
+	</Panel>
+</root>

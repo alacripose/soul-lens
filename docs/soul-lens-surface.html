@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Soul Lens — hover surface witness</title>
+<style>
+    :root {
+        --ground: #08080a;
+        --panel: #111114;
+        --line: #26262b;
+        --ink: #e9e3d6;
+        --muted: #8d877b;
+        --faint: #6d6960;
+        --gold: #c8a04a;
+        --mono: "IBM Plex Mono", "Cascadia Mono", ui-monospace, monospace;
+        --sans: "Archivo", "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: var(--ground);
+        color: var(--ink);
+        font-family: var(--sans);
+        padding: 40px 32px 56px;
+    }
+    header { max-width: 1180px; margin: 0 auto 28px; }
+    .eyebrow {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 3px;
+        color: var(--gold);
+        text-transform: uppercase;
+    }
+    h1 { font-size: 30px; margin: 8px 0 6px; font-weight: 600; letter-spacing: -0.01em; }
+    p.lead { color: var(--muted); max-width: 76ch; line-height: 1.55; margin: 0; font-size: 14px; }
+    .grid {
+        max-width: 1180px;
+        margin: 32px auto 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 22px;
+    }
+    .frame {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 16px;
+    }
+    .frame h2 {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin: 0 0 12px;
+    }
+    /* The card below is the stock tooltip's own shape: dark plate, name, price,
+       tier tag, then the Soul Lens strip the mod appends. */
+    .ModHoverContents {
+        width: 320px;
+        background: #0b0b0d;
+        border: 1px solid #222226;
+        padding: 10px;
+    }
+    .mod_view { display: block; }
+    #ModCard {
+        height: 96px;
+        border: 1px solid #2b2b30;
+        background: linear-gradient(160deg, #17171a, #101013 60%, #0c0c0e);
+        position: relative;
+    }
+    .tier {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 1px;
+        color: #0b0b0d;
+        background: var(--gold);
+        padding: 1px 5px;
+    }
+    .mod_name_area { margin-top: 8px; }
+    .modName { font-size: 15px; color: var(--ink); letter-spacing: 0.01em; }
+    #ItemCostContainer { margin-top: 3px; }
+    #ItemCost { font-family: var(--mono); font-size: 13px; color: var(--gold); }
+    .SoulLens {
+        width: 100%;
+        display: flow-root;
+        margin-top: 8px;
+        padding: 7px 9px 8px;
+        background: #0d0d0f;
+        border: 1px solid #2a2a2e;
+    }
+    .SoulLensRule { width: 100%; height: 1px; background: var(--gold); margin-bottom: 6px; }
+    .SoulLensHead {
+        display: block;
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 2px;
+        color: var(--gold);
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+    .SoulLensRow { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .SoulLensKey {
+        width: 46px;
+        flex: 0 0 46px;
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 1px;
+        color: var(--muted);
+        text-transform: uppercase;
+    }
+    .SoulLensValue { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+    .SoulLensValue.SoulLensNone { color: #7a756c; }
+    .SoulLensBuy { display: block; margin-top: 5px; font-size: 11px; color: #b9b2a4; }
+    .SoulLensSrc { display: block; margin-top: 2px; font-family: var(--mono); font-size: 10px; color: var(--faint); }
+    .legend {
+        max-width: 1180px;
+        margin: 34px auto 0;
+        border-top: 1px solid var(--line);
+        padding-top: 20px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+    .legend code { font-family: var(--mono); color: var(--ink); font-size: 12px; }
+    .legend h3 {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: var(--gold);
+        text-transform: uppercase;
+        margin: 0 0 8px;
+    }
+    .legend table { border-collapse: collapse; margin-top: 8px; }
+    .legend td { padding: 3px 18px 3px 0; vertical-align: top; }
+    .state { font-family: var(--mono); font-size: 11px; margin-top: 14px; color: var(--faint); }
+</style>
+</head>
+<body>
+<header>
+    <div class="eyebrow">Soul Lens · hover surface</div>
+    <h1>The shop hover card, with its economy strip</h1>
+    <p class="lead">
+        This page runs the shipped overlay script, <code>panorama/scripts/soul_lens.js</code>, against a DOM
+        stand-in for the game's panel API and the baked catalogue in <code>data/items.json</code>. It is the
+        browser witness for the same code the mod packs: each card is filled by the script, not by the page.
+    </p>
+</header>
+
+<div class="grid">
+    <div class="frame">
+        <h2>weapon item</h2>
+        <div class="ModHoverContents">
+            <div class="mod_view" id="ModView">
+                <div id="ModCard"><span class="tier">Tier 1</span></div>
+                <div class="mod_name_area"><span class="modName" data-item="extended magazine">Extended Magazine</span></div>
+                <div id="ItemCostContainer"><span id="ItemCost">800</span></div>
+            </div>
+            <div id="SoulLens" class="SoulLens">
+                <div class="SoulLensRule"></div>
+                <span id="SoulLensHead" class="SoulLensHead">SOUL LENS</span>
+                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span></div>
+                <span id="SoulLensBuy" class="SoulLensBuy"></span>
+                <span id="SoulLensSrc" class="SoulLensSrc"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="frame">
+        <h2>no weapon terms</h2>
+        <div class="ModHoverContents">
+            <div class="mod_view" id="ModView">
+                <div id="ModCard"><span class="tier">Tier 1</span></div>
+                <div class="mod_name_area"><span class="modName">Extra Spirit</span></div>
+                <div id="ItemCostContainer"><span id="ItemCost">800</span></div>
+            </div>
+            <div id="SoulLens" class="SoulLens">
+                <div class="SoulLensRule"></div>
+                <span id="SoulLensHead" class="SoulLensHead">SOUL LENS</span>
+                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span></div>
+                <span id="SoulLensBuy" class="SoulLensBuy"></span>
+                <span id="SoulLensSrc" class="SoulLensSrc"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="frame">
+        <h2>item the bake does not know</h2>
+        <div class="ModHoverContents">
+            <div class="mod_view" id="ModView">
+                <div id="ModCard"><span class="tier">Tier ?</span></div>
+                <div class="mod_name_area"><span class="modName">A Later Patch Item</span></div>
+                <div id="ItemCostContainer"><span id="ItemCost">3200</span></div>
+            </div>
+            <div id="SoulLens" class="SoulLens">
+                <div class="SoulLensRule"></div>
+                <span id="SoulLensHead" class="SoulLensHead">SOUL LENS</span>
+                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span></div>
+                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span></div>
+                <span id="SoulLensBuy" class="SoulLensBuy"></span>
+                <span id="SoulLensSrc" class="SoulLensSrc"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="legend">
+    <h3>what each line is, and what it refuses</h3>
+    <table>
+        <tr><td><code>power</code></td><td>souls per +1% weapon power, from the item's <code>BaseAttackDamagePercent</code> and <code>WeaponPower</code>.</td></tr>
+        <tr><td><code>dps</code></td><td>souls per +1% DPS of the hero's current weapon, from <code>(1 + power/100) × (1 + fire rate/100) − 1</code>.</td></tr>
+        <tr><td><code>buy ≈</code></td><td>measured average purchase time across the matches the public API holds, not a recommendation.</td></tr>
+        <tr><td><code>in this list</code></td><td>the item's place in the shop list that is open, read from the shop's own panels.</td></tr>
+        <tr><td><code>statlocker</code></td><td>WPA and build order join the strip only when an <code>X-API-Key</code> answer is present; otherwise the line says why it is absent.</td></tr>
+    </table>
+    <div class="state" id="state">loading data…</div>
+</div>
+
+<script>
+// A DOM stand-in for the Panorama methods soul_lens.js calls. If the script grows a
+// call this shim does not answer, the page throws and the witness fails loudly
+// rather than drawing a number the game would not.
+(function () {
+    function wrap(el, root) {
+        const panel = {
+            id: el.id || "",
+            className: el.className || "",
+            _el: el,
+            get text() { return el.textContent || ""; },
+            set text(value) { el.textContent = String(value == null ? "" : value); },
+            FindChildTraverse(id) {
+                const found = el.querySelector('#' + CSS.escape(id));
+                return found ? wrap(found, root) : null;
+            },
+            GetChildCount() { return el.children.length; },
+            GetChild(index) { return el.children[index] ? wrap(el.children[index], root) : null; },
+            GetParent() { return el.parentElement ? wrap(el.parentElement, root) : null; },
+            GetAttributeString(key) { return key === "class" ? (el.className || "") : ""; },
+            AddClass(name) { el.classList.add(name); },
+            RemoveClass(name) { el.classList.remove(name); },
+        };
+        return panel;
+    }
+
+    let current = null;
+    window.$ = {
+        Msg() {},
+        GetContextPanel() { return current; },
+        // The script schedules its first tick, so the card whose script scheduled a
+        // callback must be the one that is mounted while it runs. Capturing the
+        // root here keeps three cards on one page from all reading the last one.
+        Schedule(delay, fn) {
+            const root = current;
+            setTimeout(() => {
+                const previous = current;
+                current = root;
+                try { fn(); } finally { current = previous; }
+            }, 0);
+        },
+        CreatePanel() { return null; },
+    };
+
+    async function runFor(card) {
+        current = wrap(card, card);
+        const source = await (await fetch("../panorama/scripts/soul_lens.js")).text();
+        const tag = document.createElement("script");
+        tag.textContent = source;
+        document.body.appendChild(tag);
+    }
+
+    window.soulLensWitness = async function () {
+        if (!window.SoulLensData) {
+            document.getElementById("state").textContent = "refused: soul_lens_data.js did not load";
+            return;
+        }
+        const cards = Array.from(document.querySelectorAll(".ModHoverContents"));
+        for (const card of cards) await runFor(card);
+        const doc = window.SoulLensData;
+        const sl = doc.sources["statlocker"] || {};
+        document.getElementById("state").textContent =
+            "data " + doc.schema + " · build " + doc.build + " " + (doc.build_date || "") +
+            " · items " + Object.keys(doc.items).length +
+            " · statlocker " + (sl.state || "?") + (sl.reason ? " (" + sl.reason + ")" : "");
+    };
+})();
+</script>
+<script src="../panorama/scripts/soul_lens_data.js"></script>
+<script>window.soulLensWitness();</script>
+</body>
+</html>
