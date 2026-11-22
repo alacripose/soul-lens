@@ -9,7 +9,9 @@ stylesheet, the scripts and the `#SoulLens` block, and writes the override.
 The block goes directly under `#SectionsContainer`, where the card already draws
 the item's own stat rows. That is the whole point of the placement: the strip is
 card content inside the card's contoured ground, at the card's text density, and
-it carries no prose beyond the four row keys.
+it carries no prose beyond the six row keys — power, wpa, dps, buy, then the two
+recommendation sources, `shop` (the shop's own recommended list) and `sl`
+(statlocker's per-hero ranking).
 
 The copy stays a copy: the only inserted text is inside the soul-lens:begin/end
 markers, and tools/check_live.py removes that block before comparing the rest
@@ -39,26 +41,30 @@ SCRIPTS = (
 # it, still inside #AttributesContainer.
 STATS_BLOCK = '\t\t\t\t\t\t<Panel id="SectionsContainer" class="TopBottomFlow" />\n'
 
+
+def row(row_id: str, value_id: str, key: str) -> str:
+    return (
+        f'\t\t\t\t\t\t\t<Panel id="{row_id}" class="SoulLensRow LeftRightFlow">\n'
+        f'\t\t\t\t\t\t\t\t<Label class="SoulLensKey componentsLabel" text="{key}" />\n'
+        f'\t\t\t\t\t\t\t\t<Label id="{value_id}" class="SoulLensValue" text="" />\n'
+        "\t\t\t\t\t\t\t</Panel>\n"
+    )
+
+
+ROWS = (
+    row("SoulLensWpRow", "SoulLensWp", "power")
+    + row("SoulLensWpaRow", "SoulLensWpa", "wpa")
+    + row("SoulLensDpsRow", "SoulLensDps", "dps")
+    + row("SoulLensBuyRow", "SoulLensBuy", "buy")
+    + row("SoulLensShopRow", "SoulLensShop", "shop")
+    + row("SoulLensSlRow", "SoulLensSl", "sl")
+)
+
 PANEL = (
     '\t\t\t\t\t\t<!-- soul-lens:begin (tools/check_live.py removes this block before comparing) -->\n'
     '\t\t\t\t\t\t<Panel id="SoulLens" class="SoulLens TopBottomFlow" hittest="false" hittestchildren="false">\n'
-    '\t\t\t\t\t\t\t<Panel id="SoulLensWpRow" class="SoulLensRow LeftRightFlow">\n'
-    '\t\t\t\t\t\t\t\t<Label class="SoulLensKey componentsLabel" text="power" />\n'
-    '\t\t\t\t\t\t\t\t<Label id="SoulLensWp" class="SoulLensValue" text="" />\n'
-    '\t\t\t\t\t\t\t</Panel>\n'
-    '\t\t\t\t\t\t\t<Panel id="SoulLensWpaRow" class="SoulLensRow LeftRightFlow">\n'
-    '\t\t\t\t\t\t\t\t<Label class="SoulLensKey componentsLabel" text="wpa" />\n'
-    '\t\t\t\t\t\t\t\t<Label id="SoulLensWpa" class="SoulLensValue" text="" />\n'
-    '\t\t\t\t\t\t\t</Panel>\n'
-    '\t\t\t\t\t\t\t<Panel id="SoulLensDpsRow" class="SoulLensRow LeftRightFlow">\n'
-    '\t\t\t\t\t\t\t\t<Label class="SoulLensKey componentsLabel" text="dps" />\n'
-    '\t\t\t\t\t\t\t\t<Label id="SoulLensDps" class="SoulLensValue" text="" />\n'
-    '\t\t\t\t\t\t\t</Panel>\n'
-    '\t\t\t\t\t\t\t<Panel id="SoulLensBuyRow" class="SoulLensRow LeftRightFlow">\n'
-    '\t\t\t\t\t\t\t\t<Label class="SoulLensKey componentsLabel" text="buy" />\n'
-    '\t\t\t\t\t\t\t\t<Label id="SoulLensBuy" class="SoulLensValue" text="" />\n'
-    '\t\t\t\t\t\t\t</Panel>\n'
-    '\t\t\t\t\t\t</Panel>\n'
+    + ROWS
+    + "\t\t\t\t\t\t</Panel>\n"
     '\t\t\t\t\t\t<!-- soul-lens:end -->\n'
 )
 

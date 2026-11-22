@@ -34,9 +34,12 @@ STEAM_INF = pathlib.Path("D:/SteamLibrary/steamapps/common/Deadlock/game/citadel
 S2V = pathlib.Path("C:/Users/ala/Downloads/cli-windows-x64/Source2Viewer-CLI.exe")
 MOD = pathlib.Path("panorama/layout/tooltips/citadel_tooltip_mod_details.xml")
 
-SCRIPTS_BLOCK = re.compile(r"\n\t<scripts>.*?</scripts>", re.S)
-SOUL_CSS = re.compile(r"\n\t\t<include src=\"file://\{resources\}/styles/soul_lens\.css\" />")
-SOUL_BLOCK = re.compile(r"\t\t<!-- soul-lens:begin.*?soul-lens:end -->\n", re.S)
+# The additions are removed wholly, indentation and line ending included: a CRLF file (which
+# Windows writes) and an LF one must strip to the same body, and the line after the block must
+# not keep four orphaned tabs of the block's indentation.
+SCRIPTS_BLOCK = re.compile(r"\r?\n\t<scripts>.*?</scripts>", re.S)
+SOUL_CSS = re.compile(r"\r?\n\t\t<include src=\"file://\{resources\}/styles/soul_lens\.css\" />")
+SOUL_BLOCK = re.compile(r"[ \t]*<!-- soul-lens:begin.*?soul-lens:end -->[^\r\n]*\r?\n", re.S)
 
 
 def strip_additions(text: str) -> str:

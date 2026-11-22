@@ -1,11 +1,11 @@
 {
  "schema": "soul-lens.live-layout/1",
- "layout": "panorama/layout/tooltips/citadel_tooltip_mod_hover.xml",
+ "layout": "panorama/layout/tooltips/citadel_tooltip_mod_details.xml",
  "build": "6864",
  "vpk": "game/citadel/pak01_dir.vpk",
  "s2v": "Source2Viewer-CLI.exe",
  "source": "installed build through S2V",
- "live_digest": "bb967467a1bf2a0781a1757c1f475059",
- "mod_body_digest": "bb967467a1bf2a0781a1757c1f475059",
+ "live_digest": "20783fc663bbbed0041962ae3d26ef4e",
+ "mod_body_digest": "20783fc663bbbed0041962ae3d26ef4e",
  "same": true
 }

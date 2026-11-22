@@ -1,7 +1,7 @@
 // Soul Lens: fill the strip under the built-in shop item hover card.
 //
 // This file is included by the mod's copy of panorama/layout/tooltips/
-// citadel_tooltip_mod_hover.xml, so it runs once per hover card and shares that
+// citadel_tooltip_mod_details.xml, so it runs once per hover card and shares that
 // card's context panel. It never throws into the tooltip: the stock card is the
 // game's own layout, and a missing data row, a renamed panel or a closed shop must
 // leave the card exactly as Valve drew it.
@@ -9,12 +9,13 @@
 // What it reads, in order:
 //   1. the card itself (`#ModView`) - item name and price, live values
 //   2. window.SoulLensData, baked by tools/ingest.py - weapon terms, per-hero
-//      WPA from recorded wins and losses, and measured purchase times
-//   3. the open shop, when it can be found - the hero name, and the item's place
-//      in the visible list ("3 of 12 in this list")
+//      measured WPA and purchase times, and Statlocker's per-hero ranking
+//   3. the open shop, when it can be found - the hero the header names, and the
+//      hovered item's place in the shop's own recommended list (`#ShopModsRecommended`)
 //
 // Every row carries the source of its number. A number that a source cannot
-// answer for is a sentence in the row, never a zero or a blank.
+// answer for is a sentence in the row, never a zero or a blank, and never another
+// item's or another hero's number.
 (function () {
     "use strict";
 
@@ -84,6 +85,28 @@
         return out;
     }
 
+    // Every descendant of `panel` carrying `needle`, in tree order. Panorama's own
+    // class lookup is exact and cheap, so it is tried first; the bounded walk is the
+    // fallback for the browser witness and for a class spelled another way.
+    function collect(panel, needle) {
+        if (!panel) return [];
+        try {
+            var hits = panel.FindChildrenWithClassTraverse ? panel.FindChildrenWithClassTraverse(needle) : null;
+            if (hits && hits.length) return hits;
+        } catch (e) {}
+        var out = [];
+        var queue = [panel];
+        var seen = 0;
+        while (queue.length && seen < 4000) {
+            var node = queue.shift();
+            seen += 1;
+            if (hasClass(node, needle)) out.push(node);
+            var next = kids(node);
+            for (var i = 0; i < next.length; i += 1) queue.push(next[i]);
+        }
+        return out;
+    }
+
     // The card's name label is `.modName`; the price is `#ItemCost`. Both sit under
     // #ModView in the stock layout, and both are re-written when the card is reused
     // for the next hovered item, so they are read every tick rather than cached.
@@ -147,11 +170,10 @@
         return sign + number.toFixed(digits);
     }
 
-    // The hero's name is in the shop layout, and a tooltip is its own popup tree:
-    // the label is a *class* (`HeroFavoritesHeaderLabel`), not an id, and it is not
-    // an ancestor of the card. Walk to the outermost ancestor this context can see
-    // and search that subtree by class, bounded so a huge HUD cannot stall a hover.
-    function heroName() {
+    // A tooltip is its own popup tree, and the shop is not an ancestor of the card
+    // but the outermost panel this context can see. Both the hero label and the
+    // recommended list are found from there.
+    function outerPanel() {
         try {
             var node = $.GetContextPanel();
             var outer = node;
@@ -161,85 +183,65 @@
                 node = node.GetParent ? node.GetParent() : null;
                 up += 1;
             }
-            // Panorama's own class lookup is cheap and exact; the manual BFS below is
-            // only a fallback for the browser witness.
-            try {
-                var hits = outer.FindChildrenWithClassTraverse ? outer.FindChildrenWithClassTraverse("HeroFavoritesHeaderLabel") : null;
-                if (hits && hits.length) {
-                    var hitText = text(hits[0]);
-                    if (hitText) {
-                        var hitMatch = hitText.match(/^(.+?)'s /);
-                        return hitMatch ? hitMatch[1] : hitText;
-                    }
+            return outer;
+        } catch (e) { return null; }
+    }
+
+    // The hero's name is a *class* (`HeroFavoritesHeaderLabel`) in the shop layout, not
+    // an id, and it reads "<Hero>'s Recommended Mods".
+    function heroName() {
+        var outer = outerPanel();
+        if (!outer) return "";
+        try {
+            var hits = outer.FindChildrenWithClassTraverse ? outer.FindChildrenWithClassTraverse("HeroFavoritesHeaderLabel") : null;
+            if (hits && hits.length) {
+                var hitText = text(hits[0]);
+                if (hitText) {
+                    var hitMatch = hitText.match(/^(.+?)'s /);
+                    return hitMatch ? hitMatch[1] : hitText;
                 }
-            } catch (e) {}
-            var queue = [outer];
-            var seen = 0;
-            while (queue.length && seen < 6000) {
-                var panel = queue.shift();
-                seen += 1;
-                if (hasClass(panel, "HeroFavoritesHeaderLabel")) {
-                    var raw = text(panel);
-                    if (raw) {
-                        var match = raw.match(/^(.+?)'s /);
-                        return match ? match[1] : raw;
-                    }
-                }
-                var next = kids(panel);
-                for (var i = 0; i < next.length; i += 1) queue.push(next[i]);
             }
         } catch (e) {}
+        var queue = [outer];
+        var seen = 0;
+        while (queue.length && seen < 6000) {
+            var panel = queue.shift();
+            seen += 1;
+            if (hasClass(panel, "HeroFavoritesHeaderLabel")) {
+                var raw = text(panel);
+                if (raw) {
+                    var match = raw.match(/^(.+?)'s /);
+                    return match ? match[1] : raw;
+                }
+            }
+            var next = kids(panel);
+            for (var i = 0; i < next.length; i += 1) queue.push(next[i]);
+        }
         return "";
     }
 
-    // The list the shop is showing. Entries are panels whose class says `mod` and
-    // whose subtree carries a name label; the hovered item's index is its place in
-    // that order, which is the shop build menu's own ordering, not a guess.
-    function listPosition(itemName) {
-        if (!itemName) return "";
-        try {
-            var node = $.GetContextPanel();
-            var container = null;
-            var guard = 0;
-            while (node && guard < 60 && !container) {
-                container = node.FindChildTraverse ? node.FindChildTraverse("ShopModListsContainer") : null;
-                node = node.GetParent ? node.GetParent() : null;
-                guard += 1;
-            }
-            if (!container) return "";
-            var entries = [];
-            var queue = [container];
-            var seen = 0;
-            while (queue.length && seen < 2500) {
-                var panel = queue.shift();
-                seen += 1;
-                var id = "";
-                try { id = panel.id || ""; } catch (e) { id = ""; }
-                if (/shop.?mod.?list/i.test(id) || hasClass(panel, "modlist")) entries.push(panel);
-                var next = kids(panel);
-                for (var i = 0; i < next.length; i += 1) queue.push(next[i]);
-            }
-            if (!entries.length) return "";
-            var wanted = normalize(itemName);
-            var names = [];
-            for (var e = 0; e < entries.length; e += 1) {
-                var found = null;
-                var walk = [entries[e]];
-                var steps = 0;
-                while (walk.length && !found && steps < 400) {
-                    var row = walk.shift();
-                    steps += 1;
-                    if (hasClass(row, "modname")) found = text(row);
-                    var children = kids(row);
-                    for (var c = 0; c < children.length; c += 1) walk.push(children[c]);
-                }
-                if (found) names.push(normalize(found));
-            }
-            for (var n = 0; n < names.length; n += 1) {
-                if (names[n] === wanted) return (n + 1) + " of " + names.length + " in this list";
-            }
-        } catch (e) {}
-        return "";
+    // The shop's own recommendation list. `citadel_hud_hero_shop.xml` puts it at
+    // `#ShopModsRecommended`; the hero-build editor is a different panel and is not
+    // read here. Each entry is a `CitadelShopMod` (`mod_view`) carrying a `.modName`
+    // label, and the item's place in that list is the shop's own ordering.
+    function shopRecommendation(itemName) {
+        if (!itemName) return { value: "" };
+        var outer = outerPanel();
+        if (!outer) return { refusal: "no shop" };
+        var list = byId(outer, "ShopModsRecommended");
+        if (!list) return { refusal: "no list" };
+        var entries = collect(list, "mod_view");
+        var names = [];
+        for (var i = 0; i < entries.length; i += 1) {
+            var labels = collect(entries[i], "modName");
+            var name = labels.length ? text(labels[0]) : "";
+            var key = normalize(name);
+            if (key && names.indexOf(key) === -1) names.push(key);
+        }
+        if (!names.length) return { refusal: "no list" };
+        var index = names.indexOf(normalize(itemName));
+        if (index === -1) return { refusal: "not listed" };
+        return { value: "#" + (index + 1) + "/" + names.length };
     }
 
     function setRow(node, value, missing, tag, tagText, tagMissing) {
@@ -309,6 +311,25 @@
         return shown + "/1%";
     }
 
+    // Statlocker's own per-hero ranking, baked by tools/ingest.py from the endpoint its
+    // hero page calls. The rank is a place in that hero's table, the percentage is the
+    // share of that hero's analyzed matches that bought the item. A source that did not
+    // answer says so; an item it did not rank says that instead.
+    function slReading(document, hero, heroRow, key) {
+        var source = (document.sources && document.sources["statlocker-ranks"]) || null;
+        if (!source || source.state !== "read") return { refusal: "unavailable" };
+        if (!hero) return { refusal: "no hero" };
+        if (!heroRow) return { refusal: "no hero rows" };
+        var row = heroRow.sl ? heroRow.sl[key] : null;
+        if (!row) return { refusal: "not listed" };
+        // A pick rate under ten percent keeps a decimal: rounding 1.27% to "1%" erases the
+        // difference between a niche item and one nobody buys.
+        var pick = typeof row.pick === "number"
+            ? (row.pick < 10 ? row.pick.toFixed(1) : String(Math.round(row.pick)))
+            : null;
+        return { value: "#" + row.rank + "/" + row.of + (pick === null ? "" : " \u00b7 " + pick + "%") };
+    }
+
     function fill(rowPanel, valuePanel, value, has) {
         if (valuePanel) valuePanel.text = value || "";
         if (!rowPanel) return;
@@ -324,6 +345,8 @@
         var wpaRow = byId(block, "SoulLensWpaRow");
         var dpsRow = byId(block, "SoulLensDpsRow");
         var buyRow = byId(block, "SoulLensBuyRow");
+        var shopRow = byId(block, "SoulLensShopRow");
+        var slRow = byId(block, "SoulLensSlRow");
 
         var key = normalize(card.name);
         var row = key && document && document.items ? document.items[key] : null;
@@ -332,6 +355,8 @@
             fill(wpaRow, byId(block, "SoulLensWpa"), "", false);
             fill(dpsRow, byId(block, "SoulLensDps"), "", false);
             fill(buyRow, byId(block, "SoulLensBuy"), "", false);
+            fill(shopRow, byId(block, "SoulLensShop"), "", false);
+            fill(slRow, byId(block, "SoulLensSl"), "", false);
             return;
         }
 
@@ -346,9 +371,9 @@
             fill(dpsRow, byId(block, "SoulLensDps"), "", false);
         } else {
             fill(wpRow, byId(block, "SoulLensWp"),
-                term && term.wp > 0 ? "+" + term.wp + "% · " + ratio(cost, term.wp) : "", term && term.wp > 0);
+                term && term.wp > 0 ? "+" + term.wp + "% \u00b7 " + ratio(cost, term.wp) : "", term && term.wp > 0);
             fill(dpsRow, byId(block, "SoulLensDps"),
-                term && term.dps > 0 ? "+" + term.dps.toFixed(1) + "% · " + ratio(cost, term.dps) : "",
+                term && term.dps > 0 ? "+" + term.dps.toFixed(1) + "% \u00b7 " + ratio(cost, term.dps) : "",
                 term && term.dps > 0);
         }
 
@@ -358,15 +383,21 @@
         if (reading.refusal) {
             fill(wpaRow, byId(block, "SoulLensWpa"), reading.refusal, true);
         } else if (reading.value <= 0) {
-            fill(wpaRow, byId(block, "SoulLensWpa"), points(reading.value) + "% · no gain", true);
+            fill(wpaRow, byId(block, "SoulLensWpa"), points(reading.value) + "% \u00b7 no gain", true);
         } else {
             fill(wpaRow, byId(block, "SoulLensWpa"),
-                points(reading.value) + "% · " + ratio(cost, reading.value), true);
+                points(reading.value) + "% \u00b7 " + ratio(cost, reading.value), true);
         }
 
         var heroBuy = heroRow && heroRow.buy ? heroRow.buy[key] : null;
         var minute = clock(heroBuy || row.avg_buy_s);
         fill(buyRow, byId(block, "SoulLensBuy"), minute, !!minute);
+
+        var shop = shopRecommendation(card.name);
+        fill(shopRow, byId(block, "SoulLensShop"), shop.refusal || shop.value, !!shop.refusal);
+
+        var locker = slReading(document, hero, heroRow, key);
+        fill(slRow, byId(block, "SoulLensSl"), locker.refusal || locker.value, !!locker.refusal);
     }
 
     function start() {
@@ -396,12 +427,18 @@
                 var key = normalize(card.name) + "|" + card.cost;
                 // The card is filled after it is created, so the first few ticks see
                 // an empty name; once it holds a name the strip is written, and it is
-                // rewritten only when the card is reused for another item.
-                if (key !== lastKey && card.name) {
+                // rewritten only when the card is reused for another item. The slow
+                // re-render catches the one case the card cannot: the same item hovered
+                // across a hero change (a new match's shop), which must not keep the
+                // previous hero's ranking.
+                if (card.name && (key !== lastKey || ticks % 50 === 0)) {
                     lastKey = key;
                     render(block, card, document);
                 }
                 ticks += 1;
+                // The card is one panel reused for every hover and lives as long as the
+                // tooltip, so this loop is not bounded: a fixed budget froze the strip on
+                // whichever item was hovered when the budget ran out.
                 $.Schedule(0.1, tick);
             } catch (e) {
                 log("tick refused: " + String(e));

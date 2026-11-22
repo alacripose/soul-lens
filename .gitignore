@@ -18,6 +18,12 @@ data/ia-x/
 data/ol-vpk/
 data/live-ts/
 data/compile/
+# Extraction scratch from the shop and heroes probes: kept on disk where they can be read
+# next to the diff that used them, never repository contents. data/probes/ is the opposite:
+# the written probes are committed.
+data/probe-shop/
+data/probe-heroes/
+data/probe-sl/
 data/panorama-strings.txt
 data/item_assistant.rar
 

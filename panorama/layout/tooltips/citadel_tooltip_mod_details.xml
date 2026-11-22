@@ -159,6 +159,14 @@
 								<Label class="SoulLensKey componentsLabel" text="buy" />
 								<Label id="SoulLensBuy" class="SoulLensValue" text="" />
 							</Panel>
+							<Panel id="SoulLensShopRow" class="SoulLensRow LeftRightFlow">
+								<Label class="SoulLensKey componentsLabel" text="shop" />
+								<Label id="SoulLensShop" class="SoulLensValue" text="" />
+							</Panel>
+							<Panel id="SoulLensSlRow" class="SoulLensRow LeftRightFlow">
+								<Label class="SoulLensKey componentsLabel" text="sl" />
+								<Label id="SoulLensSl" class="SoulLensValue" text="" />
+							</Panel>
 						</Panel>
 						<!-- soul-lens:end -->
 						<Panel id="BrawlMsg">

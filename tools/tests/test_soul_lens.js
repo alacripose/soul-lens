@@ -1,8 +1,14 @@
 // The Soul Lens harness: run the shipped script against a fake Panorama tree.
 //
 // The strip is card content now, so the behaviour that matters is small: fill the
-// four rows with real numbers, collapse a row that has nothing to say, refuse a
-// build with no terms snapshot, and never throw into the game's own card.
+// six rows with real numbers from the source that owns each one, collapse a row
+// that has nothing to say, refuse a build with no terms snapshot, and never throw
+// into the game's own card.
+//
+// The last block is the regression that matters most: the card is one panel reused
+// for every hover, and the two recommendation rows must follow the card's current
+// item and the shop header's current hero — never the item or hero that was there
+// when the tick loop started.
 "use strict";
 
 const fs = require("fs");
@@ -31,6 +37,17 @@ class Panel {
         }
         return null;
     }
+    FindChildrenWithClassTraverse(name) {
+        const out = [];
+        const walk = (panel) => {
+            for (const child of panel.children) {
+                if (child.classes.has(name)) out.push(child);
+                walk(child);
+            }
+        };
+        walk(this);
+        return out;
+    }
     GetChildCount() { return this.children.length; }
     GetChild(index) { return this.children[index] || null; }
     GetParent() { return this.parent; }
@@ -41,12 +58,25 @@ class Panel {
     SetHasClass(name, on) { if (on) this.classes.add(name); else this.classes.delete(name); }
 }
 
-function tree(itemName, cost, hero) {
+// The shop's own recommended list: one `CitadelShopMod` (`mod_view`) per item, each
+// carrying a `.modName` label, exactly the shape `citadel_hud_hero_shop.xml` builds.
+function recommended(root, names, id) {
+    const list = new Panel(id || "ShopModsRecommended", "", root);
+    for (const name of names) {
+        const entry = new Panel("", "mod_view", list);
+        const label = new Panel("", "modName", entry);
+        label.text = name;
+    }
+    return list;
+}
+
+function tree(itemName, cost, hero, recommendNames) {
     const root = new Panel("", "root", null);
     if (hero) {
         const header = new Panel("HeroFavoritesHeaderLabel", "HeroFavoritesHeaderLabel", root);
         header.text = hero + "'s Recommended Mods";
     }
+    if (recommendNames) recommended(root, recommendNames);
     const contents = new Panel("", "ModHoverContents", root);
     new Panel("BackgroundTexture", "", contents);
     const view = new Panel("ModView", "", contents);
@@ -58,7 +88,8 @@ function tree(itemName, cost, hero) {
     costLabel.text = String(cost);
     const lens = new Panel("SoulLens", "SoulLens", contents);
     for (const [key, valueId] of [["power", "SoulLensWp"], ["wpa", "SoulLensWpa"],
-                                  ["dps", "SoulLensDps"], ["buy", "SoulLensBuy"]]) {
+                                  ["dps", "SoulLensDps"], ["buy", "SoulLensBuy"],
+                                  ["shop", "SoulLensShop"], ["sl", "SoulLensSl"]]) {
         const row = new Panel(valueId + "Row", "SoulLensRow", lens);
         const label = new Panel("", "SoulLensKey", row);
         label.text = key;
@@ -110,6 +141,17 @@ function check(name, condition, detail) {
 const data = JSON.parse(fs.readFileSync(path.join(ROOT, "data/items.json"), "utf8"));
 const minMatches = data.model.min_matches;
 
+// Statlocker's own row, rendered the way the script renders it, so a test compares
+// against the bake rather than against a number copied into this file.
+function slText(hero, itemKey) {
+    const ranked = hero && hero.sl ? hero.sl[itemKey] : null;
+    if (!ranked) return null;
+    const pick = typeof ranked.pick === "number"
+        ? (ranked.pick < 10 ? ranked.pick.toFixed(1) : String(Math.round(ranked.pick)))
+        : null;
+    return "#" + ranked.rank + "/" + ranked.of + (pick === null ? "" : " \u00b7 " + pick + "%");
+}
+
 const worked = (() => {
     for (const [heroKey, hero] of Object.entries(data.heroes)) {
         for (const [itemKey, measured] of Object.entries(hero.wpa)) {
@@ -158,6 +200,8 @@ const worked = (() => {
     load(root, data);
     check("an unknown hero is one phrase", value(lens, "SoulLensWpa") === "no hero rows",
         value(lens, "SoulLensWpa"));
+    check("an unknown hero has no statlocker rank", value(lens, "SoulLensSl") === "no hero rows",
+        value(lens, "SoulLensSl"));
 }
 
 {
@@ -234,18 +278,123 @@ const worked = (() => {
     check("an unfilled card writes no row", value(lens, "SoulLensWp") === "");
 }
 
+// ---- the shop's own recommended list -------------------------------------------
 {
-    // The card is one panel reused for every hover. The tick loop must keep
-    // running for the tooltip's whole life: a bounded loop froze the strip on
-    // whichever item was hovered when the budget ran out, so every later card
-    // showed the same numbers.
+    const names = [worked.item.name, "Burst Fire", "Extra Spirit"];
+    const { root, lens } = tree(worked.item.name, worked.item.cost, worked.hero.name, names);
+    const { queue } = load(root, data, undefined, 3);
+    check("the shop row is the item's place in the shop's own list",
+        value(lens, "SoulLensShop") === "#1/3", value(lens, "SoulLensShop"));
+
+    // The same card, reused for an item further down that list: the running loop must
+    // read the card again, not keep the first item's place.
+    root.FindChildTraverse("ModName").text = "Extra Spirit";
+    root.FindChildTraverse("ItemCost").text = "1000";
+    for (let step = 0; step < 3 && queue.length; step += 1) queue.shift()();
+    check("the shop row follows the reused card", value(lens, "SoulLensShop") === "#3/3",
+        value(lens, "SoulLensShop"));
+}
+
+{
+    const names = ["Burst Fire", "Extra Spirit"];
+    const { root, lens } = tree(worked.item.name, worked.item.cost, worked.hero.name, names);
+    load(root, data);
+    check("an item the shop does not recommend says so", value(lens, "SoulLensShop") === "not listed",
+        value(lens, "SoulLensShop"));
+}
+
+{
+    const { root, lens } = tree(worked.item.name, worked.item.cost, worked.hero.name);
+    load(root, data);
+    check("a shop without the recommended panel says so", value(lens, "SoulLensShop") === "no list",
+        value(lens, "SoulLensShop"));
+}
+
+// ---- statlocker's per-hero ranking ---------------------------------------------
+const rankedHero = (() => {
+    for (const [heroKey, hero] of Object.entries(data.heroes)) {
+        const keys = hero.sl ? Object.keys(hero.sl) : [];
+        if (keys.length >= 2) return { heroKey, hero, keys };
+    }
+    return null;
+})();
+
+{
+    check("the bake carries statlocker rankings", rankedHero !== null);
+    if (rankedHero) {
+        const [firstKey, secondKey] = rankedHero.keys;
+        const first = data.items[firstKey];
+        const second = data.items[secondKey];
+        const { root, lens } = tree(first.name, first.cost, rankedHero.hero.name);
+        const { queue } = load(root, data, undefined, 3);
+        check("the statlocker row is the hero's own rank and pick rate",
+            value(lens, "SoulLensSl") === slText(rankedHero.hero, firstKey),
+            value(lens, "SoulLensSl") + " expected " + slText(rankedHero.hero, firstKey));
+
+        // The card is reused for another item: the rank must be that item's, not the
+        // one the strip drew a moment ago.
+        const before = value(lens, "SoulLensSl");
+        root.FindChildTraverse("ModName").text = second.name;
+        root.FindChildTraverse("ItemCost").text = String(second.cost);
+        for (let step = 0; step < 3 && queue.length; step += 1) queue.shift()();
+        const after = value(lens, "SoulLensSl");
+        check("the statlocker row follows the reused card to the new item",
+            after === slText(rankedHero.hero, secondKey) && after !== before,
+            before + " -> " + after);
+    }
+}
+
+{
+    // The same item hovered while the shop header names another hero: the ranking is
+    // that hero's, and an item the new hero has no row for is a refusal, never the
+    // previous hero's number.
+    const other = rankedHero && Object.entries(data.heroes).find(([heroKey, hero]) =>
+        heroKey !== rankedHero.heroKey && hero.sl);
+    check("the bake has a second ranked hero", !!other);
+    if (rankedHero && other) {
+        const [otherKey, otherHero] = other;
+        const itemKey = rankedHero.keys[0];
+        const item = data.items[itemKey];
+        const { root, lens } = tree(item.name, item.cost, otherHero.name);
+        const { queue } = load(root, data, undefined, 3);
+        const expected = slText(otherHero, itemKey);
+        check("the statlocker row is the header hero's, not the first hero's",
+            value(lens, "SoulLensSl") === (expected || "not listed"),
+            value(lens, "SoulLensSl") + " expected " + (expected || "not listed"));
+
+        // Now change the header under the running loop: after the slow re-render the
+        // row must be the new hero's.
+        root.FindChildTraverse("HeroFavoritesHeaderLabel").text = rankedHero.hero.name + "'s Recommended Mods";
+        for (let step = 0; step < 700 && queue.length; step += 1) queue.shift()();
+        check("a hero change under the same hovered item re-reads the ranking",
+            value(lens, "SoulLensSl") === (slText(rankedHero.hero, itemKey) || "not listed"),
+            value(lens, "SoulLensSl"));
+    }
+}
+
+{
+    const refused = clone(data);
+    refused.sources["statlocker-ranks"] = { state: "refused", reason: "HTTP 429", heroes: 0, rows: 0 };
+    const itemKey = rankedHero ? rankedHero.keys[0] : worked.itemKey;
+    const item = data.items[itemKey];
+    const { root, lens } = tree(item.name, item.cost, rankedHero ? rankedHero.hero.name : worked.hero.name);
+    load(root, refused);
+    check("a refused statlocker source reads unavailable, not stale",
+        value(lens, "SoulLensSl") === "unavailable", value(lens, "SoulLensSl"));
+}
+
+{
+    // The old tick budget froze every card after it; the loop is unbounded now and the
+    // rows must still be this card's after 40 s of shop uptime (700 ticks at 0.1 s).
     const first = worked.item;
     const second = Object.values(data.items).find((item) =>
         item.souls_per_wp && item.name !== first.name && item.cost &&
         data.heroes[worked.heroKey].wpa[Object.keys(data.items).find((k) => data.items[k] === item)]);
-    const { root, lens } = tree(first.name, first.cost, worked.hero.name);
+    const names = [first.name, second.name, "Extra Spirit"];
+    const { root, lens } = tree(first.name, first.cost, worked.hero.name, names);
     const { queue } = load(root, data, undefined, 60);
     const before = value(lens, "SoulLensWp");
+    const beforeShop = value(lens, "SoulLensShop");
     const namePanel = root.FindChildTraverse("ModName");
     const costPanel = root.FindChildTraverse("ItemCost");
     const secondKey = Object.keys(data.items).find((k) => data.items[k] === second);
@@ -258,6 +407,9 @@ const worked = (() => {
     check("the strip follows the reused card to the new item",
         Math.abs(second.wp - first.wp) < 1e-9 || after.includes(String(second.wp)),
         after);
+    check("the shop row is the new item's after 40 s, not the first item's",
+        value(lens, "SoulLensShop") === "#2/3" && beforeShop === "#1/3",
+        beforeShop + " -> " + value(lens, "SoulLensShop"));
 }
 
 {

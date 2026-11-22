@@ -1,6 +1,6 @@
 {
  "schema": "soul-lens.provenance/1",
- "generated": "2026-11-22T16:49:46+00:00",
+ "generated": "2026-11-22T17:33:14+00:00",
  "build": "6864",
  "endpoints": {
   "items": "https://api.deadlock-api.com/v1/assets/items",
@@ -8,7 +8,406 @@
   "heroes": "https://api.deadlock-api.com/v1/assets/heroes",
   "hero_stats": "https://api.deadlock-api.com/v1/analytics/hero-stats",
   "hero_item_stats": "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id={id}",
-  "statlocker": "https://statlocker.gg/api/info/wpa-filtered-items"
+  "statlocker": "https://statlocker.gg/api/info/wpa-filtered-items",
+  "statlocker_ranks": "https://statlocker.gg/api/info/eternus-item-analysis/{hero_id}?minRank=-2",
+  "statlocker_rank_heroes": {
+   "abrams": {
+    "hero_id": 6,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/6?minRank=-2",
+    "cache": "data/cache/statlocker-6.json",
+    "sha256_16": "34ff7b79b2d45bac",
+    "rows": 163,
+    "items": 163,
+    "matches": 9967
+   },
+   "apollo": {
+    "hero_id": 77,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/77?minRank=-2",
+    "cache": "data/cache/statlocker-77.json",
+    "sha256_16": "6d624a50362ddae0",
+    "rows": 171,
+    "items": 171,
+    "matches": 9882
+   },
+   "baba": {
+    "hero_id": 88,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/88?minRank=-2",
+    "cache": "data/cache/statlocker-88.json",
+    "sha256_16": "466a14e3f413f6bc",
+    "rows": 165,
+    "items": 165,
+    "matches": 9959
+   },
+   "bebop": {
+    "hero_id": 15,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/15?minRank=-2",
+    "cache": "data/cache/statlocker-15.json",
+    "sha256_16": "fb0d88f76ea6015d",
+    "rows": 168,
+    "items": 168,
+    "matches": 9978
+   },
+   "billy": {
+    "hero_id": 72,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/72?minRank=-2",
+    "cache": "data/cache/statlocker-72.json",
+    "sha256_16": "96bfbcfe3c072474",
+    "rows": 171,
+    "items": 171,
+    "matches": 9927
+   },
+   "calico": {
+    "hero_id": 16,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/16?minRank=-2",
+    "cache": "data/cache/statlocker-16.json",
+    "sha256_16": "d4c6f6d440532689",
+    "rows": 165,
+    "items": 165,
+    "matches": 9910
+   },
+   "celeste": {
+    "hero_id": 81,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/81?minRank=-2",
+    "cache": "data/cache/statlocker-81.json",
+    "sha256_16": "a1bca4bb2318ac34",
+    "rows": 171,
+    "items": 171,
+    "matches": 9938
+   },
+   "deadman danny": {
+    "hero_id": 78,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/78?minRank=-2",
+    "cache": "data/cache/statlocker-78.json",
+    "sha256_16": "8f186de56571c818",
+    "rows": 163,
+    "items": 163,
+    "matches": 9979
+   },
+   "drifter": {
+    "hero_id": 64,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/64?minRank=-2",
+    "cache": "data/cache/statlocker-64.json",
+    "sha256_16": "5fb301e8a3ca1a08",
+    "rows": 161,
+    "items": 161,
+    "matches": 9982
+   },
+   "dynamo": {
+    "hero_id": 11,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/11?minRank=-2",
+    "cache": "data/cache/statlocker-11.json",
+    "sha256_16": "7c0063a03fe6cef7",
+    "rows": 169,
+    "items": 169,
+    "matches": 9554
+   },
+   "graves": {
+    "hero_id": 76,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/76?minRank=-2",
+    "cache": "data/cache/statlocker-76.json",
+    "sha256_16": "bd1ae53ad43ec79a",
+    "rows": 166,
+    "items": 166,
+    "matches": 9987
+   },
+   "grey talon": {
+    "hero_id": 17,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/17?minRank=-2",
+    "cache": "data/cache/statlocker-17.json",
+    "sha256_16": "43e924e93e9ab094",
+    "rows": 164,
+    "items": 164,
+    "matches": 9910
+   },
+   "haze": {
+    "hero_id": 13,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/13?minRank=-2",
+    "cache": "data/cache/statlocker-13.json",
+    "sha256_16": "3cc74b5c8cdadd7d",
+    "rows": 168,
+    "items": 168,
+    "matches": 9975
+   },
+   "holliday": {
+    "hero_id": 14,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/14?minRank=-2",
+    "cache": "data/cache/statlocker-14.json",
+    "sha256_16": "329b8311d41ac583",
+    "rows": 162,
+    "items": 162,
+    "matches": 9951
+   },
+   "infernus": {
+    "hero_id": 1,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/1?minRank=-2",
+    "cache": "data/cache/statlocker-1.json",
+    "sha256_16": "2dff09844deb1c6c",
+    "rows": 172,
+    "items": 172,
+    "matches": 9926
+   },
+   "ivy": {
+    "hero_id": 20,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/20?minRank=-2",
+    "cache": "data/cache/statlocker-20.json",
+    "sha256_16": "869c30d44148f990",
+    "rows": 168,
+    "items": 168,
+    "matches": 9975
+   },
+   "kelvin": {
+    "hero_id": 12,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/12?minRank=-2",
+    "cache": "data/cache/statlocker-12.json",
+    "sha256_16": "324824dd390a0d9b",
+    "rows": 168,
+    "items": 168,
+    "matches": 9865
+   },
+   "lady geist": {
+    "hero_id": 4,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/4?minRank=-2",
+    "cache": "data/cache/statlocker-4.json",
+    "sha256_16": "69b5f7163fccba6e",
+    "rows": 171,
+    "items": 171,
+    "matches": 9917
+   },
+   "lash": {
+    "hero_id": 31,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/31?minRank=-2",
+    "cache": "data/cache/statlocker-31.json",
+    "sha256_16": "0ea08d90c1529c9f",
+    "rows": 167,
+    "items": 167,
+    "matches": 9987
+   },
+   "mcginnis": {
+    "hero_id": 8,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/8?minRank=-2",
+    "cache": "data/cache/statlocker-8.json",
+    "sha256_16": "286a17a3882e7e9e",
+    "rows": 169,
+    "items": 169,
+    "matches": 6813
+   },
+   "mina": {
+    "hero_id": 63,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/63?minRank=-2",
+    "cache": "data/cache/statlocker-63.json",
+    "sha256_16": "575a60f6959f14d5",
+    "rows": 162,
+    "items": 162,
+    "matches": 9983
+   },
+   "mirage": {
+    "hero_id": 52,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/52?minRank=-2",
+    "cache": "data/cache/statlocker-52.json",
+    "sha256_16": "1f2e4c01a944aed3",
+    "rows": 163,
+    "items": 163,
+    "matches": 7064
+   },
+   "mo krill": {
+    "hero_id": 18,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/18?minRank=-2",
+    "cache": "data/cache/statlocker-18.json",
+    "sha256_16": "d038b590b60062ec",
+    "rows": 163,
+    "items": 163,
+    "matches": 9907
+   },
+   "nurse harrow": {
+    "hero_id": 87,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/87?minRank=-2",
+    "cache": "data/cache/statlocker-87.json",
+    "sha256_16": "43ae7a75e3e52a98",
+    "rows": 171,
+    "items": 171,
+    "matches": 9979
+   },
+   "paige": {
+    "hero_id": 67,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/67?minRank=-2",
+    "cache": "data/cache/statlocker-67.json",
+    "sha256_16": "9d005d3e8f69030d",
+    "rows": 169,
+    "items": 169,
+    "matches": 9932
+   },
+   "paradox": {
+    "hero_id": 10,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/10?minRank=-2",
+    "cache": "data/cache/statlocker-10.json",
+    "sha256_16": "84435cdefa3348bd",
+    "rows": 169,
+    "items": 169,
+    "matches": 9981
+   },
+   "pocket": {
+    "hero_id": 50,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/50?minRank=-2",
+    "cache": "data/cache/statlocker-50.json",
+    "sha256_16": "a71c0f0a00173f36",
+    "rows": 165,
+    "items": 165,
+    "matches": 9980
+   },
+   "rat king": {
+    "hero_id": 84,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/84?minRank=-2",
+    "cache": "data/cache/statlocker-84.json",
+    "sha256_16": "1b2068cc24c800a7",
+    "rows": 171,
+    "items": 171,
+    "matches": 9977
+   },
+   "rem": {
+    "hero_id": 79,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/79?minRank=-2",
+    "cache": "data/cache/statlocker-79.json",
+    "sha256_16": "3f1b33108571ded6",
+    "rows": 171,
+    "items": 171,
+    "matches": 9509
+   },
+   "seven": {
+    "hero_id": 2,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/2?minRank=-2",
+    "cache": "data/cache/statlocker-2.json",
+    "sha256_16": "01c7828f6d92b446",
+    "rows": 169,
+    "items": 169,
+    "matches": 9898
+   },
+   "shiv": {
+    "hero_id": 19,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/19?minRank=-2",
+    "cache": "data/cache/statlocker-19.json",
+    "sha256_16": "001b0878a947fa6b",
+    "rows": 168,
+    "items": 168,
+    "matches": 9970
+   },
+   "silver": {
+    "hero_id": 80,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/80?minRank=-2",
+    "cache": "data/cache/statlocker-80.json",
+    "sha256_16": "7447969fc32a17ca",
+    "rows": 169,
+    "items": 169,
+    "matches": 9319
+   },
+   "sinclair": {
+    "hero_id": 60,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/60?minRank=-2",
+    "cache": "data/cache/statlocker-60.json",
+    "sha256_16": "57e13e577b252cb9",
+    "rows": 170,
+    "items": 170,
+    "matches": 7031
+   },
+   "solomon": {
+    "hero_id": 85,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/85?minRank=-2",
+    "cache": "data/cache/statlocker-85.json",
+    "sha256_16": "19f504cabd32b0c7",
+    "rows": 170,
+    "items": 170,
+    "matches": 9139
+   },
+   "the doorman": {
+    "hero_id": 69,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/69?minRank=-2",
+    "cache": "data/cache/statlocker-69.json",
+    "sha256_16": "6112cebaef50be5c",
+    "rows": 172,
+    "items": 172,
+    "matches": 5317
+   },
+   "venator": {
+    "hero_id": 65,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/65?minRank=-2",
+    "cache": "data/cache/statlocker-65.json",
+    "sha256_16": "61631b74a1f2b392",
+    "rows": 168,
+    "items": 168,
+    "matches": 9984
+   },
+   "victor": {
+    "hero_id": 66,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/66?minRank=-2",
+    "cache": "data/cache/statlocker-66.json",
+    "sha256_16": "84645273f172c36a",
+    "rows": 171,
+    "items": 171,
+    "matches": 9974
+   },
+   "vindicta": {
+    "hero_id": 3,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/3?minRank=-2",
+    "cache": "data/cache/statlocker-3.json",
+    "sha256_16": "f89e2164d7dd62a5",
+    "rows": 168,
+    "items": 168,
+    "matches": 9932
+   },
+   "violet": {
+    "hero_id": 86,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/86?minRank=-2",
+    "cache": "data/cache/statlocker-86.json",
+    "sha256_16": "ae94ea117d7884f1",
+    "rows": 172,
+    "items": 172,
+    "matches": 9970
+   },
+   "viscous": {
+    "hero_id": 35,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/35?minRank=-2",
+    "cache": "data/cache/statlocker-35.json",
+    "sha256_16": "d0a504287bd558fa",
+    "rows": 172,
+    "items": 172,
+    "matches": 7224
+   },
+   "vyper": {
+    "hero_id": 58,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/58?minRank=-2",
+    "cache": "data/cache/statlocker-58.json",
+    "sha256_16": "b0fd1945d93544d2",
+    "rows": 167,
+    "items": 167,
+    "matches": 9540
+   },
+   "warden": {
+    "hero_id": 25,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/25?minRank=-2",
+    "cache": "data/cache/statlocker-25.json",
+    "sha256_16": "6e0b9d908347f897",
+    "rows": 167,
+    "items": 167,
+    "matches": 7629
+   },
+   "wraith": {
+    "hero_id": 7,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/7?minRank=-2",
+    "cache": "data/cache/statlocker-7.json",
+    "sha256_16": "0ac9ed5831d45fed",
+    "rows": 159,
+    "items": 159,
+    "matches": 9975
+   },
+   "yamato": {
+    "hero_id": 27,
+    "url": "https://statlocker.gg/api/info/eternus-item-analysis/27?minRank=-2",
+    "cache": "data/cache/statlocker-27.json",
+    "sha256_16": "59487dba03f18eab",
+    "rows": 164,
+    "items": 164,
+    "matches": 9975
+   }
+  }
  },
  "wpa": "item win rate minus the hero's own win rate, in percentage points, from the recorded wins and losses",
  "heroes": {

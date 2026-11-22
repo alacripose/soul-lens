@@ -1,9 +1,10 @@
 # Soul Lens
 
-A single Deadlock mod: the game's own shop item card, with four rows under the
+A single Deadlock mod: the game's own shop item card, with six rows under the
 item's own stat block — what the item costs per point of weapon power, per point
 of win probability added, and per percent of DPS, when the match usually buys it,
-and where it sits in the shop list that is open.
+and what the two recommendation sources say about it — its place in the shop's own
+recommended list, and Statlocker's rank and pick rate for the hero being played.
 
 It is one Panorama VPK. There is no server, no companion app and no overlay
 process: the mod replaces exactly one of the game's layouts,
@@ -20,7 +21,14 @@ A worked example, Haze and Glass Cannon, from the catalogue this repository ship
 ```
 wpa   +5.0% · 1277 souls/%
 buy   29:18
+sl    #10/168 · 47%
+shop  #3/9
 ```
+
+`sl` is Statlocker's rank and pick rate for Haze, baked from the endpoint its own
+hero page calls; `shop` is the hovered item's place in the list the open shop is
+showing, read from the panel tree at hover time (the `#3/9` above is that list's
+shape, not a baked number).
 
 | Line | Where the number comes from |
 |---|---|
@@ -31,7 +39,8 @@ buy   29:18
 | `+N% dps` | `(1 + power/100) × (1 + fire rate/100) − 1`, the standing weapon multiplier the item adds |
 | `souls / +1%` (dps) | the same division against the DPS percentage |
 | `buy ≈` | the measured purchase time for the hero on the shop header, from that hero's own rows; the global average, labelled `(average)`, when the hero has none |
-| `N of M in this list` | the hovered item's place in the shop list that is open, read from the shop's own panels |
+| `shop` `#N/M` | the hovered item's place in the shop's own recommended list (`#ShopModsRecommended`), read live from the panel tree; `not listed` when the open list does not name it |
+| `sl` `#N/M · P%` | Statlocker's per-hero ranking: the item's place in that hero's table and the share of that hero's analyzed matches that bought it (`/api/info/eternus-item-analysis/<hero_id>`) |
 | the right-hand tag | which source the number on that row came from: `dl-api` or `statlocker` |
 
 ### WPA is measured, not modelled
@@ -48,6 +57,29 @@ set at bake time (or `--statlocker-file`), its WPA replaces the measured one for
 the items it names and the row is tagged `statlocker`. Without a key the measured
 value stands and the source line records the refusal; the mod never needs the key
 to be useful.
+
+### The two recommendation rows are not blended
+
+`shop` and `sl` are separate rows because they are separate sources and they
+disagree, and a blended number would hide that:
+
+- `shop` is the game's own list: the hovered item's index in
+  `#ShopModsRecommended`, the panel `citadel_hud_hero_shop.xml` fills for the
+  selected hero. It is read from the shop's panel tree at hover time, so no bake is
+  involved and none can go stale. A closed shop (`no shop`), a panel that is not
+  there or holds no items (`no list`) and an item the list does not name
+  (`not listed`) are three different sentences.
+- `sl` is Statlocker's own ranking, baked per hero.
+  `/api/info/eternus-item-analysis/<hero_id>?minRank=-2` is the endpoint
+  `statlocker.gg/heroes/<hero>` calls for its item table: rank by purchase share,
+  pick rate, win rate and measured buy time for that hero's matches. It needs no key
+  but does need the page's request headers — a browser User-Agent plus the site as
+  origin and referer; with a bare `soul-lens/1` User-Agent the same URL answers
+  `401 Missing API key` (measured 2026-11-22). The ingest records `read`, `refused`
+  or `skipped`, and the strip prints `unavailable` when the source did not answer —
+  never a neighbouring hero's row.
+
+The measured WPA keeps its own row and is never replaced by either source.
 
 An item with no standing weapon terms — most spirit and vitality items — shows
 `no weapon power term` / `no standing dps term` instead of a zero. Its WPA row
@@ -85,7 +117,8 @@ never needs the network and a card cannot hang:
 
 ```bash
 python tools/ingest.py                       # live network; writes data/items.json, data/provenance.json and the baked script
-python tools/ingest.py --from-cache          # rebuild from data/cache without a request
+python tools/ingest.py --from-cache          # rebuild from data/cache (only statlocker's new heroes are fetched)
+python tools/ingest.py --no-statlocker       # skip statlocker's per-hero ranking, one request per hero
 python tools/record_fixture.py --hero Haze   # re-record the WPA recomputation fixture
 python tools/check_live.py --write-report    # compare the override with the installed build
 ```
@@ -100,6 +133,7 @@ Endpoints read at bake time, all keyless:
 | each hero's own win rate (the WPA baseline) | `.../v1/analytics/hero-stats` |
 | each hero's item wins, losses and purchase time | `.../v1/analytics/item-stats?hero_id=<id>` |
 | statlocker WPA (optional, keyed) | `statlocker.gg/api/info/wpa-filtered-items` |
+| statlocker per-hero ranking (keyless) | `statlocker.gg/api/info/eternus-item-analysis/<hero_id>?minRank=-2` |
 
 `data/provenance.json` records, per hero, the endpoint, the cache file and its
 SHA-256, and the baseline the WPA was measured against.
@@ -168,7 +202,11 @@ a skip, never as a pass.
 | `panorama/scripts/soul_lens.js` | reads the card and the open shop, fills the strip, labels each row, refuses unknown data |
 | `panorama/scripts/soul_lens_data.js` | generated catalogue the overlay reads |
 | `panorama/styles/soul_lens.css` | the strip's family styling |
-| `tools/ingest.py` | item catalogue, per-hero WPA and purchase times, live build → `data/` and the baked script |
+| `tools/ingest.py` | item catalogue, per-hero WPA, purchase times, Statlocker rankings and live build → `data/` and the baked script |
+| `tools/statlocker.py` | reads Statlocker's per-hero ranking endpoint into rank, pick rate and buy time |
+| `tests/test_statlocker.py` | the parse path against the captured response |
+| `tests/fixtures/statlocker-eternus-haze.json` | captured `/api/info/eternus-item-analysis/13` response, 168 ranked items |
+| `data/probes/2026-11-22-heredoc-code-authoring.md` | kept patch probe: why a heredoc was planned for authoring this repo, and the measurement that made it unnecessary |
 | `tools/record_fixture.py` | records one hero's real response as the WPA recomputation fixture |
 | `tools/check_live.py` | refuses a stale override against the installed build |
 | `tools/gate.py` | unit, harness, live and shipped checks in one command |
@@ -210,9 +248,15 @@ a skip, never as a pass.
 - Catalogue: 173 shopable items, 27 with a weapon power term, 45 with a DPS term.
 - Hero outcome data: 44 heroes, 6,831 WPA rows, 702 of them under the 2,000-match
   floor and printed as refusals, from the keyless analytics endpoints.
-- `python -m unittest discover -s tests` — 28 tests.
-- `node tools/tests/test_soul_lens.js` — 28 checks.
-- `python tools/gate.py` — unit, harness, live and shipped all pass.
+- `python -m unittest discover -s tests` — 43 tests, `tests/test_statlocker.py`'s nine
+  of them against `tests/fixtures/statlocker-eternus-haze.json`.
+- `node tools/tests/test_soul_lens.js` — 41 checks, including the reused card's shop
+  place and statlocker rank, a header change under the same hovered item after 700
+  ticks, and a refused statlocker source reading `unavailable`.
+- `python tools/gate.py` — unit, harness, live, no-heredoc and shipped all pass.
+- Statlocker rankings: `python tools/ingest.py --from-cache` read 44 heroes, 7,372
+  item rows (172-item tables, cohort `minRank=103`, 416,571 analyzed matches), 0
+  refused; each hero's URL, cache file and SHA-256 is in `data/provenance.json`.
 - `docs/soul-lens-surface.html` draws all three cases from the shipped script:
   the worked example with both ratios and both tags, a spirit item with its two
   refusals and a live WPA, and an item the bake does not know.
@@ -222,7 +266,7 @@ a skip, never as a pass.
   refuses an archive without the compiled assets.
 - `install.ps1` end to end on this machine: stamp 6864, terms snapshot
   `blake2b:05fd3356…`, `OK: 5 compiled, 0 failed`, nine files packed, mount line
-  present, installed VPK byte-identical to `dist/` (`sha256 89f92292…`).
+  present, installed VPK byte-identical to `dist/` (`sha256 a2a53ba8…`).
 - Witnessed in build 6864 with the native block: `wpa +5.0% · 1277 souls/%`,
   `buy 29:18` under Ricochet's stat boxes (`data/shots/native6.jpg`).
 - A stamped build with no snapshot was witnessed refusing before that:

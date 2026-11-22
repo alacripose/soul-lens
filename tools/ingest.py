@@ -34,19 +34,24 @@ import os
 import pathlib
 import re
 import sys
+import time
 import urllib.request
 
 try:  # script form (python tools/ingest.py) and package import (tests) both work
+    import statlocker
     import terms_archive
 except ImportError:  # pragma: no cover - the package path
-    from tools import terms_archive
+    from tools import statlocker, terms_archive
 
 ITEM_URL = "https://api.deadlock-api.com/v1/assets/items"
 STATS_URL = "https://api.deadlock-api.com/v1/analytics/item-stats"
 HERO_URL = "https://api.deadlock-api.com/v1/assets/heroes"
 HERO_STATS_URL = "https://api.deadlock-api.com/v1/analytics/hero-stats"
 HERO_ITEM_URL = "https://api.deadlock-api.com/v1/analytics/item-stats?hero_id={id}"
+# Two statlocker products, each its own source row in the output: the keyed pooled WPA listing
+# (WPA_URL) and the keyless per-hero ranking the site's hero page draws (statlocker.ANALYSIS_URL).
 WPA_URL = "https://statlocker.gg/api/info/wpa-filtered-items"
+RANK_URL = statlocker.ANALYSIS_URL
 STEAM_INF = pathlib.Path("D:/SteamLibrary/steamapps/common/Deadlock/game/citadel/steam.inf")
 
 # A win-rate delta from fewer matches than this is a reading of noise; the client
@@ -246,6 +251,72 @@ def hero_analytics(heroes: list[dict], rows: dict[str, dict], baselines: dict[in
     return out, source, provenance
 
 
+def statlocker_hero_ranks(heroes: list[dict], rows: dict[str, dict], cache: pathlib.Path,
+                          *, use_cache: bool, retry_delay: float = 1.5):
+    """Statlocker's ranking for each hero, from the per-hero endpoint its hero page calls.
+
+    One request per hero, cached under `data/cache/`. A hero the site refuses is counted and named;
+    no neighbouring hero's rows are used in its place, because a rank is a fact about one hero.
+    """
+    item_keys = {normalize(row.get("name", "")): key for key, row in rows.items() if row.get("name")}
+    out: dict[str, dict] = {}
+    provenance: dict[str, dict] = {}
+    source = {"state": "absent", "heroes": 0, "rows": 0, "skipped": 0, "refused_heroes": 0,
+              "reason": None, "url": RANK_URL, "items": 0, "matches": 0, "cohort_min_rank": None}
+    for hero in heroes:
+        hero_id = hero.get("id")
+        name = hero.get("name") or ""
+        if not isinstance(hero_id, int) or not name or hero.get("disabled"):
+            continue
+        cache_file = cache / f"statlocker-{hero_id}.json"
+        payload = None
+        for attempt in (1, 2):
+            try:
+                payload = fetch(statlocker.analysis_url(hero_id), cache_file,
+                                headers=statlocker.HEADERS, use_cache=use_cache)
+                break
+            except Exception as error:
+                if attempt == 2:
+                    source["refused_heroes"] += 1
+                    source["reason"] = f"hero {name}: {error}"
+                else:
+                    time.sleep(retry_delay)
+        if payload is None:
+            continue
+        try:
+            parsed, parsed_source = statlocker.parse_analysis(payload, item_keys, hero_id=hero_id)
+        except Exception as error:  # a changed shape is a refusal for this hero
+            source["refused_heroes"] += 1
+            source["reason"] = f"hero {name}: {error}"
+            continue
+        source["skipped"] += parsed_source["skipped"]
+        source["items"] = max(source["items"], parsed_source["items"])
+        if parsed_source["cohort_min_rank"] is not None:
+            source["cohort_min_rank"] = parsed_source["cohort_min_rank"]
+        if parsed_source["matches"]:
+            source["matches"] += parsed_source["matches"]
+        if not parsed:
+            continue
+        out[normalize(name)] = {"name": name, "rows": parsed}
+        source["heroes"] += 1
+        source["rows"] += len(parsed)
+        digest = hashlib.sha256(cache_file.read_bytes()).hexdigest()[:16] if cache_file.exists() else None
+        provenance[normalize(name)] = {
+            "hero_id": hero_id,
+            "url": statlocker.analysis_url(hero_id),
+            "cache": f"data/cache/statlocker-{hero_id}.json",
+            "sha256_16": digest,
+            "rows": len(parsed),
+            "items": parsed_source["items"],
+            "matches": parsed_source["matches"],
+        }
+    if out:
+        source["state"] = "read"
+    elif source["refused_heroes"]:
+        source["state"] = "refused"
+    return out, source, provenance
+
+
 def statlocker_rows(payload, rows: dict[str, dict]) -> tuple[dict[str, dict], dict]:
     """Read statlocker's WPA listing, whatever row shape it uses, by item name.
 
@@ -335,6 +406,10 @@ def main() -> int:
                         help="skip the per-hero rows (one request per hero)")
     parser.add_argument("--min-wpa-matches", type=int, default=MIN_WPA_MATCHES)
     parser.add_argument("--statlocker-file", default="")
+    parser.add_argument("--no-statlocker", action="store_true",
+                        help="skip statlocker's per-hero rankings (one request per hero)")
+    parser.add_argument("--statlocker-retry-s", type=float, default=1.5,
+                        help="wait before the one retry after a statlocker request fails")
     parser.add_argument("--replace-terms", action="store_true",
                         help="replace this build's archived terms instead of refusing a changed bake")
     args = parser.parse_args()
@@ -356,6 +431,7 @@ def main() -> int:
         print("REFUSED: no shopable upgrade rows in the catalog", file=sys.stderr)
         return 1
 
+    heroes: list[dict] = []
     hero_source = {"state": "skipped", "heroes": 0, "rows": 0, "wpa_rows": 0, "small": 0,
                    "skipped": 0, "reason": "--no-heroes", "min_matches": args.min_wpa_matches}
     hero_rows: dict[str, dict] = {}
@@ -399,12 +475,34 @@ def main() -> int:
         rows[item_key].update(extra)
     sl_source["url"] = WPA_URL
 
+    # Statlocker's per-hero ranking is a second, separate source: the site's own hero page draws
+    # its item table from it, and it answers without a key. It rides on each hero's block so the
+    # strip can print "#4/168 · 89%" for the hero the shop header names and for no other hero.
+    rank_source = {"state": "skipped", "heroes": 0, "rows": 0, "skipped": 0, "refused_heroes": 0,
+                   "reason": "--no-statlocker or --no-heroes", "url": RANK_URL, "items": 0,
+                   "matches": 0, "cohort_min_rank": None}
+    rank_provenance: dict[str, dict] = {}
+    if not args.no_statlocker and not args.no_heroes and heroes:
+        try:
+            ranks, rank_source, rank_provenance = statlocker_hero_ranks(
+                heroes, rows, cache, use_cache=args.from_cache,
+                retry_delay=args.statlocker_retry_s)
+        except Exception as error:  # the whole source is a refusal, not a crash
+            ranks = {}
+            rank_source = {"state": "refused", "reason": str(error), "heroes": 0, "rows": 0,
+                           "skipped": 0, "refused_heroes": 0, "url": RANK_URL, "items": 0,
+                           "matches": 0, "cohort_min_rank": None}
+        for hero_key, block in ranks.items():
+            hero_row = hero_rows.setdefault(hero_key, {"name": block["name"], "buy": {}, "wpa": {}})
+            hero_row["sl"] = block["rows"]
+
     build = live_build()
     sources = {
         "deadlock-api": {"state": "read", "items": len(rows), "stats_rows": len(stats),
                          "url": ITEM_URL, "stats_url": STATS_URL},
         "deadlock-api-heroes": hero_source,
         "statlocker": sl_source,
+        "statlocker-ranks": rank_source,
         "live-game": build,
     }
     document = {
@@ -471,6 +569,8 @@ def main() -> int:
             "hero_stats": HERO_STATS_URL,
             "hero_item_stats": HERO_ITEM_URL,
             "statlocker": WPA_URL,
+            "statlocker_ranks": RANK_URL,
+            "statlocker_rank_heroes": dict(sorted(rank_provenance.items())),
         },
         "wpa": document["model"]["wpa"],
         "heroes": dict(sorted(provenance.items())),
@@ -484,6 +584,9 @@ def main() -> int:
     print(f"heroes {hero_source['heroes']} rows={hero_source['rows']} wpa_rows={hero_source['wpa_rows']} "
           f"small={hero_source['small']} ({hero_source['state']})")
     print(f"statlocker {sl_source['state']} rows={sl_source['rows']} reason={sl_source['reason']}")
+    print(f"statlocker ranks {rank_source['state']} heroes={rank_source['heroes']} "
+          f"rows={rank_source['rows']} items={rank_source['items']} "
+          f"refused={rank_source['refused_heroes']} reason={rank_source['reason']}")
     print(f"live build {document['build']} {document['build_date']}")
     print(f"wrote {out}, {js} and {provenance_path}")
     return 0

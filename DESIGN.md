@@ -55,6 +55,24 @@ tag is what keeps that legible: `dl-api` for the measured win-rate delta,
 dimmer than the value, so a refusal (`under 2000` in the refusal colour) reads as
 a refusal before it is read as a number.
 
+## 2026-11-22 — the recommendation rows are two rows, not one score
+
+`shop` and `sl` sit under `buy` because they answer the question the ratios raise:
+should I buy this now, and does anyone else? They are two rows rather than one
+blended rank because the populations differ — the shop's list is the game's own
+recommendation for the selected hero, Statlocker's rank is the purchase share of
+that hero's recent matches. A player comparing them is comparing two populations,
+so each key names its source and each value keeps that source's own unit: `#N/M`
+for a place, `%` for a share.
+
+Three states, all the size of a number: `#3/9` (found), `not listed` (the source
+answered and does not name the item), `unavailable` (the source did not answer).
+None is a zero, and none borrows a neighbour's figure.
+
+The placed item is the one the card names at the moment it is read, not the one it
+was created with, and the hero is the one the shop header names on that same read —
+which is why the strip re-renders on a slow tick as well as on a card change.
+
 ## 2026-11-22 — the copy is checked, not trusted
 
 The mod's layout file is the live build's file plus additions, and
