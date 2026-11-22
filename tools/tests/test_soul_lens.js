@@ -52,7 +52,7 @@ function tree(itemName, cost, hero) {
     const view = new Panel("ModView", "", contents);
     const card = new Panel("ModCard", "", view);
     const nameArea = new Panel("", "mod_name_area", card);
-    const name = new Panel("", "modName", nameArea);
+    const name = new Panel("ModName", "modName", nameArea);
     name.text = itemName;
     const costLabel = new Panel("ItemCost", "", card);
     costLabel.text = String(cost);
@@ -71,7 +71,7 @@ function clone(value) {
     return JSON.parse(JSON.stringify(value));
 }
 
-function load(panel, dataSource, liveBuild) {
+function load(panel, dataSource, liveBuild, ticks) {
     const queue = [];
     const sandbox = {
         console,
@@ -92,7 +92,8 @@ function load(panel, dataSource, liveBuild) {
     const stamp = liveBuild === undefined ? (dataSource && dataSource.build) : liveBuild;
     vm.runInContext('var SoulLensLiveBuild = ' + JSON.stringify(stamp === undefined || stamp === null ? "" : stamp) + ";", sandbox);
     vm.runInContext(fs.readFileSync(path.join(ROOT, "panorama/scripts/soul_lens.js"), "utf8"), sandbox);
-    for (let step = 0; step < 3 && queue.length; step += 1) queue.shift()();
+    const budget = ticks === undefined ? 3 : ticks;
+    for (let step = 0; step < budget && queue.length; step += 1) queue.shift()();
     return { panel, queue };
 }
 
@@ -127,14 +128,14 @@ const worked = (() => {
     load(root, data);
     const wp = value(lens, "SoulLensWp");
     check("the weapon row is a number, not a sentence", wp.includes("+" + worked.item.wp + "%"), wp);
-    check("the weapon row carries souls per point", wp.includes("souls/%"), wp);
+    check("the weapon row carries souls per point", wp.includes("/1%"), wp);
     check("the weapon row is shown", shown(lens, "SoulLensWp"));
     const wpa = value(lens, "SoulLensWpa");
     check("the wpa row carries the measured points", wpa.includes("% · "), wpa);
     check("the wpa ratio is cost over the measured wpa",
         wpa.includes(String(Math.round(worked.item.cost / worked.measured.wpa))), wpa);
     const dump = value(lens, "SoulLensDps");
-    check("the dps row carries souls per point", dump.includes("souls/%"), dump);
+    check("the dps row carries souls per point", dump.includes("/1%"), dump);
     const buy = value(lens, "SoulLensBuy");
     check("the buy row is just the minute", /^\d+:\d\d$/.test(buy), buy);
     check("there is no title row in the shipped tree",
@@ -231,6 +232,32 @@ const worked = (() => {
     const { root, lens } = tree("", 0);
     load(root, data);
     check("an unfilled card writes no row", value(lens, "SoulLensWp") === "");
+}
+
+{
+    // The card is one panel reused for every hover. The tick loop must keep
+    // running for the tooltip's whole life: a bounded loop froze the strip on
+    // whichever item was hovered when the budget ran out, so every later card
+    // showed the same numbers.
+    const first = worked.item;
+    const second = Object.values(data.items).find((item) =>
+        item.souls_per_wp && item.name !== first.name && item.cost &&
+        data.heroes[worked.heroKey].wpa[Object.keys(data.items).find((k) => data.items[k] === item)]);
+    const { root, lens } = tree(first.name, first.cost, worked.hero.name);
+    const { queue } = load(root, data, undefined, 60);
+    const before = value(lens, "SoulLensWp");
+    const namePanel = root.FindChildTraverse("ModName");
+    const costPanel = root.FindChildTraverse("ItemCost");
+    const secondKey = Object.keys(data.items).find((k) => data.items[k] === second);
+    namePanel.text = second.name;
+    costPanel.text = String(second.cost);
+    for (let step = 0; step < 700 && queue.length; step += 1) queue.shift()();
+    const after = value(lens, "SoulLensWp");
+    check("the strip keeps ticking past the old 40 s budget", after !== "" && after !== before,
+        before + " -> " + after);
+    check("the strip follows the reused card to the new item",
+        Math.abs(second.wp - first.wp) < 1e-9 || after.includes(String(second.wp)),
+        after);
 }
 
 {

@@ -142,7 +142,7 @@
     function points(value) {
         var number = Number(value);
         if (!isFinite(number)) return String(value);
-        var digits = Math.abs(number) < 0.1 ? 2 : 1;
+        var digits = Math.abs(number) < 10 ? 2 : 1;
         var sign = number > 0 ? "+" : (number < 0 ? "" : "+");
         return sign + number.toFixed(digits);
     }
@@ -299,9 +299,14 @@
     // Terse by construction: no title, no tags, no sentence. Each row is a
     // number or a one-word refusal, and a row with nothing to say is collapsed so
     // an item with no weapon term does not print "none".
+    // Souls paid per one percentage point of the effect, and the unit says so:
+    // a small measured effect gives a large price per point (a bad-value signal),
+    // which read as a payout when the unit was only implied.
     function ratio(cost, gain) {
         if (!cost || !gain || gain <= 0) return "";
-        return Math.round(cost / gain) + " souls/%";
+        var souls = cost / gain;
+        var shown = souls >= 1000 ? (souls / 1000).toFixed(1) + "k" : String(Math.round(souls));
+        return shown + "/1%";
     }
 
     function fill(rowPanel, valuePanel, value, has) {
@@ -397,7 +402,6 @@
                     render(block, card, document);
                 }
                 ticks += 1;
-                if (ticks > 400) return;
                 $.Schedule(0.1, tick);
             } catch (e) {
                 log("tick refused: " + String(e));
