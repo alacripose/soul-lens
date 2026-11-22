@@ -26,6 +26,7 @@ HERE = pathlib.Path(__file__).resolve().parent.parent
 CONTENT = pathlib.Path("panorama")
 SOURCES = (
     "layout/tooltips/citadel_tooltip_mod_details.xml",
+    "scripts/soul_lens_build.js",
     "scripts/soul_lens.js",
     "scripts/soul_lens_data.js",
     "styles/soul_lens.css",

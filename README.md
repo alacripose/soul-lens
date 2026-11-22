@@ -1,7 +1,7 @@
 # Soul Lens
 
-A single Deadlock mod: the game's own shop item hover card, with one more block
-under the item's name — what the item costs per point of weapon power, per point
+A single Deadlock mod: the game's own shop item card, with four rows under the
+item's own stat block — what the item costs per point of weapon power, per point
 of win probability added, and per percent of DPS, when the match usually buys it,
 and where it sits in the shop list that is open.
 
@@ -18,12 +18,8 @@ compiler and packs the `.vxml_c`/`.vjs_c`/`.vcss_c` output with Source2Viewer CL
 A worked example, Haze and Glass Cannon, from the catalogue this repository ships:
 
 ```
-SOUL LENS · HAZE
-power   +85% power · 75 souls / +1%              dl-api
-wpa     +8.9% WPA · 716 souls / +1%              dl-api
-dps     +85.0% dps · 75 souls / +1%              dl-api
-buy ≈ 30:51 (Haze) · 2 of 7 in this list
-shop price live · dl-api Haze · statlocker: no STATLOCKER_API_KEY and no --statlocker-file
+wpa   +5.0% · 1277 souls/%
+buy   29:18
 ```
 
 | Line | Where the number comes from |
@@ -107,6 +103,26 @@ Endpoints read at bake time, all keyless:
 
 `data/provenance.json` records, per hero, the endpoint, the cache file and its
 SHA-256, and the baseline the WPA was measured against.
+
+## Builds, bakes and refusals
+
+Weapon terms belong to a build; a patch can change them under a bake that still
+looks current. Two pieces keep that honest:
+
+- `python tools/terms_archive.py` keeps one immutable terms snapshot per build
+  under `data/builds/<build>.json`, bound with a digest and listed in
+  `data/builds/index.json` — the same per-build snapshot convention the forge's
+  VPK tracker uses. A re-bake of the same build with different terms is refused;
+  the first snapshot is kept.
+- `python tools/stamp_build.py` reads the installed `steam.inf` at install time
+  (Panorama has no build API and no file access) and writes the build into
+  `panorama/scripts/soul_lens_build.js`. The strip draws terms only for that
+  build: the current bake, or an archived snapshot for that build. Otherwise the
+  power row reads `no <build>` and the empty rows collapse.
+
+`install.ps1` stamps the build, reports whether its terms are baked, then builds.
+deadlock-api serves only the current build (`?client_version=6800` is a 404), so
+the archive grows forward one patch at a time.
 
 ## The live-layout check
 
@@ -200,12 +216,16 @@ a skip, never as a pass.
 - `docs/soul-lens-surface.html` draws all three cases from the shipped script:
   the worked example with both ratios and both tags, a spirit item with its two
   refusals and a live WPA, and an item the bake does not know.
-- The packed VPK (`tools/build_addon.py`, CSDK 13 compile + S2V) carries seven
-  paths: the compiled details layout, both compiled scripts, the compiled
+- The packed VPK (`tools/build_addon.py`, CSDK 13 compile + S2V) carries nine
+  paths: the compiled details layout, three compiled scripts, the compiled
   stylesheet, and the raw `.js`/`.css` alongside them; `tools/verify_vpk.py`
   refuses an archive without the compiled assets.
-- Witnessed in the running game: build 6864, hideout shop, `B`, hover Extra
-  Health — the card draws name, cost, `-210 Bonus Health`, upgrades, then
-  `SOUL LENS · CALICO / POWER no weapon power term / WPA +1.5% WPA · 542 souls /
-  +1% / DPS no standing dps term / buy = 14:12 (Calico)` with per-row `DL-API`
-  tags. Captures: `data/shots/final8.jpg`, `data/shots/strip-zoom4.jpg`.
+- `install.ps1` end to end on this machine: stamp 6864, terms snapshot
+  `blake2b:05fd3356…`, `OK: 5 compiled, 0 failed`, nine files packed, mount line
+  present, installed VPK byte-identical to `dist/` (`sha256 89f92292…`).
+- Witnessed in build 6864 with the native block: `wpa +5.0% · 1277 souls/%`,
+  `buy 29:18` under Ricochet's stat boxes (`data/shots/native6.jpg`).
+- A stamped build with no snapshot was witnessed refusing before that:
+  `power no 9999`, dps collapsed, wpa still drawn
+  (`data/shots/stale-terms-zoom6.jpg`).
+

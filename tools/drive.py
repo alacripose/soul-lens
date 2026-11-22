@@ -84,8 +84,20 @@ def focus() -> int:
     if not handle:
         raise SystemExit("REFUSED: no Deadlock window with a handle; is the game running?")
     user32.ShowWindow(handle, 9)  # SW_RESTORE
+    user32.BringWindowToTop(handle)
+    # Windows refuses SetForegroundWindow to a process that does not own the
+    # current foreground window (the launch from the Steam URL leaves Freebuff in
+    # front). Tapping ALT first is the documented unlock; without it the keys go
+    # to whatever window still has focus.
+    VK_MENU = 0x12
+    KEYEVENTF_KEYUP = 0x0002
+    user32.keybd_event(VK_MENU, 0, 0, 0)
     user32.SetForegroundWindow(handle)
+    user32.keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0)
     time.sleep(0.4)
+    active = user32.GetForegroundWindow()
+    if active != handle:
+        raise SystemExit(f"REFUSED: focus stayed on window {active}, not Deadlock {handle}")
     return handle
 
 

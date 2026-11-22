@@ -33,6 +33,27 @@
         try { return window.SoulLensData || null; } catch (e) { return null; }
     }
 
+    // The installed build is stamped by tools/stamp_build.py at install time:
+    // Panorama has no build API and cannot read steam.inf, and the install is the
+    // one place that file is readable. A missing stamp is a refusal, not a guess.
+    function liveBuild() {
+        try { if (typeof SoulLensLiveBuild !== "undefined" && SoulLensLiveBuild) return String(SoulLensLiveBuild); } catch (e) {}
+        try { return window.SoulLensLiveBuild ? String(window.SoulLensLiveBuild) : ""; } catch (e) { return ""; }
+    }
+
+    // Weapon terms belong to a build. The current bake is the build the ingest ran
+    // on; any other installed build must have its own archived snapshot
+    // (tools/terms_archive.py) or the terms are withheld. WPA and purchase times
+    // are match measurements, not build contents, so they still draw.
+    function termsFor(document, live) {
+        if (!live) return { refusal: "installed build not stamped; run install.ps1" };
+        if (!document.build) return { refusal: "bake build unknown" };
+        if (document.build === live) return { terms: document.items || {}, build: live };
+        var archived = document.term_builds ? document.term_builds[live] : null;
+        if (archived) return { terms: archived, build: live };
+        return { refusal: "no terms baked for build " + live, baked: document.build };
+    }
+
     function text(panel) {
         try { return panel && panel.text ? String(panel.text) : ""; } catch (e) { return ""; }
     }
@@ -247,25 +268,25 @@
         var sl = sources["statlocker"] || {};
         if (sl.state === "read" && row && typeof row.wpa === "number") {
             return {
-                source: "statlocker",
+                source: "sl",
                 value: row.wpa,
                 matches: null,
                 ratio: cost && row.wpa > 0 ? Math.round(cost / row.wpa) : null,
             };
         }
         if (!hero) {
-            return { refusal: "no hero on the shop header", source: "dl-api" };
+            return { refusal: "no hero", source: "api" };
         }
         if (!heroRow) {
-            return { refusal: "no " + hero + " rows in this bake", source: "dl-api" };
+            return { refusal: "no hero rows", source: "api" };
         }
         var measured = heroRow.wpa ? heroRow.wpa[key] : null;
         if (!measured) {
-            return { refusal: "no " + hero + " rows for this item", source: "dl-api" };
+            return { refusal: "no item row", source: "api" };
         }
         var minimum = (document.model && document.model.min_matches) || 0;
         if (measured.matches < minimum) {
-            return { refusal: measured.matches + " matches, under " + minimum, source: "dl-api" };
+            return { refusal: measured.matches + "m<" + minimum, source: "api" };
         }
         return {
             source: "dl-api",
@@ -275,81 +296,72 @@
         };
     }
 
-    function render(block, card, document) {
-        var head = byId(block, "SoulLensHead");
-        var wpRow = byId(block, "SoulLensWp");
-        var wpaRow = byId(block, "SoulLensWpa");
-        var dpsRow = byId(block, "SoulLensDps");
-        var buyRow = byId(block, "SoulLensBuy");
-        var srcRow = byId(block, "SoulLensSrc");
-        var wpTag = byId(block, "SoulLensWpSrc");
-        var wpaTag = byId(block, "SoulLensWpaSrc");
-        var dpsTag = byId(block, "SoulLensDpsSrc");
+    // Terse by construction: no title, no tags, no sentence. Each row is a
+    // number or a one-word refusal, and a row with nothing to say is collapsed so
+    // an item with no weapon term does not print "none".
+    function ratio(cost, gain) {
+        if (!cost || !gain || gain <= 0) return "";
+        return Math.round(cost / gain) + " souls/%";
+    }
 
-        var hero = heroName();
-        if (head) head.text = hero ? ("SOUL LENS · " + hero.toUpperCase()) : "SOUL LENS";
+    function fill(rowPanel, valuePanel, value, has) {
+        if (valuePanel) valuePanel.text = value || "";
+        if (!rowPanel) return;
+        try {
+            if (rowPanel.SetHasClass) rowPanel.SetHasClass("SoulLensHidden", !has);
+            else if (has) rowPanel.RemoveClass("SoulLensHidden");
+            else rowPanel.AddClass("SoulLensHidden");
+        } catch (e) {}
+    }
+
+    function render(block, card, document) {
+        var wpRow = byId(block, "SoulLensWpRow");
+        var wpaRow = byId(block, "SoulLensWpaRow");
+        var dpsRow = byId(block, "SoulLensDpsRow");
+        var buyRow = byId(block, "SoulLensBuyRow");
 
         var key = normalize(card.name);
         var row = key && document && document.items ? document.items[key] : null;
         if (!row) {
-            setRow(wpRow, key ? "no stat line for this item" : "reading the shop…", true, wpTag, "dl-api");
-            setRow(wpaRow, "", true, wpaTag, "");
-            setRow(dpsRow, "", true, dpsTag, "");
-            if (buyRow) buyRow.text = "";
-            if (srcRow) srcRow.text = document ? "soul-lens data: " + (document.build || "unknown build") : "soul-lens data missing";
+            fill(wpRow, byId(block, "SoulLensWp"), "", false);
+            fill(wpaRow, byId(block, "SoulLensWpa"), "", false);
+            fill(dpsRow, byId(block, "SoulLensDps"), "", false);
+            fill(buyRow, byId(block, "SoulLensBuy"), "", false);
             return;
         }
 
-        var cost = card.cost || row.cost;
-        var priceNote = "";
-        if (card.cost && row.cost && card.cost !== row.cost) {
-            priceNote = "live price " + card.cost;
-        }
+        var live = liveBuild();
+        var picked = termsFor(document, live);
+        var term = picked.terms && key ? picked.terms[key] : null;
+        var termCost = term && term.cost ? term.cost : null;
+        var cost = card.cost || termCost || row.cost;
 
-        if (row.wp > 0) {
-            setRow(wpRow, "+" + row.wp + "% power · " + souls(row.souls_per_wp) + " / +1%", false, wpTag, "dl-api");
+        if (picked.refusal) {
+            fill(wpRow, byId(block, "SoulLensWp"), live ? "no " + live : "no build", true);
+            fill(dpsRow, byId(block, "SoulLensDps"), "", false);
         } else {
-            setRow(wpRow, "no weapon power term", true, wpTag, "dl-api");
+            fill(wpRow, byId(block, "SoulLensWp"),
+                term && term.wp > 0 ? "+" + term.wp + "% · " + ratio(cost, term.wp) : "", term && term.wp > 0);
+            fill(dpsRow, byId(block, "SoulLensDps"),
+                term && term.dps > 0 ? "+" + term.dps.toFixed(1) + "% · " + ratio(cost, term.dps) : "",
+                term && term.dps > 0);
         }
 
+        var hero = heroName();
         var heroRow = hero && document.heroes ? document.heroes[normalize(hero)] : null;
         var reading = wpaReading(document, hero, heroRow, key, row, cost);
         if (reading.refusal) {
-            setRow(wpaRow, "WPA: " + reading.refusal, true, wpaTag, reading.source, true);
+            fill(wpaRow, byId(block, "SoulLensWpa"), reading.refusal, true);
         } else if (reading.value <= 0) {
-            setRow(wpaRow, points(reading.value) + "% WPA · no gain", true, wpaTag, reading.source);
+            fill(wpaRow, byId(block, "SoulLensWpa"), points(reading.value) + "% · no gain", true);
         } else {
-            setRow(wpaRow, points(reading.value) + "% WPA · " + souls(reading.ratio) + " / +1%", false,
-                wpaTag, reading.source);
+            fill(wpaRow, byId(block, "SoulLensWpa"),
+                points(reading.value) + "% · " + ratio(cost, reading.value), true);
         }
 
-        if (row.dps > 0) {
-            setRow(dpsRow, "+" + row.dps.toFixed(1) + "% dps · " + souls(row.souls_per_dps) + " / +1%", false,
-                dpsTag, "dl-api");
-        } else {
-            setRow(dpsRow, "no standing dps term", true, dpsTag, "dl-api");
-        }
-
-        // The hero on the shop header decides the buy line. The API was asked per
-        // hero, so this is that hero's own measured minute, not the global average
-        // wearing the hero's name; when the hero has no rows the average is used and
-        // labelled.
-        var heroKey = normalize(hero);
         var heroBuy = heroRow && heroRow.buy ? heroRow.buy[key] : null;
-        var parts = [];
-        if (heroBuy) parts.push("buy ≈ " + clock(heroBuy) + " (" + heroRow.name + ")");
-        else if (row.avg_buy_s) parts.push("buy ≈ " + clock(row.avg_buy_s) + " (average)");
-        var place = listPosition(card.name);
-        if (place) parts.push(place);
-        if (buyRow) buyRow.text = parts.join(" · ");
-
-        var sources = ["shop price live"];
-        sources.push(heroRow ? "dl-api " + heroRow.name : "dl-api");
-        var sl = (document.sources || {})["statlocker"] || null;
-        if (sl && sl.state === "read") sources.push("statlocker WPA");
-        else if (sl) sources.push("statlocker: " + (sl.reason || sl.state));
-        if (priceNote) sources.push(priceNote);
-        if (srcRow) srcRow.text = sources.join(" · ");
+        var minute = clock(heroBuy || row.avg_buy_s);
+        fill(buyRow, byId(block, "SoulLensBuy"), minute, !!minute);
     }
 
     function start() {
@@ -362,8 +374,8 @@
 
         var document = data();
         if (!document) {
-            setRow(byId(block, "SoulLensWp"), "soul_lens_data.js did not load", true);
-            log("data refused: no window.SoulLensData");
+            setRow(byId(block, "SoulLensWp"), "no data", true);
+            log("data refused: no SoulLensData global");
             return;
         }
 

@@ -4,10 +4,16 @@ The shop's hover card is `citadel_tooltip_mod_details`, not the `..._hover` layo
 that was replaced first: hovering a shop item opens the details card, which is why
 the strip did not appear in the game even when the addon was mounted. This takes
 the live details layout exactly as extracted from the installed VPK, adds the
-stylesheet, the two scripts and the `#SoulLens` panel, and writes the override.
+stylesheet, the scripts and the `#SoulLens` block, and writes the override.
+
+The block goes directly under `#SectionsContainer`, where the card already draws
+the item's own stat rows. That is the whole point of the placement: the strip is
+card content inside the card's contoured ground, at the card's text density, and
+it carries no prose beyond the four row keys.
 
 The copy stays a copy: the only inserted text is inside the soul-lens:begin/end
-markers, and tools/check_live.py2 compares the rest with the installed build.
+markers, and tools/check_live.py removes that block before comparing the rest
+with the installed build.
 
 usage:
   python tools/overlay_details.py [--live data/live2/panorama/layout/tooltips/citadel_tooltip_mod_details.xml]
@@ -23,34 +29,38 @@ import sys
 STYLE_LINE = '\t\t<include src="file://{resources}/styles/soul_lens.css" />\n'
 SCRIPTS = (
     "\t<scripts>\n"
+    '\t\t<include src="file://{resources}/scripts/soul_lens_build.js" />\n'
     '\t\t<include src="file://{resources}/scripts/soul_lens_data.js" />\n'
     '\t\t<include src="file://{resources}/scripts/soul_lens.js" />\n'
     "\t</scripts>\n"
 )
-PANEL = """\t\t<!-- soul-lens:begin (tools/check_live.py removes this block before comparing) -->
-\t\t<Panel id="SoulLens" class="SoulLens" hittest="false" hittestchildren="false">
-\t\t\t<Panel class="SoulLensRule" />
-\t\t\t<Label id="SoulLensHead" class="SoulLensHead" text="SOUL LENS" />
-\t\t\t<Panel class="SoulLensRow">
-\t\t\t\t<Label class="SoulLensKey" text="power" />
-\t\t\t\t<Label id="SoulLensWp" class="SoulLensValue" text="reading the shop…" />
-\t\t\t\t<Label id="SoulLensWpSrc" class="SoulLensTag" text="" />
-\t\t\t</Panel>
-\t\t\t<Panel class="SoulLensRow">
-\t\t\t\t<Label class="SoulLensKey" text="wpa" />
-\t\t\t\t<Label id="SoulLensWpa" class="SoulLensValue" text="" />
-\t\t\t\t<Label id="SoulLensWpaSrc" class="SoulLensTag" text="" />
-\t\t\t</Panel>
-\t\t\t<Panel class="SoulLensRow">
-\t\t\t\t<Label class="SoulLensKey" text="dps" />
-\t\t\t\t<Label id="SoulLensDps" class="SoulLensValue" text="" />
-\t\t\t\t<Label id="SoulLensDpsSrc" class="SoulLensTag" text="" />
-\t\t\t</Panel>
-\t\t\t<Label id="SoulLensBuy" class="SoulLensBuy" text="" />
-\t\t\t<Label id="SoulLensSrc" class="SoulLensSrc" text="" />
-\t\t</Panel>
-\t\t<!-- soul-lens:end -->
-"""
+
+# The stats block the card builds its item rows into; the strip sits right under
+# it, still inside #AttributesContainer.
+STATS_BLOCK = '\t\t\t\t\t\t<Panel id="SectionsContainer" class="TopBottomFlow" />\n'
+
+PANEL = (
+    '\t\t\t\t\t\t<!-- soul-lens:begin (tools/check_live.py removes this block before comparing) -->\n'
+    '\t\t\t\t\t\t<Panel id="SoulLens" class="SoulLens TopBottomFlow" hittest="false" hittestchildren="false">\n'
+    '\t\t\t\t\t\t\t<Panel id="SoulLensWpRow" class="SoulLensRow LeftRightFlow">\n'
+    '\t\t\t\t\t\t\t\t<Label class="SoulLensKey componentsLabel" text="power" />\n'
+    '\t\t\t\t\t\t\t\t<Label id="SoulLensWp" class="SoulLensValue" text="" />\n'
+    '\t\t\t\t\t\t\t</Panel>\n'
+    '\t\t\t\t\t\t\t<Panel id="SoulLensWpaRow" class="SoulLensRow LeftRightFlow">\n'
+    '\t\t\t\t\t\t\t\t<Label class="SoulLensKey componentsLabel" text="wpa" />\n'
+    '\t\t\t\t\t\t\t\t<Label id="SoulLensWpa" class="SoulLensValue" text="" />\n'
+    '\t\t\t\t\t\t\t</Panel>\n'
+    '\t\t\t\t\t\t\t<Panel id="SoulLensDpsRow" class="SoulLensRow LeftRightFlow">\n'
+    '\t\t\t\t\t\t\t\t<Label class="SoulLensKey componentsLabel" text="dps" />\n'
+    '\t\t\t\t\t\t\t\t<Label id="SoulLensDps" class="SoulLensValue" text="" />\n'
+    '\t\t\t\t\t\t\t</Panel>\n'
+    '\t\t\t\t\t\t\t<Panel id="SoulLensBuyRow" class="SoulLensRow LeftRightFlow">\n'
+    '\t\t\t\t\t\t\t\t<Label class="SoulLensKey componentsLabel" text="buy" />\n'
+    '\t\t\t\t\t\t\t\t<Label id="SoulLensBuy" class="SoulLensValue" text="" />\n'
+    '\t\t\t\t\t\t\t</Panel>\n'
+    '\t\t\t\t\t\t</Panel>\n'
+    '\t\t\t\t\t\t<!-- soul-lens:end -->\n'
+)
 
 
 def main() -> int:
@@ -70,11 +80,13 @@ def main() -> int:
     if "</styles>" not in text or "</CitadelTooltipModDetails>" not in text:
         print("REFUSED: the layout does not look like citadel_tooltip_mod_details", file=sys.stderr)
         return 1
+    if STATS_BLOCK not in text:
+        print("REFUSED: the layout has no SectionsContainer to put the strip under", file=sys.stderr)
+        return 1
 
     text = text.replace("\t</styles>\n", STYLE_LINE + "\t</styles>\n", 1)
     text = text.replace("\t</styles>\n", "\t</styles>\n" + SCRIPTS, 1)
-    close = "\t</CitadelTooltipModDetails>"
-    text = text.replace(close, PANEL + close, 1)
+    text = text.replace(STATS_BLOCK, STATS_BLOCK + PANEL, 1)
 
     out = pathlib.Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)

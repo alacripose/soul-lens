@@ -1,0 +1,4956 @@
+{
+ "schema": "soul-lens.terms/1",
+ "build": "6864",
+ "version_date": "Nov 18 2026",
+ "captured_at": "2026-11-22T16:49:46+00:00",
+ "items": {
+  "active reload": {
+   "wp": 0.0,
+   "fire": 25.0,
+   "dps": 25.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusFireRate",
+       "bonus": "15"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "3m"
+      },
+      {
+       "name": "BulletLifestealPercent",
+       "bonus": "12"
+      },
+      {
+       "name": "BonusClipSizePercent",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Active Reload"
+  },
+  "alchemical fire": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "DPS",
+       "bonus": "30"
+      },
+      {
+       "name": "DPSMax",
+       "bonus": "30"
+      },
+      {
+       "name": "BulletArmorReduction",
+       "bonus": "-8"
+      },
+      {
+       "name": "SpiritPower",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Alchemical Fire"
+  },
+  "arcane surge": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "Stamina",
+       "bonus": "1"
+      },
+      {
+       "name": "SpiritPower",
+       "bonus": "25"
+      },
+      {
+       "name": "TechRadiusMultiplierBuff",
+       "bonus": "15"
+      },
+      {
+       "name": "TechRangeMultiplierBuff",
+       "bonus": "15"
+      },
+      {
+       "name": "BonusAbilityDurationPercent",
+       "bonus": "15"
+      },
+      {
+       "name": "StaminaCooldownReduction",
+       "bonus": "14"
+      }
+     ]
+    }
+   ],
+   "name": "Arcane Surge"
+  },
+  "arctic blast": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "Damage",
+       "bonus": "150"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-12"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "15"
+      },
+      {
+       "name": "FreezeDuration",
+       "bonus": "0.25"
+      }
+     ]
+    }
+   ],
+   "name": "Arctic Blast"
+  },
+  "armor piercer": {
+   "wp": 8.0,
+   "fire": 0.0,
+   "dps": 8.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusBulletSpeedPercent",
+       "bonus": "55"
+      },
+      {
+       "name": "ProcChance",
+       "bonus": "20"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "30"
+      }
+     ]
+    }
+   ],
+   "name": "Armor Piercer"
+  },
+  "ballistic enchantment": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "WeaponPowerPerStack",
+       "bonus": "15"
+      },
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "15"
+      },
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Ballistic Enchantment"
+  },
+  "battle vest": {
+   "wp": 22.0,
+   "fire": 7.0,
+   "dps": 30.54,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "3"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "12"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "15"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "8"
+      }
+     ]
+    }
+   ],
+   "name": "Battle Vest"
+  },
+  "berserker": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "WeaponPowerPerStack",
+       "bonus": "3"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "8"
+      },
+      {
+       "name": "MaxStacks",
+       "bonus": "8"
+      }
+     ]
+    }
+   ],
+   "name": "Berserker"
+  },
+  "blood tribute": {
+   "wp": 0.0,
+   "fire": 35.0,
+   "dps": 35.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "HealthDrainedPerSecond",
+       "bonus": "-20"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "30"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "14"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "8"
+      }
+     ]
+    }
+   ],
+   "name": "Blood Tribute"
+  },
+  "boundless spirit": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechPower",
+       "bonus": "25"
+      },
+      {
+       "name": "TechPowerPercent",
+       "bonus": "10"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "4"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "100"
+      }
+     ]
+    }
+   ],
+   "name": "Boundless Spirit"
+  },
+  "bullet lifesteal": {
+   "wp": 10.0,
+   "fire": 0.0,
+   "dps": 10.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletLifestealPercent",
+       "bonus": "16"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "120"
+      }
+     ]
+    }
+   ],
+   "name": "Bullet Lifesteal"
+  },
+  "bullet resilience": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletResist",
+       "bonus": "10"
+      },
+      {
+       "name": "BulletResistBelowThreshold",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Bullet Resilience"
+  },
+  "bullet resist shredder": {
+   "wp": 9.0,
+   "fire": 0.0,
+   "dps": 9.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletResist",
+       "bonus": "7"
+      },
+      {
+       "name": "BulletArmorReduction",
+       "bonus": "-11"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Bullet Resist Shredder"
+  },
+  "burst fire": {
+   "wp": 0.0,
+   "fire": 10.0,
+   "dps": 10.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "SlideScale",
+       "bonus": "50"
+      },
+      {
+       "name": "ActivatedFireRate",
+       "bonus": "15"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "1.5m"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "14"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-1"
+      }
+     ]
+    }
+   ],
+   "name": "Burst Fire"
+  },
+  "capacitor": {
+   "wp": 0.0,
+   "fire": 5.0,
+   "dps": 5.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ProcChance",
+       "bonus": "5"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "15"
+      },
+      {
+       "name": "DamagePerChain",
+       "bonus": "25"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-32"
+      },
+      {
+       "name": "Damage",
+       "bonus": "25"
+      }
+     ]
+    }
+   ],
+   "name": "Capacitor"
+  },
+  "celestial blessing": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-20"
+      },
+      {
+       "name": "BuffDuration",
+       "bonus": "2"
+      },
+      {
+       "name": "MinHeal",
+       "bonus": "200"
+      }
+     ]
+    }
+   ],
+   "name": "Celestial Blessing"
+  },
+  "cheat death": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "DeathImmunityDamageReduction",
+       "bonus": "90"
+      },
+      {
+       "name": "HealAmpReceivePenaltyPercent",
+       "bonus": "90"
+      },
+      {
+       "name": "HealAmpRegenPenaltyPercent",
+       "bonus": "90"
+      },
+      {
+       "name": "DeathImmunityDuration",
+       "bonus": "0.5"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-20"
+      }
+     ]
+    }
+   ],
+   "name": "Cheat Death"
+  },
+  "cloak of opportunity": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "4m"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-4"
+      },
+      {
+       "name": "CombatBarrier",
+       "bonus": "300"
+      }
+     ]
+    }
+   ],
+   "name": "Cloak of Opportunity"
+  },
+  "close quarters": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "CloseRangeBonusWeaponPower",
+       "bonus": "15"
+      },
+      {
+       "name": "MeleeResistPercent",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Close Quarters"
+  },
+  "cold front": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechResist",
+       "bonus": "8"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-13"
+      },
+      {
+       "name": "Damage",
+       "bonus": "60"
+      }
+     ]
+    }
+   ],
+   "name": "Cold Front"
+  },
+  "colossus": {
+   "wp": 15.0,
+   "fire": 0.0,
+   "dps": 15.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusBaseHealth",
+       "bonus": "15"
+      },
+      {
+       "name": "ModelScaleGrowth",
+       "bonus": "0.2"
+      },
+      {
+       "name": "ModelScaleGrowthTooltip",
+       "bonus": "20"
+      },
+      {
+       "name": "BuffBulletResist",
+       "bonus": "10"
+      },
+      {
+       "name": "BuffTechResist",
+       "bonus": "10"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-7"
+      }
+     ]
+    }
+   ],
+   "name": "Colossus"
+  },
+  "compress cooldown": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "CooldownReduction",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Compress Cooldown"
+  },
+  "counterspell": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "SpiritPower",
+       "bonus": "20"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "150"
+      },
+      {
+       "name": "HealOnSuccess",
+       "bonus": "250"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "2m"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-8"
+      }
+     ]
+    }
+   ],
+   "name": "Counterspell"
+  },
+  "crippling headshot": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "MagicResistReduction",
+       "bonus": "-12"
+      },
+      {
+       "name": "BulletResistReduction",
+       "bonus": "-12"
+      },
+      {
+       "name": "HealAmpReceivePenaltyPercent",
+       "bonus": "-25"
+      },
+      {
+       "name": "HealAmpRegenPenaltyPercent",
+       "bonus": "-25"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "150"
+      }
+     ]
+    }
+   ],
+   "name": "Crippling Headshot"
+  },
+  "crushing fists": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "MeleeDistanceScale",
+       "bonus": "40"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "12"
+      },
+      {
+       "name": "BonusMeleeDamagePercent",
+       "bonus": "15"
+      },
+      {
+       "name": "BulletResistReduction",
+       "bonus": "-4"
+      },
+      {
+       "name": "BonusHeavyMeleeDamage",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Crushing Fists"
+  },
+  "cultist sacrifice": {
+   "wp": 10.0,
+   "fire": 0.0,
+   "dps": 10.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "40"
+      },
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "40"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "47"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "300"
+      },
+      {
+       "name": "NonPlayerBonusWeaponPower",
+       "bonus": "30"
+      },
+      {
+       "name": "NonPlayerBulletResist",
+       "bonus": "30"
+      }
+     ]
+    }
+   ],
+   "name": "Cultist Sacrifice"
+  },
+  "cursed relic": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-40"
+      },
+      {
+       "name": "AbilityDuration",
+       "bonus": "0.25"
+      }
+     ]
+    }
+   ],
+   "name": "Cursed Relic"
+  },
+  "debuff reducer": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "StatusResistancePercent",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Debuff Reducer"
+  },
+  "decay": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechPower",
+       "bonus": "12"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "90"
+      },
+      {
+       "name": "HealAmpReceivePenaltyPercent",
+       "bonus": "-20"
+      },
+      {
+       "name": "HealAmpRegenPenaltyPercent",
+       "bonus": "-20"
+      },
+      {
+       "name": "DotHealthPercent",
+       "bonus": ".375"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-10"
+      }
+     ]
+    }
+   ],
+   "name": "Decay"
+  },
+  "disarming hex": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusHealth",
+       "bonus": "175"
+      },
+      {
+       "name": "BulletArmorReduction",
+       "bonus": "-7"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-8"
+      }
+     ]
+    }
+   ],
+   "name": "Disarming Hex"
+  },
+  "dispel magic": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "HealOnActivate",
+       "bonus": "150"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "20"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-25"
+      }
+     ]
+    }
+   ],
+   "name": "Dispel Magic"
+  },
+  "divine barrier": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-27"
+      },
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "10"
+      },
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Divine Barrier"
+  },
+  "diviner s kevlar": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusAbilityDurationPercent",
+       "bonus": "15"
+      },
+      {
+       "name": "TechPower",
+       "bonus": "55"
+      },
+      {
+       "name": "CombatBarrier",
+       "bonus": "500"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-14"
+      }
+     ]
+    }
+   ],
+   "name": "Diviner's Kevlar"
+  },
+  "duration extender": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusAbilityDurationPercent",
+       "bonus": "12"
+      }
+     ]
+    }
+   ],
+   "name": "Duration Extender"
+  },
+  "echo shard": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletResist",
+       "bonus": "5"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "5"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-10"
+      }
+     ]
+    }
+   ],
+   "name": "Echo Shard"
+  },
+  "electric slippers": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "Stamina",
+       "bonus": "2"
+      },
+      {
+       "name": "EvasionWhileSliding",
+       "bonus": "15"
+      },
+      {
+       "name": "Damage",
+       "bonus": "50"
+      },
+      {
+       "name": "FireRateWhileSliding",
+       "bonus": "20"
+      }
+     ]
+    }
+   ],
+   "name": "Electric Slippers"
+  },
+  "enchanter s emblem": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechResist",
+       "bonus": "13"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "3"
+      },
+      {
+       "name": "TechPower",
+       "bonus": "15"
+      },
+      {
+       "name": "CooldownReduction",
+       "bonus": "7"
+      }
+     ]
+    }
+   ],
+   "name": "Enchanter's Emblem"
+  },
+  "enduring speed": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "SlowResistancePercent",
+       "bonus": "30"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "2m"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "8"
+      }
+     ]
+    }
+   ],
+   "name": "Enduring Speed"
+  },
+  "escalating exposure": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "MagicIncreasePerStack",
+       "bonus": "1.5"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "8"
+      },
+      {
+       "name": "TechArmorDamageReduction",
+       "bonus": "-10"
+      },
+      {
+       "name": "MaxStacks",
+       "bonus": "6"
+      }
+     ]
+    }
+   ],
+   "name": "Escalating Exposure"
+  },
+  "escalating resilience": {
+   "wp": 18.0,
+   "fire": 0.0,
+   "dps": 18.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletResistPerStack",
+       "bonus": "2"
+      },
+      {
+       "name": "MaxArmorStacks",
+       "bonus": "20"
+      },
+      {
+       "name": "BonusClipSizePercent",
+       "bonus": "30"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "125"
+      },
+      {
+       "name": "WeaponPower",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Escalating Resilience"
+  },
+  "eternal gift": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BuffFrequency",
+       "bonus": "-0.5"
+      }
+     ]
+    }
+   ],
+   "name": "Eternal Gift"
+  },
+  "ethereal shift": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityDuration",
+       "bonus": "2"
+      },
+      {
+       "name": "BonusSpirit",
+       "bonus": "30"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "2m"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "10"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-10"
+      },
+      {
+       "name": "FloatMoveSpeed",
+       "bonus": "3.5m"
+      }
+     ]
+    }
+   ],
+   "name": "Ethereal Shift"
+  },
+  "express shot": {
+   "wp": 8.0,
+   "fire": 0.0,
+   "dps": 8.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ProcBaseAttackDamagePercent",
+       "bonus": "75"
+      },
+      {
+       "name": "ProcBaseAttackDamagePercentAltFire",
+       "bonus": "25"
+      },
+      {
+       "name": "BonusBulletSpeedPercent",
+       "bonus": "45"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Express Shot"
+  },
+  "extended magazine": {
+   "wp": 8.0,
+   "fire": 0.0,
+   "dps": 8.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusClipSizePercent",
+       "bonus": "30"
+      }
+     ]
+    }
+   ],
+   "name": "Extended Magazine"
+  },
+  "extra charge": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusAbilityCharges",
+       "bonus": "1"
+      },
+      {
+       "name": "BonusSpiritForChargedAbilities",
+       "bonus": "7"
+      }
+     ]
+    }
+   ],
+   "name": "Extra Charge"
+  },
+  "extra health": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusHealth",
+       "bonus": "115"
+      }
+     ]
+    }
+   ],
+   "name": "Extra Health"
+  },
+  "extra regen": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusHealthRegen",
+       "bonus": "9"
+      }
+     ]
+    }
+   ],
+   "name": "Extra Regen"
+  },
+  "extra spirit": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechPower",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Extra Spirit"
+  },
+  "extra stamina": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "Stamina",
+       "bonus": "1"
+      },
+      {
+       "name": "StaminaCooldownReduction",
+       "bonus": "14"
+      }
+     ]
+    }
+   ],
+   "name": "Extra Stamina"
+  },
+  "fleetfoot": {
+   "wp": 6.0,
+   "fire": 0.0,
+   "dps": 6.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "SlowResistancePercent",
+       "bonus": "30"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "12"
+      },
+      {
+       "name": "ActiveBonusMoveSpeed",
+       "bonus": "3m"
+      }
+     ]
+    },
+    {
+     "property_upgrades": []
+    }
+   ],
+   "name": "Fleetfoot"
+  },
+  "focus lens": {
+   "wp": 0.0,
+   "fire": 10.0,
+   "dps": 10.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "PercentDamage",
+       "bonus": "20"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "20"
+      },
+      {
+       "name": "TechPowerReduction",
+       "bonus": "-26"
+      },
+      {
+       "name": "MagicResistReduction",
+       "bonus": "-12"
+      },
+      {
+       "name": "AbilityDuration",
+       "bonus": "0.25"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-12"
+      }
+     ]
+    }
+   ],
+   "name": "Focus Lens"
+  },
+  "fortitude": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "RestoreDelay",
+       "bonus": "-6"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "375"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "1m"
+      },
+      {
+       "name": "HealLifePercentOutOfCombat",
+       "bonus": "1"
+      }
+     ]
+    }
+   ],
+   "name": "Fortitude"
+  },
+  "frenzy": {
+   "wp": 0.0,
+   "fire": 15.0,
+   "dps": 15.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusHealth",
+       "bonus": "125"
+      },
+      {
+       "name": "FervorFireRate",
+       "bonus": "20"
+      },
+      {
+       "name": "FervorMovespeed",
+       "bonus": "3m"
+      },
+      {
+       "name": "FervorStatusResistancePercent",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Frenzy"
+  },
+  "frostbite charm": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-2"
+      },
+      {
+       "name": "ImbuedCooldownReduction",
+       "bonus": "15"
+      },
+      {
+       "name": "ImbuedTechPower",
+       "bonus": "40"
+      },
+      {
+       "name": "Damage",
+       "bonus": "100"
+      },
+      {
+       "name": "FreezeDuration",
+       "bonus": "0.3"
+      }
+     ]
+    }
+   ],
+   "name": "Frostbite Charm"
+  },
+  "fury trance": {
+   "wp": 10.0,
+   "fire": 0.0,
+   "dps": 10.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletLifestealPercent",
+       "bonus": "28"
+      },
+      {
+       "name": "ActiveBonusFireRate",
+       "bonus": "25"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "20"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "110"
+      }
+     ]
+    }
+   ],
+   "name": "Fury Trance"
+  },
+  "glass cannon": {
+   "wp": 85.0,
+   "fire": 0.0,
+   "dps": 85.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "FireRatePerKill",
+       "bonus": "8"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "60"
+      }
+     ]
+    }
+   ],
+   "name": "Glass Cannon"
+  },
+  "golden goose egg": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusSprintSpeed",
+       "bonus": "5"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "10"
+      },
+      {
+       "name": "BonusBuffsPerGold",
+       "bonus": "-50"
+      },
+      {
+       "name": "OutgoingDamagePenaltyPercent",
+       "bonus": "20"
+      }
+     ]
+    }
+   ],
+   "name": "Golden Goose Egg"
+  },
+  "greater expansion": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechResist",
+       "bonus": "10"
+      },
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "20"
+      },
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "20"
+      }
+     ]
+    }
+   ],
+   "name": "Greater Expansion"
+  },
+  "grit": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "CombatBarrier",
+       "bonus": "250"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "10"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-25"
+      }
+     ]
+    }
+   ],
+   "name": "Grit"
+  },
+  "guardian ward": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "12"
+      },
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "12"
+      },
+      {
+       "name": "GuardianWardCombatBarrier",
+       "bonus": "250"
+      },
+      {
+       "name": "ChannelMoveSpeed",
+       "bonus": "2"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-12"
+      }
+     ]
+    }
+   ],
+   "name": "Guardian Ward"
+  },
+  "haunting shot": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "GroundDashReductionPercent",
+       "bonus": "-9"
+      },
+      {
+       "name": "HealthPctDamage",
+       "bonus": "5"
+      },
+      {
+       "name": "MovementSpeedSlow",
+       "bonus": "8"
+      },
+      {
+       "name": "HealAmpReceivePenaltyPercent",
+       "bonus": "-15"
+      },
+      {
+       "name": "HealAmpRegenPenaltyPercent",
+       "bonus": "-15"
+      },
+      {
+       "name": "OutgoingDamagePenaltyPercent",
+       "bonus": "-15"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-1"
+      }
+     ]
+    }
+   ],
+   "name": "Haunting Shot"
+  },
+  "headhunter": {
+   "wp": 5.0,
+   "fire": 0.0,
+   "dps": 5.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "HeadShotBonusDamage",
+       "bonus": "75"
+      },
+      {
+       "name": "HealPercentPerHeadshot",
+       "bonus": "4"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-3"
+      }
+     ]
+    }
+   ],
+   "name": "Headhunter"
+  },
+  "headshot booster": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "HeadShotBonusDamage",
+       "bonus": "55"
+      }
+     ]
+    }
+   ],
+   "name": "Headshot Booster"
+  },
+  "healbane": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "HealAmpRegenPenaltyPercent",
+       "bonus": "-20"
+      },
+      {
+       "name": "HealAmpReceivePenaltyPercent",
+       "bonus": "-20"
+      },
+      {
+       "name": "TechPower",
+       "bonus": "11"
+      },
+      {
+       "name": "HealOnKill",
+       "bonus": "125"
+      }
+     ]
+    }
+   ],
+   "name": "Healbane"
+  },
+  "healing booster": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "HealAmpRegenPercent",
+       "bonus": "15"
+      },
+      {
+       "name": "HealAmpCastPercent",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Healing Booster"
+  },
+  "healing nova": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "12"
+      },
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "12"
+      },
+      {
+       "name": "TechPower",
+       "bonus": "12"
+      },
+      {
+       "name": "TotalHealthRegen",
+       "bonus": "425"
+      }
+     ]
+    }
+   ],
+   "name": "Healing Nova"
+  },
+  "healing rite": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TotalHealthRegen",
+       "bonus": "600"
+      },
+      {
+       "name": "BonusSprintSpeed",
+       "bonus": "6m"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-60"
+      }
+     ]
+    }
+   ],
+   "name": "Healing Rite"
+  },
+  "healing tempo": {
+   "wp": 0.0,
+   "fire": 35.0,
+   "dps": 35.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "HealAmpRegenPercent",
+       "bonus": "10"
+      },
+      {
+       "name": "HealAmpCastPercent",
+       "bonus": "10"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "10"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "2m"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "20"
+      },
+      {
+       "name": "BonusHealthRegen",
+       "bonus": "6"
+      }
+     ]
+    }
+   ],
+   "name": "Healing Tempo"
+  },
+  "heroic aura": {
+   "wp": 0.0,
+   "fire": 26.0,
+   "dps": 26.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ActiveBonusMoveSpeed",
+       "bonus": "3m"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "34"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "10"
+      },
+      {
+       "name": "ActiveRadius",
+       "bonus": "15m"
+      }
+     ]
+    }
+   ],
+   "name": "Heroic Aura"
+  },
+  "high velocity rounds": {
+   "wp": 8.0,
+   "fire": 0.0,
+   "dps": 8.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusBulletSpeedPercent",
+       "bonus": "45"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "High-Velocity Rounds"
+  },
+  "hollow point": {
+   "wp": 35.0,
+   "fire": 0.0,
+   "dps": 35.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletArmorReduction",
+       "bonus": "-12"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "150"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "25"
+      }
+     ]
+    }
+   ],
+   "name": "Hollow Point"
+  },
+  "hunter s aura": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "FireRateSlow",
+       "bonus": "5"
+      },
+      {
+       "name": "BulletArmorReduction",
+       "bonus": "-6"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "125"
+      },
+      {
+       "name": "BonusSprintSpeed",
+       "bonus": "3m"
+      }
+     ]
+    }
+   ],
+   "name": "Hunter's Aura"
+  },
+  "improved spirit": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechPower",
+       "bonus": "22"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "3"
+      }
+     ]
+    }
+   ],
+   "name": "Improved Spirit"
+  },
+  "indomitable": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletResist",
+       "bonus": "14"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "14"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-35"
+      },
+      {
+       "name": "VexBarrierCombatBarrier",
+       "bonus": "450"
+      }
+     ]
+    }
+   ],
+   "name": "Indomitable"
+  },
+  "infinite rounds": {
+   "wp": 0.0,
+   "fire": 35.0,
+   "dps": 35.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusBulletSpeedPercent",
+       "bonus": "100"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "20"
+      },
+      {
+       "name": "ProcChance",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Infinite Rounds"
+  },
+  "infuser": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-10"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "10"
+      },
+      {
+       "name": "BonusSpirit",
+       "bonus": "30"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "50"
+      },
+      {
+       "name": "AbilityLifestealPercentHeroPassive",
+       "bonus": "16"
+      }
+     ]
+    }
+   ],
+   "name": "Infuser"
+  },
+  "inhibitor": {
+   "wp": 10.0,
+   "fire": 0.0,
+   "dps": 10.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "OutgoingDamagePenaltyPercent",
+       "bonus": "-20"
+      },
+      {
+       "name": "HealAmpReceivePenaltyPercent",
+       "bonus": "-20"
+      },
+      {
+       "name": "HealAmpRegenPenaltyPercent",
+       "bonus": "-20"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "125"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "20"
+      }
+     ]
+    }
+   ],
+   "name": "Inhibitor"
+  },
+  "intensifying magazine": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusClipSizePercent",
+       "bonus": "40"
+      },
+      {
+       "name": "BaseAttackDamagePercentAtMaxDuration",
+       "bonus": "55"
+      }
+     ]
+    }
+   ],
+   "name": "Intensifying Magazine"
+  },
+  "juggernaut": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "3.5m"
+      },
+      {
+       "name": "MeleeResistPercent",
+       "bonus": "15"
+      },
+      {
+       "name": "FireRateSlow",
+       "bonus": "20"
+      },
+      {
+       "name": "SlowResistancePercent",
+       "bonus": "15"
+      },
+      {
+       "name": "BonusHealthRegen",
+       "bonus": "8"
+      }
+     ]
+    }
+   ],
+   "name": "Juggernaut"
+  },
+  "kinetic dash": {
+   "wp": 0.0,
+   "fire": 25.0,
+   "dps": 25.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusFireRate",
+       "bonus": "20"
+      },
+      {
+       "name": "Stamina",
+       "bonus": "1"
+      },
+      {
+       "name": "BonusClipSize",
+       "bonus": "6"
+      },
+      {
+       "name": "StaminaCooldownReduction",
+       "bonus": "14"
+      }
+     ]
+    }
+   ],
+   "name": "Kinetic Dash"
+  },
+  "knockdown": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "6"
+      },
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "6"
+      },
+      {
+       "name": "StunDuration",
+       "bonus": "0.75"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "75"
+      }
+     ]
+    }
+   ],
+   "name": "Knockdown"
+  },
+  "leech": {
+   "wp": 12.0,
+   "fire": 0.0,
+   "dps": 12.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletLifestealPercent",
+       "bonus": "15"
+      },
+      {
+       "name": "AbilityLifestealPercentHero",
+       "bonus": "15"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "200"
+      },
+      {
+       "name": "TechPower",
+       "bonus": "15"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Leech"
+  },
+  "lifestrike": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusMeleeDamagePercent",
+       "bonus": "10"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "125"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-3"
+      }
+     ]
+    }
+   ],
+   "name": "Lifestrike"
+  },
+  "lightning scroll": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusHealth",
+       "bonus": "100"
+      },
+      {
+       "name": "Damage",
+       "bonus": "100"
+      },
+      {
+       "name": "BonusSprintSpeed",
+       "bonus": "5m"
+      },
+      {
+       "name": "StunDuration",
+       "bonus": "0.75"
+      }
+     ]
+    }
+   ],
+   "name": "Lightning Scroll"
+  },
+  "long range": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusAttackRangePercent",
+       "bonus": "8"
+      },
+      {
+       "name": "LongRangeBonusWeaponPower",
+       "bonus": "30"
+      }
+     ]
+    }
+   ],
+   "name": "Long Range"
+  },
+  "lucky shot": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "CritDamagePercent",
+       "bonus": "30"
+      },
+      {
+       "name": "BonusClipSizePercent",
+       "bonus": "40"
+      },
+      {
+       "name": "ProcChance",
+       "bonus": "5"
+      }
+     ]
+    }
+   ],
+   "name": "Lucky Shot"
+  },
+  "magic carpet": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechPower",
+       "bonus": "46"
+      },
+      {
+       "name": "AbilityDuration",
+       "bonus": "8"
+      },
+      {
+       "name": "BonusAbilityDurationPercent",
+       "bonus": "15"
+      },
+      {
+       "name": "FlyMoveSpeed",
+       "bonus": "6m"
+      },
+      {
+       "name": "SummonDuration",
+       "bonus": "-0.3"
+      }
+     ]
+    }
+   ],
+   "name": "Magic Carpet"
+  },
+  "majestic leap": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-35"
+      },
+      {
+       "name": "CombatBarrier",
+       "bonus": "275"
+      },
+      {
+       "name": "InterruptCooldown",
+       "bonus": "-3"
+      }
+     ]
+    }
+   ],
+   "name": "Majestic Leap"
+  },
+  "melee charge": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "MeleeDistanceScale",
+       "bonus": "30"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "12"
+      },
+      {
+       "name": "BonusHeavyMeleeDamage",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Melee Charge"
+  },
+  "melee lifesteal": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusMeleeDamagePercent",
+       "bonus": "12"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-6"
+      }
+     ]
+    }
+   ],
+   "name": "Melee Lifesteal"
+  },
+  "mercurial magnum": {
+   "wp": 0.0,
+   "fire": 22.0,
+   "dps": 22.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusFireRate",
+       "bonus": "20"
+      },
+      {
+       "name": "BonusClipSizePercent",
+       "bonus": "60"
+      },
+      {
+       "name": "Damage",
+       "bonus": "120"
+      },
+      {
+       "name": "BulletsBonusMagicDamage",
+       "bonus": "20"
+      },
+      {
+       "name": "TechPower",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Mercurial Magnum"
+  },
+  "metal skin": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ActiveMoveSpeedPenalty",
+       "bonus": "6.5m"
+      },
+      {
+       "name": "GroundDashReductionPercent",
+       "bonus": "60"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-2"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "5"
+      }
+     ]
+    }
+   ],
+   "name": "Metal Skin"
+  },
+  "monster rounds": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "NonPlayerBonusWeaponPower",
+       "bonus": "35"
+      },
+      {
+       "name": "NonPlayerBulletResist",
+       "bonus": "35"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "1"
+      }
+     ]
+    }
+   ],
+   "name": "Monster Rounds"
+  },
+  "mystic burst": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "Damage",
+       "bonus": "60"
+      }
+     ]
+    }
+   ],
+   "name": "Mystic Burst"
+  },
+  "mystic conduit": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "10"
+      },
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "10"
+      },
+      {
+       "name": "CooldownReduction",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Mystic Conduit"
+  },
+  "mystic expansion": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "15"
+      },
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Mystic Expansion"
+  },
+  "mystic regeneration": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "Regeneration",
+       "bonus": "8"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "150"
+      }
+     ]
+    }
+   ],
+   "name": "Mystic Regeneration"
+  },
+  "mystic reverb": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityLifestealPercentHero",
+       "bonus": "25"
+      },
+      {
+       "name": "TechDamagePercent",
+       "bonus": "20"
+      }
+     ]
+    },
+    {
+     "property_upgrades": []
+    }
+   ],
+   "name": "Mystic Reverb"
+  },
+  "mystic shot": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ProcBonusMagicDamage",
+       "bonus": "109"
+      },
+      {
+       "name": "SpiritPower",
+       "bonus": "14"
+      }
+     ]
+    }
+   ],
+   "name": "Mystic Shot"
+  },
+  "mystic slow": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "MovementSpeedSlow",
+       "bonus": "12"
+      },
+      {
+       "name": "GroundDashReductionPercent",
+       "bonus": "-10"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "100"
+      },
+      {
+       "name": "BonusSprintSpeed",
+       "bonus": "1"
+      }
+     ]
+    }
+   ],
+   "name": "Mystic Slow"
+  },
+  "mystic vulnerability": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechResist",
+       "bonus": "8"
+      },
+      {
+       "name": "TechArmorDamageReduction",
+       "bonus": "-10"
+      }
+     ]
+    }
+   ],
+   "name": "Mystic Vulnerability"
+  },
+  "mystical piano": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-15"
+      },
+      {
+       "name": "Radius",
+       "bonus": "3m"
+      }
+     ]
+    }
+   ],
+   "name": "Mystical Piano"
+  },
+  "nullification burst": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "EndRadius",
+       "bonus": "6m"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "300"
+      },
+      {
+       "name": "StatusResistancePercent",
+       "bonus": "20"
+      },
+      {
+       "name": "Damage",
+       "bonus": "200"
+      }
+     ]
+    }
+   ],
+   "name": "Nullification Burst"
+  },
+  "omnicharge signet": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusAbilityCharges",
+       "bonus": "2"
+      },
+      {
+       "name": "BonusSpiritForChargedAbilities",
+       "bonus": "30"
+      },
+      {
+       "name": "CooldownBetweenChargeReduction",
+       "bonus": "5"
+      },
+      {
+       "name": "CooldownReductionOnChargedAbilities",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Omnicharge Signet"
+  },
+  "opening rounds": {
+   "wp": 8.0,
+   "fire": 0.0,
+   "dps": 8.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BaseAttackDamagePercentBonus",
+       "bonus": "25"
+      },
+      {
+       "name": "TechPower",
+       "bonus": "18"
+      },
+      {
+       "name": "BonusBulletSpeedPercent",
+       "bonus": "45"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Opening Rounds"
+  },
+  "phantom strike": {
+   "wp": 15.0,
+   "fire": 0.0,
+   "dps": 15.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechPower",
+       "bonus": "22"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "20"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-20"
+      },
+      {
+       "name": "ImpactDamage",
+       "bonus": "100"
+      }
+     ]
+    }
+   ],
+   "name": "Phantom Strike"
+  },
+  "plated armor": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "DeflectionPercent",
+       "bonus": "15"
+      },
+      {
+       "name": "BulletProcDeflectionPercent",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Plated Armor"
+  },
+  "point blank": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "CloseRangeBonusWeaponPower",
+       "bonus": "30"
+      },
+      {
+       "name": "MeleeResistPercent",
+       "bonus": "30"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "150"
+      },
+      {
+       "name": "SlowPercent",
+       "bonus": "4"
+      }
+     ]
+    }
+   ],
+   "name": "Point Blank"
+  },
+  "prism blast": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityDuration",
+       "bonus": "2"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-10"
+      }
+     ]
+    }
+   ],
+   "name": "Prism Blast"
+  },
+  "quicksilver reload": {
+   "wp": 0.0,
+   "fire": 10.0,
+   "dps": 10.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusFireRate",
+       "bonus": "20"
+      },
+      {
+       "name": "Damage",
+       "bonus": "56"
+      },
+      {
+       "name": "AbilityChargeUpTime",
+       "bonus": "-4"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-4"
+      }
+     ]
+    }
+   ],
+   "name": "Quicksilver Reload"
+  },
+  "radiant regeneration": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "Regeneration",
+       "bonus": "9"
+      },
+      {
+       "name": "HealingPerCast",
+       "bonus": "60"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "110"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "1m"
+      }
+     ]
+    }
+   ],
+   "name": "Radiant Regeneration"
+  },
+  "rapid recharge": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusAbilityCharges",
+       "bonus": "2"
+      },
+      {
+       "name": "CooldownReductionOnChargedAbilities",
+       "bonus": "15"
+      },
+      {
+       "name": "BonusSpiritForChargedAbilities",
+       "bonus": "20"
+      },
+      {
+       "name": "CooldownBetweenChargeReduction",
+       "bonus": "5"
+      }
+     ]
+    }
+   ],
+   "name": "Rapid Recharge"
+  },
+  "rapid rounds": {
+   "wp": 0.0,
+   "fire": 9.0,
+   "dps": 9.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusFireRate",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Rapid Rounds"
+  },
+  "reactive barrier": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "VexBarrierCombatBarrier",
+       "bonus": "375"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-15"
+      }
+     ]
+    }
+   ],
+   "name": "Reactive Barrier"
+  },
+  "rebuttal": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ParryCooldownReduction",
+       "bonus": "0.5"
+      },
+      {
+       "name": "MeleeResistPercent",
+       "bonus": "22"
+      },
+      {
+       "name": "BonusDamagePercent",
+       "bonus": "20"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "150"
+      }
+     ]
+    }
+   ],
+   "name": "Rebuttal"
+  },
+  "recharging rush": {
+   "wp": 10.0,
+   "fire": 0.0,
+   "dps": 10.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-12"
+      },
+      {
+       "name": "BonusClipSizePercent",
+       "bonus": "30"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "30"
+      }
+     ]
+    }
+   ],
+   "name": "Recharging Rush"
+  },
+  "refresher": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-210"
+      }
+     ]
+    }
+   ],
+   "name": "Refresher"
+  },
+  "rescue beam": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "20"
+      },
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "20"
+      },
+      {
+       "name": "HealPercentAmount",
+       "bonus": "15"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-45"
+      }
+     ]
+    }
+   ],
+   "name": "Rescue Beam"
+  },
+  "restorative locket": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechResist",
+       "bonus": "10"
+      },
+      {
+       "name": "HealPerStack",
+       "bonus": "30"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-8"
+      },
+      {
+       "name": "MaxStaminaRestore",
+       "bonus": "2"
+      },
+      {
+       "name": "MinStaminaRestore",
+       "bonus": "2"
+      }
+     ]
+    }
+   ],
+   "name": "Restorative Locket"
+  },
+  "restorative shot": {
+   "wp": 6.0,
+   "fire": 0.0,
+   "dps": 6.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "HealFromHero",
+       "bonus": "100"
+      },
+      {
+       "name": "HealFromNPC",
+       "bonus": "40"
+      }
+     ]
+    }
+   ],
+   "name": "Restorative Shot"
+  },
+  "return fire": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletResist",
+       "bonus": "16"
+      },
+      {
+       "name": "SpiritDamageReflectedPct",
+       "bonus": "15"
+      },
+      {
+       "name": "BulletDamageReflectedPct",
+       "bonus": "25"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-10"
+      }
+     ]
+    }
+   ],
+   "name": "Return Fire"
+  },
+  "ricochet": {
+   "wp": 0.0,
+   "fire": 18.0,
+   "dps": 18.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "RicochetDamagePercent",
+       "bonus": "15"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "25"
+      }
+     ]
+    }
+   ],
+   "name": "Ricochet"
+  },
+  "runed gauntlets": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "MeleeDistanceScale",
+       "bonus": "50"
+      },
+      {
+       "name": "MeleeResistPercent",
+       "bonus": "15"
+      },
+      {
+       "name": "CooldownReductionOnHitPct",
+       "bonus": "6"
+      }
+     ]
+    }
+   ],
+   "name": "Runed Gauntlets"
+  },
+  "rusted barrel": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusHealth",
+       "bonus": "130"
+      },
+      {
+       "name": "BulletArmorReduction",
+       "bonus": "-4"
+      },
+      {
+       "name": "FireRateSlow",
+       "bonus": "20"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-8"
+      }
+     ]
+    }
+   ],
+   "name": "Rusted Barrel"
+  },
+  "scourge": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "MaxHealthPercentAsDPS",
+       "bonus": "2"
+      },
+      {
+       "name": "CombatBarrier",
+       "bonus": "300"
+      },
+      {
+       "name": "StatusResistancePercent",
+       "bonus": "20"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "125"
+      },
+      {
+       "name": "AbilityDuration",
+       "bonus": "3"
+      }
+     ]
+    }
+   ],
+   "name": "Scourge"
+  },
+  "seraphim wings": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AirBonusDamageGiven",
+       "bonus": "10"
+      },
+      {
+       "name": "AirBonusDamageTaken",
+       "bonus": "-10"
+      },
+      {
+       "name": "StaminaCooldownReduction",
+       "bonus": "30"
+      }
+     ]
+    }
+   ],
+   "name": "Seraphim Wings"
+  },
+  "shadow strike": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "Stamina",
+       "bonus": "1"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "250"
+      },
+      {
+       "name": "ResistStealAmount",
+       "bonus": "20"
+      },
+      {
+       "name": "DPS",
+       "bonus": "125"
+      },
+      {
+       "name": "AbilityDuration",
+       "bonus": "3"
+      }
+     ]
+    }
+   ],
+   "name": "Shadow Strike"
+  },
+  "shadow weave": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "20"
+      },
+      {
+       "name": "AmbushBonusWeaponDamage",
+       "bonus": "35"
+      },
+      {
+       "name": "AmbushBonusTechPower",
+       "bonus": "35"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-17"
+      }
+     ]
+    }
+   ],
+   "name": "Shadow Weave"
+  },
+  "sharpshooter": {
+   "wp": 10.0,
+   "fire": 0.0,
+   "dps": 10.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "LongRangeBonusWeaponPower",
+       "bonus": "40"
+      },
+      {
+       "name": "BonusAttackRangePercent",
+       "bonus": "10"
+      },
+      {
+       "name": "BonusBulletSpeedPercent",
+       "bonus": "45"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Sharpshooter"
+  },
+  "shrink ray": {
+   "wp": 0.0,
+   "fire": 20.0,
+   "dps": 20.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ModelScaleGrowth",
+       "bonus": "-0.15"
+      },
+      {
+       "name": "ModelScaleGrowthTooltip",
+       "bonus": "-15"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "2m"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "20"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-15"
+      }
+     ]
+    }
+   ],
+   "name": "Shrink Ray"
+  },
+  "silence wave": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-10"
+      },
+      {
+       "name": "Damage",
+       "bonus": "125"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "75"
+      }
+     ]
+    }
+   ],
+   "name": "Silence Wave"
+  },
+  "silencer": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechDamageReduction",
+       "bonus": "-15"
+      },
+      {
+       "name": "SilenceDuration",
+       "bonus": "1.25"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Silencer"
+  },
+  "siphon bullets": {
+   "wp": 15.0,
+   "fire": 0.0,
+   "dps": 15.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "HealthStealPctHero",
+       "bonus": "1.5"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Siphon Bullets"
+  },
+  "slowing bullets": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "SlowPercent",
+       "bonus": "16"
+      },
+      {
+       "name": "GroundDashReductionPercent",
+       "bonus": "-8"
+      }
+     ]
+    }
+   ],
+   "name": "Slowing Bullets"
+  },
+  "slowing hex": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "SlowPercent",
+       "bonus": "8"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-18"
+      },
+      {
+       "name": "GroundDashReductionPercent",
+       "bonus": "-6"
+      }
+     ]
+    }
+   ],
+   "name": "Slowing Hex"
+  },
+  "spellbreaker": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechResist",
+       "bonus": "15"
+      },
+      {
+       "name": "StatusResistancePercent",
+       "bonus": "15"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-3"
+      }
+     ]
+    }
+   ],
+   "name": "Spellbreaker"
+  },
+  "spellslinger": {
+   "wp": 0.0,
+   "fire": 11.0,
+   "dps": 11.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ReloadSpeedMultipler",
+       "bonus": "-3"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "6"
+      },
+      {
+       "name": "CooldownReduction",
+       "bonus": "8"
+      }
+     ]
+    }
+   ],
+   "name": "Spellslinger"
+  },
+  "spirit burn": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ExplosionDamage",
+       "bonus": "160"
+      },
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "12"
+      },
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "12"
+      },
+      {
+       "name": "DPS",
+       "bonus": "20"
+      },
+      {
+       "name": "ImmunityDuration",
+       "bonus": "-6"
+      }
+     ]
+    }
+   ],
+   "name": "Spirit Burn"
+  },
+  "spirit lifesteal": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityLifestealPercentHero",
+       "bonus": "14"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "80"
+      },
+      {
+       "name": "TechPower",
+       "bonus": "9"
+      }
+     ]
+    }
+   ],
+   "name": "Spirit Lifesteal"
+  },
+  "spirit rend": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "MagicResistReduction",
+       "bonus": "-5"
+      },
+      {
+       "name": "AbilityLifestealPercentHero",
+       "bonus": "10"
+      },
+      {
+       "name": "TechArmorDamageReduction",
+       "bonus": "-10"
+      }
+     ]
+    }
+   ],
+   "name": "Spirit Rend"
+  },
+  "spirit resilience": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechResist",
+       "bonus": "10"
+      },
+      {
+       "name": "TechResistBelowThreshold",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Spirit Resilience"
+  },
+  "spirit sap": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusHealth",
+       "bonus": "150"
+      },
+      {
+       "name": "MagicResistReduction",
+       "bonus": "-12"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-12"
+      },
+      {
+       "name": "TechPowerReduction",
+       "bonus": "-26"
+      }
+     ]
+    }
+   ],
+   "name": "Spirit Sap"
+  },
+  "spirit shielding": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "3"
+      },
+      {
+       "name": "CombatBarrier",
+       "bonus": "175"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "20"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-20"
+      }
+     ]
+    }
+   ],
+   "name": "Spirit Shielding"
+  },
+  "spirit shredder": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechArmorDamageReduction",
+       "bonus": "-10"
+      },
+      {
+       "name": "AbilityLifestealPercentHero",
+       "bonus": "10"
+      }
+     ]
+    }
+   ],
+   "name": "Spirit Shredder"
+  },
+  "spirit snatch": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "SpiritDamage",
+       "bonus": "50"
+      },
+      {
+       "name": "TechArmorGain",
+       "bonus": "5"
+      },
+      {
+       "name": "TechArmorDamageReduction",
+       "bonus": "-5"
+      },
+      {
+       "name": "TechPowerGain",
+       "bonus": "35"
+      },
+      {
+       "name": "TechPowerReduction",
+       "bonus": "-35"
+      }
+     ]
+    }
+   ],
+   "name": "Spirit Snatch"
+  },
+  "spirit strike": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "SpiritDamage",
+       "bonus": "80"
+      },
+      {
+       "name": "TechArmorDamageReduction",
+       "bonus": "-5"
+      }
+     ]
+    }
+   ],
+   "name": "Spirit Strike"
+  },
+  "spiritual overflow": {
+   "wp": 0.0,
+   "fire": 25.0,
+   "dps": 25.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusAbilityDurationPercent",
+       "bonus": "15"
+      },
+      {
+       "name": "BonusSpirit",
+       "bonus": "30"
+      },
+      {
+       "name": "BonusFireRate",
+       "bonus": "20"
+      },
+      {
+       "name": "AbilityLifestealPercentHero",
+       "bonus": "15"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "80"
+      },
+      {
+       "name": "TechPower",
+       "bonus": "9"
+      }
+     ]
+    }
+   ],
+   "name": "Spiritual Overflow"
+  },
+  "split shot": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletSplitShot",
+       "bonus": "4"
+      },
+      {
+       "name": "WeaponDamagePerStack",
+       "bonus": "8"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-8"
+      }
+     ]
+    }
+   ],
+   "name": "Split Shot"
+  },
+  "sprint boots": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 800,
+   "tier": 1,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "8"
+      },
+      {
+       "name": "BonusSprintSpeed",
+       "bonus": "12m"
+      }
+     ]
+    }
+   ],
+   "name": "Sprint Boots"
+  },
+  "stalker": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletResistReduction",
+       "bonus": "-10"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "2m"
+      },
+      {
+       "name": "DPS",
+       "bonus": "20"
+      },
+      {
+       "name": "ReduceFootstepSound",
+       "bonus": "-50"
+      }
+     ]
+    }
+   ],
+   "name": "Stalker"
+  },
+  "stamina mastery": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "Stamina",
+       "bonus": "2"
+      },
+      {
+       "name": "AirMoveIncreasePercent",
+       "bonus": "40"
+      },
+      {
+       "name": "StaminaCooldownReduction",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Stamina Mastery"
+  },
+  "superior cooldown": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "CooldownReduction",
+       "bonus": "10"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "6"
+      }
+     ]
+    }
+   ],
+   "name": "Superior Cooldown"
+  },
+  "superior duration": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusAbilityDurationPercent",
+       "bonus": "12"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "8"
+      }
+     ]
+    }
+   ],
+   "name": "Superior Duration"
+  },
+  "suppressor": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechPower",
+       "bonus": "12"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "16"
+      },
+      {
+       "name": "FireRateSlow",
+       "bonus": "20"
+      }
+     ]
+    }
+   ],
+   "name": "Suppressor"
+  },
+  "surge of power": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ImbuedTechPower",
+       "bonus": "32"
+      },
+      {
+       "name": "FireRateBonus",
+       "bonus": "18"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "2m"
+      }
+     ]
+    }
+   ],
+   "name": "Surge of Power"
+  },
+  "swift striker": {
+   "wp": 0.0,
+   "fire": 20.0,
+   "dps": 20.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusFireRate",
+       "bonus": "15"
+      },
+      {
+       "name": "BonusSprintSpeed",
+       "bonus": "4m"
+      }
+     ]
+    }
+   ],
+   "name": "Swift Striker"
+  },
+  "tankbuster": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "CurrentHealthDamage",
+       "bonus": "5"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "100"
+      },
+      {
+       "name": "Damage",
+       "bonus": "60"
+      }
+     ]
+    }
+   ],
+   "name": "Tankbuster"
+  },
+  "tesla bullets": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "DamagePerChain",
+       "bonus": "25"
+      },
+      {
+       "name": "BonusPerChain",
+       "bonus": "25"
+      }
+     ]
+    }
+   ],
+   "name": "Tesla Bullets"
+  },
+  "titanic magazine": {
+   "wp": 14.0,
+   "fire": 0.0,
+   "dps": 14.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "18"
+      },
+      {
+       "name": "BonusClipSizePercent",
+       "bonus": "70"
+      }
+     ]
+    }
+   ],
+   "name": "Titanic Magazine"
+  },
+  "torment pulse": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusHealth",
+       "bonus": "75"
+      },
+      {
+       "name": "DamagePulseAmount",
+       "bonus": "30"
+      }
+     ]
+    }
+   ],
+   "name": "Torment Pulse"
+  },
+  "toxic bullets": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "HealAmpReceivePenaltyPercent",
+       "bonus": "-30"
+      },
+      {
+       "name": "HealAmpRegenPenaltyPercent",
+       "bonus": "-30"
+      },
+      {
+       "name": "DotHealthPercent",
+       "bonus": "0.7"
+      }
+     ]
+    }
+   ],
+   "name": "Toxic Bullets"
+  },
+  "transcendent cooldown": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ItemCooldownReduction",
+       "bonus": "10"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "10"
+      },
+      {
+       "name": "CooldownReduction",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Transcendent Cooldown"
+  },
+  "trophy collector": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "StackingTechRadiusMultiplier",
+       "bonus": "3"
+      },
+      {
+       "name": "StackingTechRangeMultiplier",
+       "bonus": "3"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "6"
+      },
+      {
+       "name": "BonusSprintSpeed",
+       "bonus": "12m"
+      },
+      {
+       "name": "MaxStacks",
+       "bonus": "83"
+      }
+     ]
+    }
+   ],
+   "name": "Trophy Collector"
+  },
+  "unstable concoction": {
+   "wp": 150.0,
+   "fire": 0.0,
+   "dps": 150.0,
+   "cost": 9999,
+   "tier": 5,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "StunDuration",
+       "bonus": "0.5"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "50"
+      },
+      {
+       "name": "TechPower",
+       "bonus": "50"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "1300"
+      }
+     ]
+    }
+   ],
+   "name": "Unstable Concoction"
+  },
+  "unstoppable": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "AbilityDuration",
+       "bonus": "1.25"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "75"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-35"
+      },
+      {
+       "name": "StatusResistancePercent",
+       "bonus": "15"
+      }
+     ]
+    }
+   ],
+   "name": "Unstoppable"
+  },
+  "vampiric burst": {
+   "wp": 10.0,
+   "fire": 0.0,
+   "dps": 10.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "ActiveBonusFireRate",
+       "bonus": "25"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-10"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "10"
+      },
+      {
+       "name": "BulletLifestealPercent",
+       "bonus": "16"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "110"
+      }
+     ]
+    }
+   ],
+   "name": "Vampiric Burst"
+  },
+  "veil walker": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "SpiritPower",
+       "bonus": "25"
+      },
+      {
+       "name": "InvisMoveSpeedMod",
+       "bonus": "6m"
+      },
+      {
+       "name": "HealOnVeil",
+       "bonus": "250"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-9"
+      },
+      {
+       "name": "InvisDuration",
+       "bonus": "4"
+      },
+      {
+       "name": "BonusMoveSpeed",
+       "bonus": "4m"
+      },
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "8"
+      },
+      {
+       "name": "BonusSprintSpeed",
+       "bonus": "12m"
+      }
+     ]
+    }
+   ],
+   "name": "Veil Walker"
+  },
+  "vortex web": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "spirit",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BonusSprintSpeed",
+       "bonus": "9m"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-22"
+      },
+      {
+       "name": "TechRadiusMultiplier",
+       "bonus": "10"
+      },
+      {
+       "name": "TechRangeMultiplier",
+       "bonus": "10"
+      },
+      {
+       "name": "SlowPercent",
+       "bonus": "12"
+      }
+     ]
+    },
+    {
+     "property_upgrades": []
+    },
+    {
+     "property_upgrades": []
+    }
+   ],
+   "name": "Vortex Web"
+  },
+  "warp stone": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletResist",
+       "bonus": "20"
+      },
+      {
+       "name": "AbilityCastRange",
+       "bonus": "9m"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-3"
+      }
+     ]
+    }
+   ],
+   "name": "Warp Stone"
+  },
+  "weakening headshot": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "BulletResistReduction",
+       "bonus": "-7"
+      },
+      {
+       "name": "BonusHealth",
+       "bonus": "125"
+      }
+     ]
+    }
+   ],
+   "name": "Weakening Headshot"
+  },
+  "weapon shielding": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 1600,
+   "tier": 2,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "OutOfCombatHealthRegen",
+       "bonus": "3"
+      },
+      {
+       "name": "CombatBarrier",
+       "bonus": "225"
+      },
+      {
+       "name": "BulletResist",
+       "bonus": "15"
+      },
+      {
+       "name": "AbilityCooldown",
+       "bonus": "-20"
+      }
+     ]
+    }
+   ],
+   "name": "Weapon Shielding"
+  },
+  "weighted shots": {
+   "wp": 30.0,
+   "fire": 0.0,
+   "dps": 30.0,
+   "cost": 3200,
+   "tier": 3,
+   "slot": "weapon",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "StatusResistancePercent",
+       "bonus": "10"
+      },
+      {
+       "name": "BaseAttackDamagePercent",
+       "bonus": "35"
+      },
+      {
+       "name": "SlowPercent",
+       "bonus": "16"
+      },
+      {
+       "name": "GroundDashReductionPercent",
+       "bonus": "-8"
+      }
+     ]
+    }
+   ],
+   "name": "Weighted Shots"
+  },
+  "witchmail": {
+   "wp": 0.0,
+   "fire": 0.0,
+   "dps": 0.0,
+   "cost": 6400,
+   "tier": 4,
+   "slot": "vitality",
+   "upgrades_to": [
+    {
+     "property_upgrades": [
+      {
+       "name": "TechPower",
+       "bonus": "26"
+      },
+      {
+       "name": "CooldownReductionPerHit",
+       "bonus": "2"
+      },
+      {
+       "name": "TechResist",
+       "bonus": "5"
+      }
+     ]
+    }
+   ],
+   "name": "Witchmail"
+  }
+ },
+ "digest": "blake2b:05fd33566a4883ff4c945b0085baec82af5b10c8f8dbf6780709ffaa7f146668"
+}

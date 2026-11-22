@@ -20,9 +20,11 @@ MAGIC = 0x55AA1234
 EXPECTED = (
     "panorama/layout/tooltips/citadel_tooltip_mod_details.vxml_c",
     "panorama/scripts/soul_lens.vjs_c",
+    "panorama/scripts/soul_lens_build.vjs_c",
     "panorama/scripts/soul_lens_data.vjs_c",
     "panorama/styles/soul_lens.vcss_c",
     "panorama/scripts/soul_lens.js",
+    "panorama/scripts/soul_lens_build.js",
     "panorama/scripts/soul_lens_data.js",
     "panorama/styles/soul_lens.css",
 )

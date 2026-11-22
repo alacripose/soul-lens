@@ -1,0 +1,13 @@
+{
+ "schema": "soul-lens.builds/1",
+ "builds": [
+  {
+   "build": "6864",
+   "version_date": "Nov 18 2026",
+   "captured_at": "2026-11-22T16:49:46+00:00",
+   "digest": "blake2b:05fd33566a4883ff4c945b0085baec82af5b10c8f8dbf6780709ffaa7f146668",
+   "items": 173,
+   "path": "data/builds/6864.json"
+  }
+ ]
+}

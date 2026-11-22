@@ -36,6 +36,11 @@ import re
 import sys
 import urllib.request
 
+try:  # script form (python tools/ingest.py) and package import (tests) both work
+    import terms_archive
+except ImportError:  # pragma: no cover - the package path
+    from tools import terms_archive
+
 ITEM_URL = "https://api.deadlock-api.com/v1/assets/items"
 STATS_URL = "https://api.deadlock-api.com/v1/analytics/item-stats"
 HERO_URL = "https://api.deadlock-api.com/v1/assets/heroes"
@@ -330,6 +335,8 @@ def main() -> int:
                         help="skip the per-hero rows (one request per hero)")
     parser.add_argument("--min-wpa-matches", type=int, default=MIN_WPA_MATCHES)
     parser.add_argument("--statlocker-file", default="")
+    parser.add_argument("--replace-terms", action="store_true",
+                        help="replace this build's archived terms instead of refusing a changed bake")
     args = parser.parse_args()
 
     cache = pathlib.Path(args.cache)
@@ -419,6 +426,22 @@ def main() -> int:
         "items": dict(sorted(rows.items())),
         "heroes": dict(sorted(hero_rows.items())),
     }
+
+    # The forge's VPK tracker keeps one immutable snapshot per build and looks a
+    # build up in its index; this is the same contract for the only part of the
+    # bake a patch can silently stale. A second bake of one build with other terms
+    # is a refusal, not an overwrite.
+    try:
+        snapshot = terms_archive.write_snapshot(document["build"], document["build_date"], rows,
+                                                replace=args.replace_terms)
+    except terms_archive.TermsConflict as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    archived = terms_archive.load()
+    document["term_builds"] = {build: row.get("items") for build, row in archived.items()
+                               if build != document["build"]}
+    print(f"terms archive: build {snapshot['build']} {snapshot['digest']}, "
+          f"{len(document['term_builds'])} other build(s)")
 
     out = pathlib.Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
