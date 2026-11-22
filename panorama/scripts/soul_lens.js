@@ -27,6 +27,9 @@
     }
 
     function data() {
+        // Panorama's global object is not `window`; the baked file declares a bare
+        // global and the browser witness also attaches it to window.
+        try { if (typeof SoulLensData !== "undefined" && SoulLensData) return SoulLensData; } catch (e) {}
         try { return window.SoulLensData || null; } catch (e) { return null; }
     }
 
@@ -39,9 +42,12 @@
     }
 
     function hasClass(panel, needle) {
+        // Panorama panels expose HasClass; GetAttributeString is not a panel method and
+        // silently returned nothing, which is why hero detection never matched.
+        try { if (panel.HasClass && panel.HasClass(needle)) return true; } catch (e) {}
         try {
             var cls = panel.GetAttributeString ? (panel.GetAttributeString("class", "") || "") : "";
-            return cls.toLowerCase().indexOf(needle) !== -1;
+            return cls.toLowerCase().indexOf(String(needle).toLowerCase()) !== -1;
         } catch (e) { return false; }
     }
 
@@ -61,8 +67,10 @@
     // #ModView in the stock layout, and both are re-written when the card is reused
     // for the next hovered item, so they are read every tick rather than cached.
     function readCard(root) {
-        var view = byId(root, "ModView") || root;
-        var nameNode = null;
+        var view = byId(root, "ModView") || byId(root, "CitadelTooltipModDetails") || root;
+        // The details tooltip names the item `#ModName`; the hover card names it
+        // `.modName`. Both are read here so the same script serves either layout.
+        var nameNode = byId(view, "ModName") || byId(root, "ModName");
         var queue = [view];
         var seen = 0;
         while (queue.length && !nameNode && seen < 120) {
@@ -78,7 +86,18 @@
                 name = view.mod_name ? String(view.mod_name) : "";
             } catch (e) { name = ""; }
         }
-        var costNode = byId(view, "ItemCost") || byId(root, "ItemCost");
+        var costNode = byId(view, "ItemCost") || byId(root, "ItemCost") || byId(view, "ModCost");
+        if (!costNode) {
+            var costQueue = [view];
+            var costSeen = 0;
+            while (costQueue.length && !costNode && costSeen < 120) {
+                var costPanel = costQueue.shift();
+                costSeen += 1;
+                if (hasClass(costPanel, "modcost")) costNode = costPanel;
+                var costKids = kids(costPanel);
+                for (var ci = 0; ci < costKids.length; ci += 1) costQueue.push(costKids[ci]);
+            }
+        }
         var cost = 0;
         try { cost = parseInt(String(text(costNode)).replace(/[^0-9]/g, ""), 10) || 0; } catch (e) { cost = 0; }
         return { name: name, cost: cost };
@@ -107,21 +126,46 @@
         return sign + number.toFixed(digits);
     }
 
+    // The hero's name is in the shop layout, and a tooltip is its own popup tree:
+    // the label is a *class* (`HeroFavoritesHeaderLabel`), not an id, and it is not
+    // an ancestor of the card. Walk to the outermost ancestor this context can see
+    // and search that subtree by class, bounded so a huge HUD cannot stall a hover.
     function heroName() {
         try {
-            var rootPanel = $.GetContextPanel();
-            var node = rootPanel;
-            var guard = 0;
-            while (node && guard < 40) {
-                var label = node.FindChildTraverse ? node.FindChildTraverse("HeroFavoritesHeaderLabel") : null;
-                if (label) {
-                    var raw = text(label);
-                    var match = raw.match(/^(.+?)'s /);
-                    if (match) return match[1];
-                    return raw;
-                }
+            var node = $.GetContextPanel();
+            var outer = node;
+            var up = 0;
+            while (node && up < 60) {
+                outer = node;
                 node = node.GetParent ? node.GetParent() : null;
-                guard += 1;
+                up += 1;
+            }
+            // Panorama's own class lookup is cheap and exact; the manual BFS below is
+            // only a fallback for the browser witness.
+            try {
+                var hits = outer.FindChildrenWithClassTraverse ? outer.FindChildrenWithClassTraverse("HeroFavoritesHeaderLabel") : null;
+                if (hits && hits.length) {
+                    var hitText = text(hits[0]);
+                    if (hitText) {
+                        var hitMatch = hitText.match(/^(.+?)'s /);
+                        return hitMatch ? hitMatch[1] : hitText;
+                    }
+                }
+            } catch (e) {}
+            var queue = [outer];
+            var seen = 0;
+            while (queue.length && seen < 6000) {
+                var panel = queue.shift();
+                seen += 1;
+                if (hasClass(panel, "HeroFavoritesHeaderLabel")) {
+                    var raw = text(panel);
+                    if (raw) {
+                        var match = raw.match(/^(.+?)'s /);
+                        return match ? match[1] : raw;
+                    }
+                }
+                var next = kids(panel);
+                for (var i = 0; i < next.length; i += 1) queue.push(next[i]);
             }
         } catch (e) {}
         return "";

@@ -17,10 +17,15 @@ instead of shipping it; `tools/gate.py` prints a check it could not run as
 
 ## The interface is the game's, not ours
 
-The mod replaces one file — `panorama/layout/tooltips/citadel_tooltip_mod_hover.xml`
-— and appends to it. It does not restyle the item card, does not move it, and
-does not draw a second tooltip. If the stock layout changes, the answer is to
-re-copy it and re-run `tools/check_live.py`, not to reconstruct it from memory.
+The mod replaces one file — `panorama/layout/tooltips/citadel_tooltip_mod_details.xml`
+(the card the shop draws; the hover layout is left stock) — and appends to it. It
+does not restyle the item card, does not move it, and does not draw a second
+tooltip. If the stock layout changes, the answer is to re-copy it and re-run
+`tools/check_live.py`, not to reconstruct it from memory.
+
+Retail Panorama loads compiled assets. A source tree of `.xml`/`.js`/`.css` is not
+a shippable mod: build with `python tools/build_addon.py` (CSDK resource compiler,
+then Source2Viewer CLI), never with a hand-rolled VPK writer.
 
 Panorama code runs in the game and is loaded by the game's own layout, so every
 entry point in `soul_lens.js` is wrapped: a throw there can cost the player the
@@ -42,7 +47,9 @@ stock tooltip. A refused tick logs once and leaves the card alone.
   ships. The ingest records `game/citadel/steam.inf`, not the drive it is on.
 - `data/cache/` and `data/live/` are fetch and extraction scratch; they do not
   ship. `data/items.json`, `data/live-layout.json` and the baked script do.
-- The VPK packs `panorama/` only.
+- The VPK packs `panorama/` only, and only what `tools/build_addon.py` stages:
+the compiled assets plus the raw scripts and stylesheet (never a raw `.xml`
+beside the compiled layout — the loader can pick the uncompiled one).
 
 ## Records
 

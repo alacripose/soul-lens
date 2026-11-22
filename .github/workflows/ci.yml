@@ -29,10 +29,12 @@ jobs:
       - name: gate
         run: python tools/gate.py --skip-live
 
-      - name: pack the addon
-        run: python tools/pack_vpk.py panorama dist/soul_lens/pak01_dir.vpk
-
-      - name: verify the archive
+      # The archive is built on a Windows machine with the CSDK resource compiler
+      # and Source2Viewer CLI (python tools/build_addon.py) and committed, because
+      # retail Panorama loads only compiled assets and neither tool exists on the
+      # runner. CI verifies the committed bytes instead of packing raw sources: a
+      # hand-packed archive of `.xml`/`.js`/`.css` mounts and renders nothing.
+      - name: verify the committed archive
         run: python tools/verify_vpk.py dist/soul_lens/pak01_dir.vpk
 
       - uses: actions/upload-artifact@v4
@@ -50,15 +52,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: pack the addon
-        run: python tools/pack_vpk.py panorama dist/soul_lens/pak01_dir.vpk
-      - name: verify the archive
+      - name: verify the committed archive
         run: python tools/verify_vpk.py dist/soul_lens/pak01_dir.vpk
       - name: publish the release asset
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          notes="The hover strip: souls per +1% weapon power, souls per +1% WPA and per +1% DPS, each row labelled with its source, plus the hero's measured buy time. Install: copy pak01_dir.vpk to game/citadel/addons/soul_lens/ and add 'game citadel/addons/soul_lens' to SearchPaths in gameinfo.gi, or run install.ps1 from the repository."
+          notes="The shop card strip: souls per +1% weapon power, souls per +1% WPA and per +1% DPS, each row labelled with its source, plus the hero's measured buy time. Install: copy pak01_dir.vpk to game/citadel/addons/soul_lens/ and add 'game citadel/addons/soul_lens' to SearchPaths in gameinfo.gi, or run install.ps1 from the repository."
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             gh release upload "$GITHUB_REF_NAME" dist/soul_lens/pak01_dir.vpk --clobber
           else

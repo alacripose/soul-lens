@@ -7,8 +7,11 @@ and where it sits in the shop list that is open.
 
 It is one Panorama VPK. There is no server, no companion app and no overlay
 process: the mod replaces exactly one of the game's layouts,
-`panorama/layout/tooltips/citadel_tooltip_mod_hover.xml`, and appends the strip
-inside it, so the stock tooltip is still the thing drawing the card.
+`panorama/layout/tooltips/citadel_tooltip_mod_details.xml` — the card the shop's
+item popup actually draws — and appends the strip inside it, so the stock tooltip
+is still the thing drawing the card. The narrower hover layout is left untouched.
+Retail Panorama loads compiled assets, so the build runs the CSDK resource
+compiler and packs the `.vxml_c`/`.vjs_c`/`.vcss_c` output with Source2Viewer CLI.
 
 ## What the strip says
 
@@ -110,7 +113,7 @@ SHA-256, and the baseline the WPA was measured against.
 The mod ships a copy of one of the game's files. `tools/check_live.py` extracts
 the same file from the installed VPK through Source 2 Viewer, removes the Soul
 Lens additions from the copy, and compares the rest line by line. When Valve
-edits the hover layout the check refuses and names the first differing line, so
+edits the details layout the check refuses and names the first differing line, so
 a stale copy cannot quietly replace a newer stock tooltip.
 
 ```bash
@@ -119,22 +122,25 @@ python tools/check_live.py --write-report   # writes data/live-layout.json
 python tools/check_live.py --base saved.xml # compare against a saved live copy
 ```
 
-The click-through details tooltip (`citadel_tooltip_mod_details.xml`) is a
-separate layout the hover layout does not load; reaching it would mean
-overriding a second game file, which this mod does not do. Why is recorded in
-`logs/records.md` rather than worked around.
+The narrower `citadel_tooltip_mod_hover.xml` is the other tooltip layout the shop
+builds; the drawn card is the details layout, which is the one this mod owns. An
+equal override of the hover layout only added a stray second strip to the item
+icon tooltip, so it was dropped and the one-file boundary holds.
 
 ## Gate and release
 
 ```bash
 python tools/gate.py
 python tools/gate.py --skip-live   # when this machine has no Deadlock install
-python tools/verify_vpk.py         # the packed archive holds the four files
+python tools/build_addon.py        # CSDK compile + S2V pack
+python tools/verify_vpk.py         # the archive holds the compiled assets
 ```
 
 `.github/workflows/ci.yml` runs the gate with `--skip-live` on every push and pull
-request, packs and verifies the VPK, and uploads it as an artifact. A `v*` tag
-publishes the same archive as a GitHub release asset. The live-layout comparison
+request, verifies the committed VPK and uploads it as an artifact. A `v*` tag
+publishes the same archive as a GitHub release asset. CI does not pack: the CSDK
+compiler and Source2Viewer are Windows tools on the build machine, and a
+hand-packed archive of raw `.xml`/`.js`/`.css` mounts and renders nothing. The live-layout comparison
 is the local check because a CI runner has no game install; the gate prints it as
 a skip, never as a pass.
 
@@ -142,7 +148,7 @@ a skip, never as a pass.
 
 | Path | Purpose |
 |---|---|
-| `panorama/layout/tooltips/citadel_tooltip_mod_hover.xml` | the live hover layout plus the strip and its two script includes |
+| `panorama/layout/tooltips/citadel_tooltip_mod_details.xml` | the live details layout plus the strip and its two script includes |
 | `panorama/scripts/soul_lens.js` | reads the card and the open shop, fills the strip, labels each row, refuses unknown data |
 | `panorama/scripts/soul_lens_data.js` | generated catalogue the overlay reads |
 | `panorama/styles/soul_lens.css` | the strip's family styling |
@@ -150,18 +156,19 @@ a skip, never as a pass.
 | `tools/record_fixture.py` | records one hero's real response as the WPA recomputation fixture |
 | `tools/check_live.py` | refuses a stale override against the installed build |
 | `tools/gate.py` | unit, harness, live and shipped checks in one command |
-| `tools/verify_vpk.py` | checks the packed archive |
-| `tools/pack_vpk.py` | VPK v1 writer (same one the family shell uses) |
+| `tools/verify_vpk.py` | checks the packed archive for the compiled and raw paths |
+| `tools/build_addon.py` | CSDK resource compile + Source2Viewer VPK pack |
+| `tools/drive.py` | focuses Deadlock, sends the shop keys and photographs the result |
 | `tools/tests/test_soul_lens.js` | the shipped overlay script against a fake Panorama tree |
 | `tests/test_ingest.py` | economy, source adapters and shipped-data checks |
 | `tests/test_wpa.py` | recomputes the baked WPA from the recorded fixture |
 | `tests/fixtures/haze-wpa.json` | recorded Haze response: 156 item rows plus the hero baseline |
 | `docs/soul-lens-surface.html` | browser witness: the shipped script drawing three cards |
-| `install.ps1` | pack, install, mount |
+| `install.ps1` | compile, pack, install, mount |
 
 ## Boundaries
 
-- **One game file is replaced.** The hover layout, and nothing else. The
+- **One game file is replaced.** The details layout, and nothing else. The
   live-layout check is what keeps that honest.
 - **Cost and hero are live.** Price and name come from the card being hovered, the
   hero and the list order from the open shop. The bake supplies the item terms,
@@ -193,7 +200,12 @@ a skip, never as a pass.
 - `docs/soul-lens-surface.html` draws all three cases from the shipped script:
   the worked example with both ratios and both tags, a spirit item with its two
   refusals and a live WPA, and an item the bake does not know.
-- The packed VPK is 729,578 bytes (`tools/pack_vpk.py`, four files,
-  `tools/verify_vpk.py`).
-- Installed into the game on this machine for the owner to look at; the strip in
-  the running shop is the acceptance step and has not been photographed here.
+- The packed VPK (`tools/build_addon.py`, CSDK 13 compile + S2V) carries seven
+  paths: the compiled details layout, both compiled scripts, the compiled
+  stylesheet, and the raw `.js`/`.css` alongside them; `tools/verify_vpk.py`
+  refuses an archive without the compiled assets.
+- Witnessed in the running game: build 6864, hideout shop, `B`, hover Extra
+  Health — the card draws name, cost, `-210 Bonus Health`, upgrades, then
+  `SOUL LENS · CALICO / POWER no weapon power term / WPA +1.5% WPA · 542 souls /
+  +1% / DPS no standing dps term / buy = 14:12 (Calico)` with per-row `DL-API`
+  tags. Captures: `data/shots/final8.jpg`, `data/shots/strip-zoom4.jpg`.

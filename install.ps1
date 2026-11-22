@@ -10,7 +10,9 @@
 
       game   citadel/addons/soul_lens
 
-  This script packs `panorama/` into `dist/soul_lens/pak01_dir.vpk`, copies it to
+  This script compiles `panorama/` with the family's CSDK resource compiler, packs
+  it with Source2Viewer CLI into `dist/soul_lens/pak01_dir.vpk` (retail Panorama
+  loads only compiled `.vxml_c`/`.vjs_c`/`.vcss_c` assets), copies it to
   `game/citadel/addons/soul_lens/pak01_dir.vpk`, and adds that line to
   `game/citadel/gameinfo.gi` when it is absent. It backs the file up once as
   `gameinfo.gi.soul-lens-bak`, and refuses rather than guessing when the file's
@@ -50,8 +52,12 @@ $python = (Get-Command python -ErrorAction SilentlyContinue).Source
 if (-not $python) { throw 'refused: python is not on PATH' }
 
 $out = Join-Path $here 'dist\soul_lens\pak01_dir.vpk'
-& $python (Join-Path $here 'tools\pack_vpk.py') (Join-Path $here 'panorama') $out
-if ($LASTEXITCODE -ne 0) { throw "refused: pack_vpk.py exited $LASTEXITCODE" }
+# Both halves matter: the CSDK compiler turns the layout/scripts/css into the
+# compiled assets retail Panorama loads, and S2V writes the archive with the
+# `panorama/` prefix the mount expects. Set $env:CSDK13 and
+# $env:SOURCE2VIEWER_CLI to override the paths this project measured.
+& $python (Join-Path $here 'tools\build_addon.py') --out $out
+if ($LASTEXITCODE -ne 0) { throw "refused: build_addon.py exited $LASTEXITCODE" }
 
 $targetDir = Join-Path $citadel 'addons\soul_lens'
 $target = Join-Path $targetDir 'pak01_dir.vpk'

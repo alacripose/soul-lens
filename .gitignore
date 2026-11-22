@@ -1,7 +1,29 @@
 data/cache/
 data/live/
-dist/
 __pycache__/
 *.pyc
 logs/surface-server.pid
 logs/*.log
+
+# The built addon ships so CI can verify the real bytes; the CSDK compiler and
+# Source2Viewer are Windows build-machine tools, not repository contents.
+dist/*
+!dist/soul_lens/
+dist/soul_lens/*
+!dist/soul_lens/pak01_dir.vpk
+
+# Fetch and probe scratch, never shipped.
+data/ia/
+data/ia-x/
+data/ol-vpk/
+data/live-ts/
+data/compile/
+data/panorama-strings.txt
+data/item_assistant.rar
+
+# Only the captures quoted in the README are evidence; the rest are probes.
+data/shots/*
+!data/shots/final8.jpg
+!data/shots/strip-zoom4.jpg
+!data/shots/shipped.jpg
+!data/shots/shipped-zoom.jpg

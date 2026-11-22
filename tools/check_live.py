@@ -1,7 +1,8 @@
-"""Refuse to ship an override that no longer matches the live hover layout.
+"""Refuse to ship an override that no longer matches the live details layout.
 
 The mod replaces one of the game's own files, `panorama/layout/tooltips/
-citadel_tooltip_mod_hover.xml`. That is only safe while the copy under
+citadel_tooltip_mod_details.xml` (the card the shop's click-through/hover popup
+draws; the hover layout is a separate, narrower card). That is only safe while the copy under
 `panorama/layout/tooltips/` is the current file from the installed build plus the
 Soul Lens additions. When Valve edits the layout, a stale copy would quietly
 replace the stock tooltip with an older one, so this command compares the two and
@@ -27,11 +28,11 @@ import re
 import subprocess
 import sys
 
-LAYOUT = "panorama/layout/tooltips/citadel_tooltip_mod_hover.xml"
+LAYOUT = "panorama/layout/tooltips/citadel_tooltip_mod_details.xml"
 VPK = pathlib.Path("D:/SteamLibrary/steamapps/common/Deadlock/game/citadel/pak01_dir.vpk")
 STEAM_INF = pathlib.Path("D:/SteamLibrary/steamapps/common/Deadlock/game/citadel/steam.inf")
 S2V = pathlib.Path("C:/Users/ala/Downloads/cli-windows-x64/Source2Viewer-CLI.exe")
-MOD = pathlib.Path("panorama/layout/tooltips/citadel_tooltip_mod_hover.xml")
+MOD = pathlib.Path("panorama/layout/tooltips/citadel_tooltip_mod_details.xml")
 
 SCRIPTS_BLOCK = re.compile(r"\n\t<scripts>.*?</scripts>", re.S)
 SOUL_CSS = re.compile(r"\n\t\t<include src=\"file://\{resources\}/styles/soul_lens\.css\" />")
@@ -131,7 +132,7 @@ def main() -> int:
             print(f"  line count: live {len(live_lines)} mod {len(mod_lines)}")
         return 1
 
-    print(f"hover layout matches the installed build ({build()}): {mod_body}")
+    print(f"details layout matches the installed build ({build()}): {mod_body}")
     return 0
 
 
