@@ -58,7 +58,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          notes="The Soul Lens passive section: a native-styled header and one sentence, then six stat tiles for weapon power, WPA, standing DPS, measured buy time, shop-list place and Statlocker rank. A source that does not answer keeps its tile and says so instead of disappearing. Install: copy pak01_dir.vpk to game/citadel/addons/soul_lens/ and add 'game citadel/addons/soul_lens' to SearchPaths in gameinfo.gi, or run install.ps1 from the repository."
+          notes="The Soul Lens passive section: a native-styled header and one sentence, then six stat tiles for weapon power, WPA, standing DPS, measured buy time, shop-list place and Statlocker rank. The tiles follow the card's own row: two across when four terms are visible, three across when all six are. A source that does not answer keeps its tile and says so instead of disappearing. Install: copy pak01_dir.vpk to game/citadel/addons/soul_lens/ and add 'game citadel/addons/soul_lens' to SearchPaths in gameinfo.gi, or run install.ps1 from the repository."
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             gh release upload "$GITHUB_REF_NAME" dist/soul_lens/pak01_dir.vpk --clobber
           else

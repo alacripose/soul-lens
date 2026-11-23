@@ -495,6 +495,25 @@
 
         var summary = byId(block, "SoulLensSummary");
         if (summary) summary.text = summaryLine(hero, reading, cost, minute);
+
+        // The card's own row groups two or three important attributes, and the
+        // section uses the same split: four visible tiles keep the 2x2 shape, while
+        // three, five or six use the 3-up row. Counting the tiles that survived the
+        // render is the only reliable source: a refusal is still a visible tile.
+        var grid = byId(block, "SoulLensGrid");
+        if (grid) {
+            var visibleTiles = 0;
+            for (var t = 0; t < ids.length; t += 1) {
+                var parts = tileParts(block, ids[t]);
+                try {
+                    if (parts.tile && !parts.tile.HasClass("SoulLensHidden")) visibleTiles += 1;
+                } catch (e) {}
+            }
+            try {
+                grid.SetHasClass("SoulLensThreeUp",
+                    visibleTiles === 3 || visibleTiles === 5 || visibleTiles === 6);
+            } catch (e) {}
+        }
     }
 
     function start() {

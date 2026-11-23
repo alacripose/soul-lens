@@ -137,8 +137,8 @@
     .SoulLensTile {
         width: 49%;
         min-height: 60px;
-        margin: 0 1% 2px 0;
-        padding: 5px 6px 6px;
+        margin: 0 2px 2px 0;
+        padding: 0;
         background: rgba(0, 0, 0, 0.375);
         display: flex;
         align-items: center;
@@ -146,6 +146,7 @@
     }
     .SoulLensTile .ImportantStatContent {
         width: 100%;
+        padding: 5px 6px 6px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -171,6 +172,7 @@
         color: var(--muted);
         opacity: 0.4;
     }
+    .SoulLensGrid.SoulLensThreeUp .SoulLensTile { width: 32.5%; }
     .SoulLensGain .SoulLensTileValue { color: var(--green); }
     .SoulLensLoss .SoulLensTileValue { color: var(--red); }
     .SoulLensRefused .SoulLensTileValue { color: var(--muted); opacity: 0.55; font-size: 14px; }
@@ -232,7 +234,7 @@
                 <div class="SoulLensHeader"><span id="SoulLensHead" class="ActivePassiveLabel">Soul Lens</span></div>
                 <div class="SoulLensBody">
                     <div id="SoulLensSummary" class="SoulLensSummary ModInfoLabel" data-html="true"></div>
-                    <div class="SoulLensGrid">
+                    <div id="SoulLensGrid" class="SoulLensGrid">
                         <div id="SoulLensWpTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWp" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Weapon Power</span><span id="SoulLensWpNote" class="SoulLensTileNote"></span></div></div>
                         <div id="SoulLensWpaTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWpa" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">WPA</span><span id="SoulLensWpaNote" class="SoulLensTileNote"></span></div></div>
                         <div id="SoulLensDpsTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensDps" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Standing DPS</span><span id="SoulLensDpsNote" class="SoulLensTileNote"></span></div></div>
@@ -262,7 +264,7 @@
                 <div class="SoulLensHeader"><span id="SoulLensHead" class="ActivePassiveLabel">Soul Lens</span></div>
                 <div class="SoulLensBody">
                     <div id="SoulLensSummary" class="SoulLensSummary ModInfoLabel" data-html="true"></div>
-                    <div class="SoulLensGrid">
+                    <div id="SoulLensGrid" class="SoulLensGrid">
                         <div id="SoulLensWpTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWp" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Weapon Power</span><span id="SoulLensWpNote" class="SoulLensTileNote"></span></div></div>
                         <div id="SoulLensWpaTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWpa" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">WPA</span><span id="SoulLensWpaNote" class="SoulLensTileNote"></span></div></div>
                         <div id="SoulLensDpsTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensDps" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Standing DPS</span><span id="SoulLensDpsNote" class="SoulLensTileNote"></span></div></div>
@@ -286,7 +288,7 @@
                 <div class="SoulLensHeader"><span id="SoulLensHead" class="ActivePassiveLabel">Soul Lens</span></div>
                 <div class="SoulLensBody">
                     <div id="SoulLensSummary" class="SoulLensSummary ModInfoLabel" data-html="true"></div>
-                    <div class="SoulLensGrid">
+                    <div id="SoulLensGrid" class="SoulLensGrid">
                         <div id="SoulLensWpTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWp" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Weapon Power</span><span id="SoulLensWpNote" class="SoulLensTileNote"></span></div></div>
                         <div id="SoulLensWpaTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWpa" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">WPA</span><span id="SoulLensWpaNote" class="SoulLensTileNote"></span></div></div>
                         <div id="SoulLensDpsTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensDps" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Standing DPS</span><span id="SoulLensDpsNote" class="SoulLensTileNote"></span></div></div>

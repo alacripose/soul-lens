@@ -148,7 +148,7 @@
 							</Panel>
 							<Panel class="SoulLensBody">
 								<Label id="SoulLensSummary" class="SoulLensSummary ModInfoLabel" html="true" text="" />
-								<Panel class="SoulLensGrid">
+								<Panel id="SoulLensGrid" class="SoulLensGrid">
 									<Panel id="SoulLensWpTile" class="SoulLensTile">
 										<Panel class="ImportantStatContent">
 											<Label id="SoulLensWp" class="SoulLensTileValue" text="" />

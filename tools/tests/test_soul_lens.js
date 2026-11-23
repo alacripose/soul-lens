@@ -148,6 +148,7 @@ function note(lens, id) { return lens.FindChildTraverse(id + "Note").text; }
 function shown(lens, id) { const found = tile(lens, id); return !!found && !found.HasClass("SoulLensHidden"); }
 function hidden(lens) { return lens.HasClass("SoulLensHidden"); }
 function summary(lens) { return lens.FindChildTraverse("SoulLensSummary").text; }
+function gridOf(lens) { return lens.FindChildTraverse("SoulLensGrid"); }
 
 function points(number) {
     const digits = Math.abs(number) < 10 ? 2 : 1;
@@ -229,6 +230,21 @@ const worked = (() => {
     check("a missing weapon term is collapsed", !shown(lens, "SoulLensWp"));
     check("a missing dps term is collapsed", !shown(lens, "SoulLensDps"));
     check("the wpa tile still draws", shown(lens, "SoulLensWpa"), value(lens, "SoulLensWpa"));
+    check("four visible tiles stay two across", !gridOf(lens).HasClass("SoulLensThreeUp"));
+}
+
+{
+    // Six visible terms use the card's 3-up row, the same grouping it gives three
+    // important attributes; four keep the 2x2 witness shape above.
+    const entry = Object.entries(data.items).find(([, row]) => row.wp > 0 && row.dps > 0);
+    check("the bake has an item with both weapon terms", !!entry);
+    if (entry) {
+        const [, item] = entry;
+        const hero = Object.values(data.heroes)[0];
+        const { root, lens } = tree(item.name, item.cost, hero.name);
+        load(root, data);
+        check("six visible tiles use three across", gridOf(lens).HasClass("SoulLensThreeUp"));
+    }
 }
 
 {

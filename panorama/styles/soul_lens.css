@@ -41,10 +41,15 @@
     line-height: 20px;
 }
 
-/* Two columns, three rows: the card is ~450px wide, so each tile is the width of
-   the native important-stat box and the values keep their size. */
+/* The card's own stat row: four visible tiles sit two across at 49%, while three,
+   five or six use the card's 3-up row at 32.5% (the same 2-up / 3-up split its
+   important attributes use). The padding sits on the inner content, not the tile:
+   Panorama adds a panel's padding outside its percentage width, so padding on the
+   tile made 49% + padding wider than half the row and the wrapped flow gave every
+   tile a row of its own. */
 .SoulLensGrid {
     width: 100%;
+    height: fit-children;
     flow-children: right-wrap;
     margin-top: 8px;
 }
@@ -52,15 +57,20 @@
 .SoulLensTile {
     width: 49%;
     min-height: 60px;
-    margin: 0px 1% 2px 0px;
-    padding: 5px 6px 6px 6px;
+    margin: 0px 2px 2px 0px;
+    padding: 0px;
     background-color: #00000060;
     flow-children: down;
+}
+
+.SoulLensGrid.SoulLensThreeUp .SoulLensTile {
+    width: 32.5%;
 }
 
 .SoulLensTile .ImportantStatContent {
     width: 100%;
     height: fit-children;
+    padding: 5px 6px 6px 6px;
     vertical-align: middle;
 }
 

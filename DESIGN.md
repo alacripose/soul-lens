@@ -77,8 +77,8 @@ The six key/value rows were readable but not part of the card's language: they
 read as a debug strip under a native passive. The section now uses the same
 hierarchy the game uses for a passive: a 32px `offBlack&90` header with an italic
 half-opacity `ActivePassiveLabel`, a `ModInfoLabel` sentence that names the hero
-and the headline, and a two-column grid of stat boxes on the card's `#00000060`
-ground. The values keep their units and their source in the note line; a refusal
+and the headline, and a two- or three-column grid of stat boxes on the card's `#00000060`
+ground, grouped the way the card groups its own important attributes. The values keep their units and their source in the note line; a refusal
 is still a value, not a blank.
 
 The sentence is not decorative. It states the hero the numbers belong to, the
@@ -90,6 +90,17 @@ This supersedes the 2026-11-22 shape that deliberately had no title, no tags and
 no type of its own. That shape was a reaction to the gold-panel overlay; the
 answer to "it does not look like the card" is to use the card's passive classes,
 not to flatten the numbers into bare lines.
+
+## 2026-11-23 — the tile row uses the card's own grouping
+
+The first shipped section stacked every tile full-width. The grid asked for two 49%
+tiles, but each tile carried its own padding, and Panorama adds a panel's padding
+outside its percentage width: 49% + 12px + the margin was wider than half the row,
+so the wrap gave each tile a row to itself. The padding now sits on the tile's
+inner content, and the visible count picks the card's own split — two across at
+49% for four tiles, three across at 32.5% for three, five or six — so a four-tile
+spirit item keeps the witness's 2x2 shape and the full six use the 3-up row the
+card gives its important attributes.
 
 ## 2026-11-22 — the copy is checked, not trusted
 

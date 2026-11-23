@@ -19,7 +19,7 @@ compiler and packs the `.vxml_c`/`.vjs_c`/`.vcss_c` output with Source2Viewer CL
 ## What the passive section says
 
 The section is laid out like the card's own passive blocks: a `Soul Lens` header,
-one sentence for the shop's hero, then two columns of stat tiles. The header and
+one sentence for the shop's hero, then the stat tiles in the card's two- or three-column row. The header and
 summary borrow the card's `CooldownHeader`, `ActivePassiveLabel` and `ModInfoLabel`
 classes; the tiles use the card's `#00000060` stat-box ground.
 

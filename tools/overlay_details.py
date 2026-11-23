@@ -72,7 +72,7 @@ PANEL = (
     "\t\t\t\t\t\t\t</Panel>\n"
     '\t\t\t\t\t\t\t<Panel class="SoulLensBody">\n'
     '\t\t\t\t\t\t\t\t<Label id="SoulLensSummary" class="SoulLensSummary ModInfoLabel" html="true" text="" />\n'
-    '\t\t\t\t\t\t\t\t<Panel class="SoulLensGrid">\n'
+    '\t\t\t\t\t\t\t\t<Panel id="SoulLensGrid" class="SoulLensGrid">\n'
     + ROWS
     + "\t\t\t\t\t\t\t\t</Panel>\n"
     "\t\t\t\t\t\t\t</Panel>\n"
