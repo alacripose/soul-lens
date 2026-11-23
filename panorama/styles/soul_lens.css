@@ -1,34 +1,111 @@
 /*
- * Soul Lens: layout only.
+ * Soul Lens: the mod's passive section.
  *
- * Every visible style here belongs to the card: the key labels carry
- * `componentsLabel`, the values inherit the card's body text, and the block sits
- * inside the card under its own stat rows. This file sets the two-column grid
- * and collapses a row that has no number. No font, size or colour is declared,
- * because a second typeface is exactly what made the strip read as an overlay
- * instead of card content.
+ * The section is drawn as a native passive block: the card's own 32px
+ * CooldownHeader ground with an ActivePassiveLabel, the card's ModInfoLabel body
+ * for the sentence, and one SoulLensTile per number. The tiles borrow the card's
+ * #00000060 stat-box ground and its centered label alignment; the values use the
+ * game's own green for a gain and the card ink for a place or a time. Nothing here
+ * moves or restyles the stock card above it.
  */
 .SoulLens {
     width: 100%;
     flow-children: down;
-    margin-top: 4px;
+    margin-top: 10px;
 }
 
-.SoulLensRow {
+/* The passive header, using the game's own offBlack at the alpha its passive
+   sections use; the label keeps the game's italic, half-opacity passive style. */
+.SoulLensHeader {
     width: 100%;
-    flow-children: right;
+    height: 32px;
+    background-color: offBlack&90;
 }
 
-.SoulLensKey {
-    width: 46px;
+.SoulLensHeader .ActivePassiveLabel {
+    font-style: italic;
+    font-weight: semi-bold;
+    opacity: 0.5;
 }
 
-.SoulLensValue {
-    margin-left: 6px;
+.SoulLensBody {
+    width: 100%;
+    flow-children: down;
+    padding: 8px 14px 2px 10px;
 }
 
-/* An empty row is collapsed rather than printed as "none": the card never
-   announces a stat the item does not have, and neither does this block. */
+.SoulLensSummary {
+    width: 100%;
+    color: #CDCDCD;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+/* Two columns, three rows: the card is ~450px wide, so each tile is the width of
+   the native important-stat box and the values keep their size. */
+.SoulLensGrid {
+    width: 100%;
+    flow-children: right-wrap;
+    margin-top: 8px;
+}
+
+.SoulLensTile {
+    width: 49%;
+    min-height: 60px;
+    margin: 0px 1% 2px 0px;
+    padding: 5px 6px 6px 6px;
+    background-color: #00000060;
+    flow-children: down;
+}
+
+.SoulLensTile .ImportantStatContent {
+    width: 100%;
+    height: fit-children;
+    vertical-align: middle;
+}
+
+.SoulLensTileValue {
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: colorCommonOffWhite;
+}
+
+.SoulLensTileLabel {
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+    color: #CDCDCD;
+    opacity: 0.75;
+}
+
+.SoulLensTileNote {
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    color: #CDCDCD;
+    opacity: 0.4;
+}
+
+/* A gain is the game's green; a loss is the card's refusal red; a refusal is
+   stated in the card's own ink, smaller, so it cannot be mistaken for a number. */
+.SoulLensGain .SoulLensTileValue {
+    color: deadlockGreen;
+}
+
+.SoulLensLoss .SoulLensTileValue {
+    color: #FF6A6A;
+}
+
+.SoulLensRefused .SoulLensTileValue {
+    color: #CDCDCD;
+    opacity: 0.55;
+    font-size: 14px;
+}
+
+/* An empty tile is collapsed rather than printed as "none": the card never
+   announces a stat the item does not have, and neither does this section. */
 .SoulLensHidden {
     visibility: collapse;
 }

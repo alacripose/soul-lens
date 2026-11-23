@@ -5,8 +5,8 @@
 
 .DESCRIPTION
   The mod is one Panorama VPK that replaces the game's own shop item hover layout
-  and adds the Soul Lens strip to it. It installs beside the game's addons, not
-  inside another mod's folder, and it is mounted by one SearchPaths line:
+  and adds the Soul Lens passive section to it. It installs beside the game's addons,
+  not inside another mod's folder, and it is mounted by one SearchPaths line:
 
       game   citadel/addons/soul_lens
 
@@ -53,13 +53,13 @@ if (-not $python) { throw 'refused: python is not on PATH' }
 
 $out = Join-Path $here 'dist\soul_lens\pak01_dir.vpk'
 # Stamp the build this mount is for. Panorama cannot read steam.inf, so the
-# installer is where the strip learns which build's terms it may draw; a build
-# with no terms snapshot installs, and the strip withholds the weapon terms.
+# installer is where the section learns which build's terms it may draw; a build
+# with no terms snapshot installs, and the section withholds the weapon terms.
 $steamInf = Join-Path $citadel 'steam.inf'
 & $python (Join-Path $here 'tools\stamp_build.py') --steam-inf $steamInf
 $stampExit = $LASTEXITCODE
 if ($stampExit -eq 1) { throw 'refused: no installed build could be read from steam.inf' }
-if ($stampExit -eq 3) { Write-Warning 'installed build has no terms snapshot: the strip will withhold weapon terms until tools/ingest.py runs for it' }
+if ($stampExit -eq 3) { Write-Warning 'installed build has no terms snapshot: the section will withhold weapon terms until tools/ingest.py runs for it' }
 elseif ($stampExit -ne 0) { throw "refused: stamp_build.py exited $stampExit" }
 # Both halves matter: the CSDK compiler turns the layout/scripts/css into the
 # compiled assets retail Panorama loads, and S2V writes the archive with the
@@ -99,5 +99,5 @@ New-Item -ItemType Directory -Force -Path $targetDir | Out-Null
 Copy-Item -LiteralPath $out -Destination $target -Force
 $size = (Get-Item -LiteralPath $target).Length
 Write-Host "installed $target ($size bytes)"
-Write-Host 'Launch Deadlock, open the shop, hover an item: the strip is under the card.'
+Write-Host 'Launch Deadlock, open the shop, hover an item: the Soul Lens passive section is under the card.'
 Write-Host 'To remove: delete the pak01_dir.vpk above and the one SearchPaths line the script added.'

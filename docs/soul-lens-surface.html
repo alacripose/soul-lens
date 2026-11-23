@@ -3,15 +3,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Soul Lens — hover surface witness</title>
+<title>Soul Lens — passive-section witness</title>
 <style>
     :root {
-        --ground: #08080a;
-        --panel: #111114;
-        --line: #26262b;
-        --ink: #e9e3d6;
-        --muted: #8d877b;
-        --faint: #6d6960;
+        --ink: #efe3c8;
+        --muted: #cdcdcd;
+        --green: #69e799;
+        --red: #ff6a6a;
         --gold: #c8a04a;
         --mono: "IBM Plex Mono", "Cascadia Mono", ui-monospace, monospace;
         --sans: "Archivo", "Segoe UI", system-ui, sans-serif;
@@ -19,7 +17,7 @@
     * { box-sizing: border-box; }
     body {
         margin: 0;
-        background: var(--ground);
+        background: #0a0907;
         color: var(--ink);
         font-family: var(--sans);
         padding: 40px 32px 56px;
@@ -33,173 +31,246 @@
         text-transform: uppercase;
     }
     h1 { font-size: 30px; margin: 8px 0 6px; font-weight: 600; letter-spacing: -0.01em; }
-    p.lead { color: var(--muted); max-width: 76ch; line-height: 1.55; margin: 0; font-size: 14px; }
+    p.lead { color: #a09a8c; max-width: 78ch; line-height: 1.55; margin: 0; font-size: 14px; }
     .grid {
         max-width: 1180px;
         margin: 32px auto 0;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 22px;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        gap: 24px;
+        align-items: start;
     }
-    .frame {
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 16px;
-    }
+    .frame { border: 1px solid #2a261d; background: #11100d; padding: 14px; }
     .frame h2 {
         font-family: var(--mono);
         font-size: 11px;
         letter-spacing: 2px;
-        color: var(--muted);
+        color: #8d877b;
         text-transform: uppercase;
         margin: 0 0 12px;
     }
-    /* The card below is the stock tooltip's own shape: dark plate, name, price,
-       tier tag, then the Soul Lens strip the mod appends. */
+
+    /* The card's own brown plate, close to the shop tooltip this mod rides in. */
     .ModHoverContents {
-        width: 320px;
-        background: #0b0b0d;
-        border: 1px solid #222226;
-        padding: 10px;
+        width: 470px;
+        max-width: 100%;
+        background: linear-gradient(180deg, #735726 0%, #61471d 55%, #553d18 100%);
+        border: 1px solid #8a6b31;
+        padding: 0 0 10px;
+        box-shadow: 0 10px 30px #00000066;
     }
-    .mod_view { display: block; }
-    #ModCard {
-        height: 96px;
-        border: 1px solid #2b2b30;
-        background: linear-gradient(160deg, #17171a, #101013 60%, #0c0c0e);
-        position: relative;
+    .HeroContext, .ShopContext { display: none; }
+    .mod_view { padding: 12px 14px 0; }
+    .mod_name_area { display: flex; align-items: baseline; gap: 8px; }
+    .modName { font-size: 19px; letter-spacing: 0.01em; color: #fff3d6; }
+    #ItemCostContainer { margin-top: 2px; }
+    #ItemCost { font-family: var(--mono); font-size: 13px; color: #ffed79; }
+    #ItemCost::before { content: "◆ "; color: #ffed79; }
+
+    /* The item's own passive, drawn the way the stock card draws it. This is the
+       block the screenshot showed above the old raw rows. */
+    .NativePassive { margin-top: 10px; }
+    .NativeHeader {
+        height: 32px;
+        display: flex;
+        align-items: center;
+        background: rgba(16, 19, 13, 0.56);
     }
-    .tier {
-        position: absolute;
-        top: 6px;
-        left: 6px;
-        font-family: var(--mono);
-        font-size: 10px;
-        letter-spacing: 1px;
-        color: #0b0b0d;
-        background: var(--gold);
-        padding: 1px 5px;
+    .NativeHeader span {
+        margin-left: 10px;
+        font-style: italic;
+        font-weight: 600;
+        opacity: 0.5;
     }
-    .mod_name_area { margin-top: 8px; }
-    .modName { font-size: 15px; color: var(--ink); letter-spacing: 0.01em; }
-    #ItemCostContainer { margin-top: 3px; }
-    #ItemCost { font-family: var(--mono); font-size: 13px; color: var(--gold); }
-    .SoulLens {
-        width: 100%;
-        display: flow-root;
-        margin-top: 8px;
-        padding: 7px 9px 8px;
-        background: #0d0d0f;
-        border: 1px solid #2a2a2e;
+    .NativeBody { padding: 8px 14px 0 10px; }
+    .NativeBody p { margin: 0 0 10px; font-size: 16px; line-height: 20px; color: var(--muted); }
+    .NativeBody b { color: #f8f8f8; font-weight: 600; }
+    .NativeStats { display: flex; gap: 2px; }
+    .NativeStat {
+        flex: 1 1 0;
+        background: rgba(0, 0, 0, 0.375);
+        min-height: 58px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1px;
+        padding: 5px;
     }
-    .SoulLensRule { width: 100%; height: 1px; background: var(--gold); margin-bottom: 6px; }
-    .SoulLensHead {
-        display: block;
-        font-family: var(--mono);
-        font-size: 10px;
-        letter-spacing: 2px;
-        color: var(--gold);
-        text-transform: uppercase;
-        margin-bottom: 4px;
-    }
-    .SoulLensRow { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
-    .SoulLensKey {
-        width: 46px;
-        flex: 0 0 46px;
-        font-family: var(--mono);
-        font-size: 10px;
-        letter-spacing: 1px;
+    .NativeValue { font-size: 22px; font-weight: 700; color: var(--green); }
+    .NativeLabel { font-size: 13px; color: var(--muted); opacity: 0.8; }
+    .NativeDuration {
+        margin-top: 2px;
+        padding: 6px 8px;
+        background: rgba(0, 0, 0, 0.375);
+        font-size: 13px;
         color: var(--muted);
-        text-transform: uppercase;
     }
-    .SoulLensValue { font-family: var(--mono); font-size: 12px; color: var(--ink); }
-    .SoulLensValue.SoulLensNone { color: #7a756c; }
-    .SoulLensTag {
-        margin-left: auto;
-        font-family: var(--mono);
-        font-size: 9px;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        color: #5f5b53;
+    .NativeDuration b { color: #f8f8f8; }
+
+    /* Soul Lens: the same header, summary and stat-box language, filled by the
+       shipped script. These class names are the mod's own. */
+    .SoulLens { width: 100%; margin-top: 10px; }
+    .SoulLensHeader {
+        height: 32px;
+        display: flex;
+        align-items: center;
+        background: rgba(16, 19, 13, 0.56);
     }
-    .SoulLensTag.SoulLensTagNone { color: #8a5a4a; }
-    .SoulLensBuy { display: block; margin-top: 5px; font-size: 11px; color: #b9b2a4; }
-    .SoulLensSrc { display: block; margin-top: 2px; font-family: var(--mono); font-size: 10px; color: var(--faint); }
-    .legend {
+    .SoulLensHeader .ActivePassiveLabel {
+        margin-left: 10px;
+        font-style: italic;
+        font-weight: 600;
+        opacity: 0.5;
+        color: var(--ink);
+    }
+    .SoulLensBody { padding: 8px 14px 2px 10px; }
+    .SoulLensSummary {
+        width: 100%;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 20px;
+    }
+    .SoulLensSummary .highlight { color: #f8f8f8; font-weight: 600; }
+    .SoulLensSummary .isNegative { color: var(--red); font-weight: 600; }
+    .SoulLensGrid { display: flex; flex-wrap: wrap; margin-top: 8px; }
+    .SoulLensTile {
+        width: 49%;
+        min-height: 60px;
+        margin: 0 1% 2px 0;
+        padding: 5px 6px 6px;
+        background: rgba(0, 0, 0, 0.375);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .SoulLensTile .ImportantStatContent {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .SoulLensTileValue {
+        width: 100%;
+        text-align: center;
+        font-size: 22px;
+        font-weight: 700;
+        color: #ffefd7;
+    }
+    .SoulLensTileLabel {
+        width: 100%;
+        text-align: center;
+        font-size: 13px;
+        color: var(--muted);
+        opacity: 0.75;
+    }
+    .SoulLensTileNote {
+        width: 100%;
+        text-align: center;
+        font-size: 11px;
+        color: var(--muted);
+        opacity: 0.4;
+    }
+    .SoulLensGain .SoulLensTileValue { color: var(--green); }
+    .SoulLensLoss .SoulLensTileValue { color: var(--red); }
+    .SoulLensRefused .SoulLensTileValue { color: var(--muted); opacity: 0.55; font-size: 14px; }
+    .SoulLensHidden { display: none !important; }
+
+    .note {
         max-width: 1180px;
         margin: 34px auto 0;
-        border-top: 1px solid var(--line);
-        padding-top: 20px;
-        color: var(--muted);
+        border-top: 1px solid #2a261d;
+        padding-top: 18px;
+        color: #8d877b;
         font-size: 13px;
         line-height: 1.6;
     }
-    .legend code { font-family: var(--mono); color: var(--ink); font-size: 12px; }
-    .legend h3 {
-        font-family: var(--mono);
-        font-size: 11px;
-        letter-spacing: 2px;
-        color: var(--gold);
-        text-transform: uppercase;
-        margin: 0 0 8px;
-    }
-    .legend table { border-collapse: collapse; margin-top: 8px; }
-    .legend td { padding: 3px 18px 3px 0; vertical-align: top; }
-    .state { font-family: var(--mono); font-size: 11px; margin-top: 14px; color: var(--faint); }
+    .note code { font-family: var(--mono); color: var(--ink); font-size: 12px; }
+    .state { font-family: var(--mono); font-size: 11px; margin-top: 12px; color: #6d6960; }
 </style>
 </head>
 <body>
 <header>
-    <div class="eyebrow">Soul Lens · hover surface</div>
-    <h1>The shop hover card, with its economy strip</h1>
+    <div class="eyebrow">Soul Lens · passive-section witness</div>
+    <h1>The shop hover card, with Soul Lens as a passive block</h1>
     <p class="lead">
-        This page runs the shipped overlay script, <code>panorama/scripts/soul_lens.js</code>, against a DOM
-        stand-in for the game's panel API and the baked catalogue in <code>data/items.json</code>. It is the
-        browser witness for the same code the mod packs: each card is filled by the script, not by the page.
-        Glass Cannon is the worked example — Haze's own win/loss rows give its WPA, and every row names the
-        source it came from.
+        This page runs the shipped script, <code>panorama/scripts/soul_lens.js</code>, over a DOM
+        stand-in for the game's panel API and the baked catalogue in <code>data/items.json</code>.
+        Slowing Hex shows the same native passive the screenshot did, and the raw
+        <code>wpa / buy / shop / sl</code> lines are gone: the numbers are tiles in the mod's own
+        header-and-stat-box section. Glass Cannon shows all six tiles; the unknown item shows the
+        section collapsing rather than drawing an empty one.
     </p>
 </header>
 
 <div class="grid">
     <div class="frame">
-        <h2>weapon item</h2>
+        <h2>spirit item · the screenshot's shape</h2>
         <div class="ModHoverContents">
-            <span id="HeroFavoritesHeaderLabel" style="display:none">Haze's Recommended Mods</span>
+            <span class="HeroContext HeroFavoritesHeaderLabel">Haze's Recommended Mods</span>
+            <div class="ShopContext" id="ShopModsRecommended">
+                <div class="mod_view"><span class="modName">Slowing Hex</span></div>
+                <div class="mod_view"><span class="modName">Glass Cannon</span></div>
+                <div class="mod_view"><span class="modName">Extra Spirit</span></div>
+            </div>
             <div class="mod_view" id="ModView">
-                <div id="ModCard"><span class="tier">Tier 4</span></div>
-                <div class="mod_name_area"><span class="modName" data-item="glass cannon">Glass Cannon</span></div>
-                <div id="ItemCostContainer"><span id="ItemCost">6400</span></div>
+                <div class="mod_name_area"><span class="modName">Slowing Hex</span></div>
+                <div id="ItemCostContainer"><span id="ItemCost">4250</span></div>
+                <div class="NativePassive">
+                    <div class="NativeHeader"><span>Passive</span></div>
+                    <div class="NativeBody">
+                        <p>Your bullets apply a debuff that reduces the <b>Spirit Resist</b> of the target and grants you and your allies <b>Spirit Lifesteal</b> against them.</p>
+                        <div class="NativeStats">
+                            <div class="NativeStat"><span class="NativeValue">−8%</span><span class="NativeLabel">Spirit Resist</span></div>
+                            <div class="NativeStat"><span class="NativeValue">+10%</span><span class="NativeLabel">Spirit Lifesteal</span></div>
+                        </div>
+                        <div class="NativeDuration"><b>8s</b> Debuff Duration</div>
+                    </div>
+                </div>
             </div>
             <div id="SoulLens" class="SoulLens">
-                <div class="SoulLensRule"></div>
-                <span id="SoulLensHead" class="SoulLensHead">SOUL LENS</span>
-                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span><span id="SoulLensWpSrc" class="SoulLensTag"></span></div>
-                <div class="SoulLensRow"><span class="SoulLensKey">wpa</span><span id="SoulLensWpa" class="SoulLensValue"></span><span id="SoulLensWpaSrc" class="SoulLensTag"></span></div>
-                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span><span id="SoulLensDpsSrc" class="SoulLensTag"></span></div>
-                <span id="SoulLensBuy" class="SoulLensBuy"></span>
-                <span id="SoulLensSrc" class="SoulLensSrc"></span>
+                <div class="SoulLensHeader"><span id="SoulLensHead" class="ActivePassiveLabel">Soul Lens</span></div>
+                <div class="SoulLensBody">
+                    <div id="SoulLensSummary" class="SoulLensSummary ModInfoLabel" data-html="true"></div>
+                    <div class="SoulLensGrid">
+                        <div id="SoulLensWpTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWp" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Weapon Power</span><span id="SoulLensWpNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensWpaTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWpa" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">WPA</span><span id="SoulLensWpaNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensDpsTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensDps" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Standing DPS</span><span id="SoulLensDpsNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensBuyTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensBuy" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Average Buy</span><span id="SoulLensBuyNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensShopTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensShop" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Shop List</span><span id="SoulLensShopNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensSlTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensSl" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Statlocker</span><span id="SoulLensSlNote" class="SoulLensTileNote"></span></div></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="frame">
-        <h2>no weapon terms</h2>
+        <h2>weapon item · all six tiles</h2>
         <div class="ModHoverContents">
-            <span id="HeroFavoritesHeaderLabel" style="display:none">Haze's Recommended Mods</span>
+            <span class="HeroContext HeroFavoritesHeaderLabel">Haze's Recommended Mods</span>
+            <div class="ShopContext" id="ShopModsRecommended">
+                <div class="mod_view"><span class="modName">Glass Cannon</span></div>
+                <div class="mod_view"><span class="modName">Burst Fire</span></div>
+                <div class="mod_view"><span class="modName">Extra Spirit</span></div>
+            </div>
             <div class="mod_view" id="ModView">
-                <div id="ModCard"><span class="tier">Tier 1</span></div>
-                <div class="mod_name_area"><span class="modName">Extra Spirit</span></div>
-                <div id="ItemCostContainer"><span id="ItemCost">800</span></div>
+                <div class="mod_name_area"><span class="modName">Glass Cannon</span></div>
+                <div id="ItemCostContainer"><span id="ItemCost">6400</span></div>
             </div>
             <div id="SoulLens" class="SoulLens">
-                <div class="SoulLensRule"></div>
-                <span id="SoulLensHead" class="SoulLensHead">SOUL LENS</span>
-                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span><span id="SoulLensWpSrc" class="SoulLensTag"></span></div>
-                <div class="SoulLensRow"><span class="SoulLensKey">wpa</span><span id="SoulLensWpa" class="SoulLensValue"></span><span id="SoulLensWpaSrc" class="SoulLensTag"></span></div>
-                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span><span id="SoulLensDpsSrc" class="SoulLensTag"></span></div>
-                <span id="SoulLensBuy" class="SoulLensBuy"></span>
-                <span id="SoulLensSrc" class="SoulLensSrc"></span>
+                <div class="SoulLensHeader"><span id="SoulLensHead" class="ActivePassiveLabel">Soul Lens</span></div>
+                <div class="SoulLensBody">
+                    <div id="SoulLensSummary" class="SoulLensSummary ModInfoLabel" data-html="true"></div>
+                    <div class="SoulLensGrid">
+                        <div id="SoulLensWpTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWp" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Weapon Power</span><span id="SoulLensWpNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensWpaTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWpa" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">WPA</span><span id="SoulLensWpaNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensDpsTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensDps" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Standing DPS</span><span id="SoulLensDpsNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensBuyTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensBuy" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Average Buy</span><span id="SoulLensBuyNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensShopTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensShop" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Shop List</span><span id="SoulLensShopNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensSlTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensSl" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Statlocker</span><span id="SoulLensSlNote" class="SoulLensTileNote"></span></div></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -208,33 +279,35 @@
         <h2>item the bake does not know</h2>
         <div class="ModHoverContents">
             <div class="mod_view" id="ModView">
-                <div id="ModCard"><span class="tier">Tier ?</span></div>
                 <div class="mod_name_area"><span class="modName">A Later Patch Item</span></div>
                 <div id="ItemCostContainer"><span id="ItemCost">3200</span></div>
             </div>
             <div id="SoulLens" class="SoulLens">
-                <div class="SoulLensRule"></div>
-                <span id="SoulLensHead" class="SoulLensHead">SOUL LENS</span>
-                <div class="SoulLensRow"><span class="SoulLensKey">power</span><span id="SoulLensWp" class="SoulLensValue">reading the shop…</span><span id="SoulLensWpSrc" class="SoulLensTag"></span></div>
-                <div class="SoulLensRow"><span class="SoulLensKey">wpa</span><span id="SoulLensWpa" class="SoulLensValue"></span><span id="SoulLensWpaSrc" class="SoulLensTag"></span></div>
-                <div class="SoulLensRow"><span class="SoulLensKey">dps</span><span id="SoulLensDps" class="SoulLensValue"></span><span id="SoulLensDpsSrc" class="SoulLensTag"></span></div>
-                <span id="SoulLensBuy" class="SoulLensBuy"></span>
-                <span id="SoulLensSrc" class="SoulLensSrc"></span>
+                <div class="SoulLensHeader"><span id="SoulLensHead" class="ActivePassiveLabel">Soul Lens</span></div>
+                <div class="SoulLensBody">
+                    <div id="SoulLensSummary" class="SoulLensSummary ModInfoLabel" data-html="true"></div>
+                    <div class="SoulLensGrid">
+                        <div id="SoulLensWpTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWp" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Weapon Power</span><span id="SoulLensWpNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensWpaTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensWpa" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">WPA</span><span id="SoulLensWpaNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensDpsTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensDps" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Standing DPS</span><span id="SoulLensDpsNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensBuyTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensBuy" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Average Buy</span><span id="SoulLensBuyNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensShopTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensShop" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Shop List</span><span id="SoulLensShopNote" class="SoulLensTileNote"></span></div></div>
+                        <div id="SoulLensSlTile" class="SoulLensTile"><div class="ImportantStatContent"><span id="SoulLensSl" class="SoulLensTileValue"></span><span class="SoulLensTileLabel">Statlocker</span><span id="SoulLensSlNote" class="SoulLensTileNote"></span></div></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="legend">
-    <h3>what each line is, and what it refuses</h3>
-    <table>
-        <tr><td><code>power</code></td><td>souls per +1% weapon power, from the item's <code>BaseAttackDamagePercent</code> and <code>WeaponPower</code>.</td></tr>
-        <tr><td><code>wpa</code></td><td>souls per +1 percentage point of win probability added: the item's win rate for this hero minus the hero's own win rate, from the recorded wins and losses. Rows under the sample floor print their count and refuse the figure.</td></tr>
-        <tr><td><code>dps</code></td><td>souls per +1% DPS of the hero's current weapon, from <code>(1 + power/100) × (1 + fire rate/100) − 1</code>.</td></tr>
-        <tr><td><code>buy ≈</code></td><td>measured average purchase time across the matches the public API holds, not a recommendation.</td></tr>
-        <tr><td><code>in this list</code></td><td>the item's place in the shop list that is open, read from the shop's own panels.</td></tr>
-        <tr><td><code>statlocker</code></td><td>WPA and build order join the strip only when an <code>X-API-Key</code> answer is present; otherwise the line says why it is absent.</td></tr>
-    </table>
+<div class="note">
+    <p>
+        The browser witness runs the same IIFE the VPK packs. A panel shim answers
+        <code>FindChildTraverse</code>, <code>SetHasClass</code> and the parent walk, so a call the
+        game would refuse throws here instead of being hidden. The native passive block above the
+        section is static: it is the card's own design, shown for comparison, and it is not part of
+        the mod.
+    </p>
     <div class="state" id="state">loading data…</div>
 </div>
 
@@ -243,31 +316,41 @@
 // call this shim does not answer, the page throws and the witness fails loudly
 // rather than drawing a number the game would not.
 (function () {
-    function wrap(el, root) {
-        const panel = {
+    function wrap(el) {
+        return {
             id: el.id || "",
             className: el.className || "",
-            _el: el,
             get text() { return el.textContent || ""; },
-            set text(value) { el.textContent = String(value == null ? "" : value); },
+            // The summary is a game Label with html="true"; in the browser it is a
+            // span marked the same way, so its highlight spans render instead of
+            // being printed as source.
+            set text(value) {
+                const shown = String(value == null ? "" : value);
+                if (el.hasAttribute("data-html")) el.innerHTML = shown;
+                else el.textContent = shown;
+            },
             FindChildTraverse(id) {
                 const found = el.querySelector('#' + CSS.escape(id));
-                return found ? wrap(found, root) : null;
+                return found ? wrap(found) : null;
+            },
+            FindChildrenWithClassTraverse(name) {
+                return Array.from(el.querySelectorAll('.' + CSS.escape(name))).map(wrap);
             },
             GetChildCount() { return el.children.length; },
-            GetChild(index) { return el.children[index] ? wrap(el.children[index], root) : null; },
+            GetChild(index) { return el.children[index] ? wrap(el.children[index]) : null; },
             // A game tooltip is its own tree, so the walk stops at the card: the
             // page has three cards in one document, and one card's header must not
             // become another's hero.
             GetParent() {
                 if (el.classList.contains("ModHoverContents")) return null;
-                return el.parentElement ? wrap(el.parentElement, root) : null;
+                return el.parentElement ? wrap(el.parentElement) : null;
             },
             GetAttributeString(key) { return key === "class" ? (el.className || "") : ""; },
             AddClass(name) { el.classList.add(name); },
             RemoveClass(name) { el.classList.remove(name); },
+            HasClass(name) { return el.classList.contains(name); },
+            SetHasClass(name, on) { el.classList.toggle(name, !!on); },
         };
-        return panel;
     }
 
     let current = null;
@@ -277,19 +360,20 @@
         // The script schedules its first tick, so the card whose script scheduled a
         // callback must be the one that is mounted while it runs. Capturing the
         // root here keeps three cards on one page from all reading the last one.
+        // Ticks are slowed to 100 ms: the shipped loop is unbounded by design.
         Schedule(delay, fn) {
             const root = current;
             setTimeout(() => {
                 const previous = current;
                 current = root;
                 try { fn(); } finally { current = previous; }
-            }, 0);
+            }, Math.max(10, Math.min(delay * 1000, 100)));
         },
         CreatePanel() { return null; },
     };
 
     async function runFor(card) {
-        current = wrap(card, card);
+        current = wrap(card);
         const source = await (await fetch("../panorama/scripts/soul_lens.js")).text();
         const tag = document.createElement("script");
         tag.textContent = source;
@@ -304,14 +388,16 @@
         const cards = Array.from(document.querySelectorAll(".ModHoverContents"));
         for (const card of cards) await runFor(card);
         const doc = window.SoulLensData;
-        const sl = doc.sources["statlocker"] || {};
+        const ranks = doc.sources["statlocker-ranks"] || {};
         document.getElementById("state").textContent =
             "data " + doc.schema + " · build " + doc.build + " " + (doc.build_date || "") +
             " · items " + Object.keys(doc.items).length +
-            " · statlocker " + (sl.state || "?") + (sl.reason ? " (" + sl.reason + ")" : "");
+            " · statlocker ranks " + (ranks.state || "?") +
+            " · section " + (window.SoulLensLiveBuild || "unstamped");
     };
 })();
 </script>
+<script src="../panorama/scripts/soul_lens_build.js"></script>
 <script src="../panorama/scripts/soul_lens_data.js"></script>
 <script>window.soulLensWitness();</script>
 </body>

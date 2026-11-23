@@ -4,14 +4,12 @@ The shop's hover card is `citadel_tooltip_mod_details`, not the `..._hover` layo
 that was replaced first: hovering a shop item opens the details card, which is why
 the strip did not appear in the game even when the addon was mounted. This takes
 the live details layout exactly as extracted from the installed VPK, adds the
-stylesheet, the scripts and the `#SoulLens` block, and writes the override.
+stylesheet, the scripts and the `#SoulLens` section, and writes the override.
 
-The block goes directly under `#SectionsContainer`, where the card already draws
-the item's own stat rows. That is the whole point of the placement: the strip is
-card content inside the card's contoured ground, at the card's text density, and
-it carries no prose beyond the six row keys — power, wpa, dps, buy, then the two
-recommendation sources, `shop` (the shop's own recommended list) and `sl`
-(statlocker's per-hero ranking).
+The section goes directly under `#SectionsContainer`, where the card already draws
+the item's own stat rows. It is shaped like the card's native passive blocks: a
+`CooldownHeader` with an `ActivePassiveLabel`, a `ModInfoLabel` sentence, and six
+stat tiles under it. The tiles replace the earlier raw key/value rows.
 
 The copy stays a copy: the only inserted text is inside the soul-lens:begin/end
 markers, and tools/check_live.py removes that block before comparing the rest
@@ -37,34 +35,48 @@ SCRIPTS = (
     "\t</scripts>\n"
 )
 
-# The stats block the card builds its item rows into; the strip sits right under
+# The stats block the card builds its item rows into; the section sits right under
 # it, still inside #AttributesContainer.
 STATS_BLOCK = '\t\t\t\t\t\t<Panel id="SectionsContainer" class="TopBottomFlow" />\n'
 
+# id, value label id, note label id, tile label.
+TILES = (
+    ("SoulLensWpTile", "SoulLensWp", "SoulLensWpNote", "Weapon Power"),
+    ("SoulLensWpaTile", "SoulLensWpa", "SoulLensWpaNote", "WPA"),
+    ("SoulLensDpsTile", "SoulLensDps", "SoulLensDpsNote", "Standing DPS"),
+    ("SoulLensBuyTile", "SoulLensBuy", "SoulLensBuyNote", "Average Buy"),
+    ("SoulLensShopTile", "SoulLensShop", "SoulLensShopNote", "Shop List"),
+    ("SoulLensSlTile", "SoulLensSl", "SoulLensSlNote", "Statlocker"),
+)
 
-def row(row_id: str, value_id: str, key: str) -> str:
+
+def tile(tile_id: str, value_id: str, note_id: str, label: str) -> str:
     return (
-        f'\t\t\t\t\t\t\t<Panel id="{row_id}" class="SoulLensRow LeftRightFlow">\n'
-        f'\t\t\t\t\t\t\t\t<Label class="SoulLensKey componentsLabel" text="{key}" />\n'
-        f'\t\t\t\t\t\t\t\t<Label id="{value_id}" class="SoulLensValue" text="" />\n'
-        "\t\t\t\t\t\t\t</Panel>\n"
+        f'\t\t\t\t\t\t\t\t\t<Panel id="{tile_id}" class="SoulLensTile">\n'
+        '\t\t\t\t\t\t\t\t\t\t<Panel class="ImportantStatContent">\n'
+        f'\t\t\t\t\t\t\t\t\t\t\t<Label id="{value_id}" class="SoulLensTileValue" text="" />\n'
+        f'\t\t\t\t\t\t\t\t\t\t\t<Label class="SoulLensTileLabel" text="{label}" />\n'
+        f'\t\t\t\t\t\t\t\t\t\t\t<Label id="{note_id}" class="SoulLensTileNote" text="" />\n'
+        "\t\t\t\t\t\t\t\t\t\t</Panel>\n"
+        "\t\t\t\t\t\t\t\t\t</Panel>\n"
     )
 
 
-ROWS = (
-    row("SoulLensWpRow", "SoulLensWp", "power")
-    + row("SoulLensWpaRow", "SoulLensWpa", "wpa")
-    + row("SoulLensDpsRow", "SoulLensDps", "dps")
-    + row("SoulLensBuyRow", "SoulLensBuy", "buy")
-    + row("SoulLensShopRow", "SoulLensShop", "shop")
-    + row("SoulLensSlRow", "SoulLensSl", "sl")
-)
+ROWS = "".join(tile(*entry) for entry in TILES)
 
 PANEL = (
     '\t\t\t\t\t\t<!-- soul-lens:begin (tools/check_live.py removes this block before comparing) -->\n'
     '\t\t\t\t\t\t<Panel id="SoulLens" class="SoulLens TopBottomFlow" hittest="false" hittestchildren="false">\n'
+    '\t\t\t\t\t\t\t<Panel class="SoulLensHeader">\n'
+    '\t\t\t\t\t\t\t\t<Label id="SoulLensHead" class="ActivePassiveLabel" text="Soul Lens" />\n'
+    "\t\t\t\t\t\t\t</Panel>\n"
+    '\t\t\t\t\t\t\t<Panel class="SoulLensBody">\n'
+    '\t\t\t\t\t\t\t\t<Label id="SoulLensSummary" class="SoulLensSummary ModInfoLabel" html="true" text="" />\n'
+    '\t\t\t\t\t\t\t\t<Panel class="SoulLensGrid">\n'
     + ROWS
-    + "\t\t\t\t\t\t</Panel>\n"
+    + "\t\t\t\t\t\t\t\t</Panel>\n"
+    "\t\t\t\t\t\t\t</Panel>\n"
+    "\t\t\t\t\t\t</Panel>\n"
     '\t\t\t\t\t\t<!-- soul-lens:end -->\n'
 )
 
@@ -87,7 +99,7 @@ def main() -> int:
         print("REFUSED: the layout does not look like citadel_tooltip_mod_details", file=sys.stderr)
         return 1
     if STATS_BLOCK not in text:
-        print("REFUSED: the layout has no SectionsContainer to put the strip under", file=sys.stderr)
+        print("REFUSED: the layout has no SectionsContainer to put the section under", file=sys.stderr)
         return 1
 
     text = text.replace("\t</styles>\n", STYLE_LINE + "\t</styles>\n", 1)

@@ -143,29 +143,55 @@
 						<Panel id="SectionsContainer" class="TopBottomFlow" />
 						<!-- soul-lens:begin (tools/check_live.py removes this block before comparing) -->
 						<Panel id="SoulLens" class="SoulLens TopBottomFlow" hittest="false" hittestchildren="false">
-							<Panel id="SoulLensWpRow" class="SoulLensRow LeftRightFlow">
-								<Label class="SoulLensKey componentsLabel" text="power" />
-								<Label id="SoulLensWp" class="SoulLensValue" text="" />
+							<Panel class="SoulLensHeader">
+								<Label id="SoulLensHead" class="ActivePassiveLabel" text="Soul Lens" />
 							</Panel>
-							<Panel id="SoulLensWpaRow" class="SoulLensRow LeftRightFlow">
-								<Label class="SoulLensKey componentsLabel" text="wpa" />
-								<Label id="SoulLensWpa" class="SoulLensValue" text="" />
-							</Panel>
-							<Panel id="SoulLensDpsRow" class="SoulLensRow LeftRightFlow">
-								<Label class="SoulLensKey componentsLabel" text="dps" />
-								<Label id="SoulLensDps" class="SoulLensValue" text="" />
-							</Panel>
-							<Panel id="SoulLensBuyRow" class="SoulLensRow LeftRightFlow">
-								<Label class="SoulLensKey componentsLabel" text="buy" />
-								<Label id="SoulLensBuy" class="SoulLensValue" text="" />
-							</Panel>
-							<Panel id="SoulLensShopRow" class="SoulLensRow LeftRightFlow">
-								<Label class="SoulLensKey componentsLabel" text="shop" />
-								<Label id="SoulLensShop" class="SoulLensValue" text="" />
-							</Panel>
-							<Panel id="SoulLensSlRow" class="SoulLensRow LeftRightFlow">
-								<Label class="SoulLensKey componentsLabel" text="sl" />
-								<Label id="SoulLensSl" class="SoulLensValue" text="" />
+							<Panel class="SoulLensBody">
+								<Label id="SoulLensSummary" class="SoulLensSummary ModInfoLabel" html="true" text="" />
+								<Panel class="SoulLensGrid">
+									<Panel id="SoulLensWpTile" class="SoulLensTile">
+										<Panel class="ImportantStatContent">
+											<Label id="SoulLensWp" class="SoulLensTileValue" text="" />
+											<Label class="SoulLensTileLabel" text="Weapon Power" />
+											<Label id="SoulLensWpNote" class="SoulLensTileNote" text="" />
+										</Panel>
+									</Panel>
+									<Panel id="SoulLensWpaTile" class="SoulLensTile">
+										<Panel class="ImportantStatContent">
+											<Label id="SoulLensWpa" class="SoulLensTileValue" text="" />
+											<Label class="SoulLensTileLabel" text="WPA" />
+											<Label id="SoulLensWpaNote" class="SoulLensTileNote" text="" />
+										</Panel>
+									</Panel>
+									<Panel id="SoulLensDpsTile" class="SoulLensTile">
+										<Panel class="ImportantStatContent">
+											<Label id="SoulLensDps" class="SoulLensTileValue" text="" />
+											<Label class="SoulLensTileLabel" text="Standing DPS" />
+											<Label id="SoulLensDpsNote" class="SoulLensTileNote" text="" />
+										</Panel>
+									</Panel>
+									<Panel id="SoulLensBuyTile" class="SoulLensTile">
+										<Panel class="ImportantStatContent">
+											<Label id="SoulLensBuy" class="SoulLensTileValue" text="" />
+											<Label class="SoulLensTileLabel" text="Average Buy" />
+											<Label id="SoulLensBuyNote" class="SoulLensTileNote" text="" />
+										</Panel>
+									</Panel>
+									<Panel id="SoulLensShopTile" class="SoulLensTile">
+										<Panel class="ImportantStatContent">
+											<Label id="SoulLensShop" class="SoulLensTileValue" text="" />
+											<Label class="SoulLensTileLabel" text="Shop List" />
+											<Label id="SoulLensShopNote" class="SoulLensTileNote" text="" />
+										</Panel>
+									</Panel>
+									<Panel id="SoulLensSlTile" class="SoulLensTile">
+										<Panel class="ImportantStatContent">
+											<Label id="SoulLensSl" class="SoulLensTileValue" text="" />
+											<Label class="SoulLensTileLabel" text="Statlocker" />
+											<Label id="SoulLensSlNote" class="SoulLensTileNote" text="" />
+										</Panel>
+									</Panel>
+								</Panel>
 							</Panel>
 						</Panel>
 						<!-- soul-lens:end -->

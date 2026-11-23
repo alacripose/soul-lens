@@ -1,66 +1,82 @@
 # Soul Lens
 
-A single Deadlock mod: the game's own shop item card, with six rows under the
-item's own stat block — what the item costs per point of weapon power, per point
-of win probability added, and per percent of DPS, when the match usually buys it,
-and what the two recommendation sources say about it — its place in the shop's own
-recommended list, and Statlocker's rank and pick rate for the hero being played.
+A single Deadlock mod: the game's own shop item card, with a passive-style
+**Soul Lens** section under the item's stat block. The section's sentence names the
+hero and the headline; six tiles carry what the item costs per point of weapon
+power, per point of win probability added, and per percent of DPS, when the match
+usually buys it, and what the two recommendation sources say about it — its place in
+the shop's own recommended list, and Statlocker's rank and pick rate for the hero
+being played.
 
 It is one Panorama VPK. There is no server, no companion app and no overlay
 process: the mod replaces exactly one of the game's layouts,
 `panorama/layout/tooltips/citadel_tooltip_mod_details.xml` — the card the shop's
-item popup actually draws — and appends the strip inside it, so the stock tooltip
+item popup actually draws — and appends the section inside it, so the stock tooltip
 is still the thing drawing the card. The narrower hover layout is left untouched.
 Retail Panorama loads compiled assets, so the build runs the CSDK resource
 compiler and packs the `.vxml_c`/`.vjs_c`/`.vcss_c` output with Source2Viewer CLI.
 
-## What the strip says
+## What the passive section says
+
+The section is laid out like the card's own passive blocks: a `Soul Lens` header,
+one sentence for the shop's hero, then two columns of stat tiles. The header and
+summary borrow the card's `CooldownHeader`, `ActivePassiveLabel` and `ModInfoLabel`
+classes; the tiles use the card's `#00000060` stat-box ground.
 
 A worked example, Haze and Glass Cannon, from the catalogue this repository ships:
 
 ```
-wpa   +5.0% · 1277 souls/%
-buy   29:18
-sl    #10/168 · 47%
-shop  #3/9
+Across 212,423 recorded matches, this item adds +8.94% WPA for Haze at 716 souls per +1%, bought at 30:51.
+
++85%              +8.94%
+Weapon Power      WPA
+75 souls / +1%    716 souls / +1% · dl-api
+
++85.0%            30:51
+Standing DPS      Average Buy
+75 souls / +1%    measured for Haze
+
+#3/9              #69/168
+Shop List         Statlocker
+this shop         1.3% picked · statlocker
 ```
 
-`sl` is Statlocker's rank and pick rate for Haze, baked from the endpoint its own
-hero page calls; `shop` is the hovered item's place in the list the open shop is
-showing, read from the panel tree at hover time (the `#3/9` above is that list's
-shape, not a baked number).
+The shop tile's `#3/9` is the open list's shape at hover time, not a baked number.
+`sl` is Statlocker's rank and pick rate for the hero, baked from the endpoint its
+own hero page calls. The WPA and Statlocker notes name their source (`dl-api` or
+`statlocker`); the other notes name what the number measures.
 
-| Line | Where the number comes from |
-|---|---|
-| `+N% power` | the item's `BaseAttackDamagePercent` and `WeaponPower`, from the live build's item catalogue (`/v1/assets/items`) |
-| `souls / +1%` | the item's price divided by that percentage — the price is read from the hover card at the moment it is hovered, so a changed price shows immediately |
-| `+N% WPA` | the item's win rate for **this hero** minus the hero's own win rate, in percentage points, from the recorded wins and losses (`/v1/analytics/item-stats?hero_id=…` and `/v1/analytics/hero-stats`) |
-| `souls / +1%` (WPA) | the item's price divided by that WPA |
-| `+N% dps` | `(1 + power/100) × (1 + fire rate/100) − 1`, the standing weapon multiplier the item adds |
-| `souls / +1%` (dps) | the same division against the DPS percentage |
-| `buy ≈` | the measured purchase time for the hero on the shop header, from that hero's own rows; the global average, labelled `(average)`, when the hero has none |
-| `shop` `#N/M` | the hovered item's place in the shop's own recommended list (`#ShopModsRecommended`), read live from the panel tree; `not listed` when the open list does not name it |
-| `sl` `#N/M · P%` | Statlocker's per-hero ranking: the item's place in that hero's table and the share of that hero's analyzed matches that bought it (`/api/info/eternus-item-analysis/<hero_id>`) |
-| the right-hand tag | which source the number on that row came from: `dl-api` or `statlocker` |
+| Tile | What it shows | Where the number comes from |
+|---|---|---|
+| Weapon Power | `+N%` and `souls / +1%` | the item's `BaseAttackDamagePercent` and `WeaponPower`, from the live build's item catalogue (`/v1/assets/items`) |
+| WPA | `+N%` and `souls / +1%` | the item's win rate for **this hero** minus the hero's own win rate, in percentage points, from the recorded wins and losses (`/v1/analytics/item-stats?hero_id=…` and `/v1/analytics/hero-stats`) |
+| Standing DPS | `+N%` and `souls / +1%` | `(1 + power/100) × (1 + fire rate/100) − 1`, the standing weapon multiplier the item adds |
+| Average Buy | `m:ss` | the measured purchase time for the hero on the shop header, from that hero's own rows; the global average, noted `all matches`, when the hero has none |
+| Shop List | `#N/M` | the hovered item's place in the shop's own recommended list (`#ShopModsRecommended`), read live from the panel tree; `not listed` when the open list does not name it |
+| Statlocker | `#N/M` and `P% picked` | Statlocker's per-hero ranking: the item's place in that hero's table and the share of that hero's analyzed matches that bought it (`/api/info/eternus-item-analysis/<hero_id>`) |
+
+The `souls / +1%` figure is the item's price divided by that percentage. The price
+is read from the hover card at the moment it is hovered, so a changed price shows
+immediately.
 
 ### WPA is measured, not modelled
 
 `WPA = item win rate − that hero's win rate`, in percentage points, from the wins
 and losses the keyless analytics endpoint returns. It is not a causal estimate
-and it is labelled by its source so it is not mistaken for one. A row with fewer
-than `model.min_matches` matches (2,000) prints its count and refuses the figure
-— `WPA: 1,432 matches, under 2000` — and a negative delta prints
-`−0.4% WPA · no gain` with no souls ratio, because there is no gain to divide by.
+and its tile names the source so it is not mistaken for one. A tile with fewer
+than `model.min_matches` matches (2,000) prints its count and refuses the figure —
+`1,432 matches` over `under 2,000 · no WPA` — and a negative delta prints `−0.4%`
+over `no gain · dl-api`, with no souls ratio, because there is no gain to divide by.
 
 Statlocker is the authoritative source *when it answers*: with `STATLOCKER_API_KEY`
 set at bake time (or `--statlocker-file`), its WPA replaces the measured one for
-the items it names and the row is tagged `statlocker`. Without a key the measured
-value stands and the source line records the refusal; the mod never needs the key
+the items it names and the WPA tile is noted `statlocker`. Without a key the measured
+value stands and the tile records the refusal; the mod never needs the key
 to be useful.
 
-### The two recommendation rows are not blended
+### The two recommendation tiles are not blended
 
-`shop` and `sl` are separate rows because they are separate sources and they
+`shop` and `sl` are separate tiles because they are separate sources and they
 disagree, and a blended number would hide that:
 
 - `shop` is the game's own list: the hovered item's index in
@@ -76,13 +92,13 @@ disagree, and a blended number would hide that:
   but does need the page's request headers — a browser User-Agent plus the site as
   origin and referer; with a bare `soul-lens/1` User-Agent the same URL answers
   `401 Missing API key` (measured 2026-11-22). The ingest records `read`, `refused`
-  or `skipped`, and the strip prints `unavailable` when the source did not answer —
+  or `skipped`, and the tile prints `unavailable` when the source did not answer —
   never a neighbouring hero's row.
 
-The measured WPA keeps its own row and is never replaced by either source.
+The measured WPA keeps its own tile and is never replaced by either source.
 
-An item with no standing weapon terms — most spirit and vitality items — shows
-`no weapon power term` / `no standing dps term` instead of a zero. Its WPA row
+An item with no standing weapon terms — most spirit and vitality items — collapses
+the Weapon Power and Standing DPS tiles instead of printing a zero. Its WPA tile
 still prints, because the win/loss data covers every item.
 
 ## Install
@@ -150,9 +166,9 @@ looks current. Two pieces keep that honest:
   the first snapshot is kept.
 - `python tools/stamp_build.py` reads the installed `steam.inf` at install time
   (Panorama has no build API and no file access) and writes the build into
-  `panorama/scripts/soul_lens_build.js`. The strip draws terms only for that
+  `panorama/scripts/soul_lens_build.js`. The section draws terms only for that
   build: the current bake, or an archived snapshot for that build. Otherwise the
-  power row reads `no <build>` and the empty rows collapse.
+  Weapon Power tile reads `no <build>` and the empty tiles collapse.
 
 `install.ps1` stamps the build, reports whether its terms are baked, then builds.
 deadlock-api serves only the current build (`?client_version=6800` is a 404), so
@@ -198,10 +214,10 @@ a skip, never as a pass.
 
 | Path | Purpose |
 |---|---|
-| `panorama/layout/tooltips/citadel_tooltip_mod_details.xml` | the live details layout plus the strip and its two script includes |
-| `panorama/scripts/soul_lens.js` | reads the card and the open shop, fills the strip, labels each row, refuses unknown data |
+| `panorama/layout/tooltips/citadel_tooltip_mod_details.xml` | the live details layout plus the passive section and its script includes |
+| `panorama/scripts/soul_lens.js` | reads the card and the open shop, writes the section's sentence and six tiles, refuses unknown data |
 | `panorama/scripts/soul_lens_data.js` | generated catalogue the overlay reads |
-| `panorama/styles/soul_lens.css` | the strip's family styling |
+| `panorama/styles/soul_lens.css` | the section's passive header, summary and tile layout |
 | `tools/ingest.py` | item catalogue, per-hero WPA, purchase times, Statlocker rankings and live build → `data/` and the baked script |
 | `tools/statlocker.py` | reads Statlocker's per-hero ranking endpoint into rank, pick rate and buy time |
 | `tests/test_statlocker.py` | the parse path against the captured response |
@@ -228,13 +244,13 @@ a skip, never as a pass.
   hero and the list order from the open shop. The bake supplies the item terms,
   the recorded outcome data and the purchase times.
 - **No invented numbers.** A missing item, a missing term, a small sample, a
-  missing hero or a missing key is named in the strip, not filled.
+  missing hero or a missing key is named in the section, not filled.
 - **No network in the client.** The VPK carries the catalogue; the ingest is a
   build step that runs on this machine.
 - **No hero baseline damage.** DPS is a percentage of the current weapon, so a
   number does not depend on a base damage table that could drift from the game.
 - **WPA is a delta, not a model.** It is the measured win-rate difference; the
-  strip does not claim causality.
+  section does not claim causality.
 
 ## Evidence
 
@@ -250,16 +266,16 @@ a skip, never as a pass.
   floor and printed as refusals, from the keyless analytics endpoints.
 - `python -m unittest discover -s tests` — 43 tests, `tests/test_statlocker.py`'s nine
   of them against `tests/fixtures/statlocker-eternus-haze.json`.
-- `node tools/tests/test_soul_lens.js` — 41 checks, including the reused card's shop
-  place and statlocker rank, a header change under the same hovered item after 700
-  ticks, and a refused statlocker source reading `unavailable`.
+- `node tools/tests/test_soul_lens.js` — 54 checks, including the six tile ids, the
+  reused card's shop place and statlocker rank, a header change under the same
+  hovered item after 700 ticks, and a refused statlocker source reading `unavailable`.
 - `python tools/gate.py` — unit, harness, live, no-heredoc and shipped all pass.
 - Statlocker rankings: `python tools/ingest.py --from-cache` read 44 heroes, 7,372
   item rows (172-item tables, cohort `minRank=103`, 416,571 analyzed matches), 0
   refused; each hero's URL, cache file and SHA-256 is in `data/provenance.json`.
 - `docs/soul-lens-surface.html` draws all three cases from the shipped script:
-  the worked example with both ratios and both tags, a spirit item with its two
-  refusals and a live WPA, and an item the bake does not know.
+  the worked example with all six tiles, Slowing Hex in the screenshot's passive
+  shape, and an item the bake does not know collapsing the section.
 - The packed VPK (`tools/build_addon.py`, CSDK 13 compile + S2V) carries nine
   paths: the compiled details layout, three compiled scripts, the compiled
   stylesheet, and the raw `.js`/`.css` alongside them; `tools/verify_vpk.py`
@@ -267,13 +283,16 @@ a skip, never as a pass.
 - `install.ps1` end to end on this machine: stamp 6864, terms snapshot
   `blake2b:05fd3356…`, `OK: 5 compiled, 0 failed`, nine files packed, mount line
   present, installed VPK byte-identical to `dist/` (`sha256 a2a53ba8…`).
-- Witnessed in build 6864 with the native block: `wpa +5.0% · 1277 souls/%`,
-  `buy 29:18` under Ricochet's stat boxes (`data/shots/native6.jpg`).
+- The passive section is not yet witnessed in game: the browser witness is the
+  current proof. The prior raw-row shape was witnessed in build 6864 as
+  `wpa +5.0% · 1277 souls/%`, `buy 29:18` under Ricochet's stat boxes
+  (`data/shots/native6.jpg`).
 - A stamped build with no snapshot was witnessed refusing before that:
   `power no 9999`, dps collapsed, wpa still drawn
   (`data/shots/stale-terms-zoom6.jpg`).
-- Six rows witnessed together, Stalker at 1600 souls: `wpa +0.35% · 4.5k/1%`,
-  `buy 6:19`, `shop #37/156`, `sl #4/165 · 90%` (`data/shots/sixrows6.jpg`). The
+- The six-row strip was the shape before 2026-11-23; witnessed together, Stalker
+  at 1600 souls: `wpa +0.35% · 4.5k/1%`, `buy 6:19`, `shop #37/156`,
+  `sl #4/165 · 90%` (`data/shots/sixrows6.jpg`). The
   first install of those two rows drew neither: both were collapsed by the flag
   that decides whether a row is worth drawing, which was `!!refusal` — true only
   when the reader had *failed*. `data/probes/2026-11-22-row-hidden-on-success.md`

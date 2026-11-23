@@ -2,36 +2,34 @@
 
 ## Surface
 
-One strip inside the game's own shop item hover card. Not a window, not a
-tooltip of our own, not a second panel beside the shop. The player already has
-the card open; the strip is the last four lines of it.
+One passive-style section inside the game's own shop item hover card. Not a
+window, not a tooltip of our own, not a second panel beside the shop. The player
+already has the card open; the section is the last block of it.
 
 ## Direction
 
-The family web-dark register, at tooltip scale: near-black ground (`#0d0d0f`),
-one gold rule (`#c8a04a`), tracked uppercase micro-labels, and monospaced
-numerals so two items compare by eye without the digits moving. The card's own
-colours and type stay untouched above the rule — the strip reads as part of the
-tooltip rather than as a sticker on it.
+The card's own passive register: the game's 32px `offBlack&90` header, an italic
+half-opacity label, a `ModInfoLabel` sentence, and stat boxes on the card's
+`#00000060` ground. The card's colours, type and spacing stay untouched above the
+section — it reads as another passive block in the tooltip rather than as a
+sticker on it.
 
-The gold is the same attention colour as the family's pinned look; it is used
-once per strip, on the rule and the head, so it never competes with the item's
-own tier tag. Labels (`power`, `dps`) are muted; values are the bright ink; the
-source line is the faintest thing in the block because it is for when a number is
-questioned, not for the first read.
+The game's green (`deadlockGreen`) marks a gain, the card's ink marks a place or a
+time, and the refusal red marks a negative WPA. The tile note is the faintest line
+in the block because it is for when a number is questioned, not for the first read.
 
 ## States
 
-- **Reading** — the card is created before the game fills it, so the strip says
-  `reading the shop…` rather than showing an empty line.
-- **Reading found** — three rows (power, WPA, DPS) with gold values, a source tag
-  at the right of each, and the muted buy line.
-- **No term** — `no weapon power term` / `no standing dps term` in the muted
-  colour. This is a refusal, and it is styled like one.
-- **Unknown item** — `no stat line for this item`, with the build the bake was
-  made against in the source line.
-- **Source absent** — the source line names statlocker's refusal; the rest of the
-  strip still draws, because the Deadlock API numbers do not depend on it.
+- **Reading** — the card is created before the game fills it, so the section stays
+  collapsed rather than showing an empty header.
+- **Reading found** — a sentence naming the hero and the headline, then six tiles
+  with their values and one-line notes.
+- **No term** — the Weapon Power and Standing DPS tiles collapse. A missing term is
+  not a zero, so the section does not print one.
+- **Unknown item** — the whole section collapses, rather than drawing an empty
+  passive header.
+- **Source absent** — the tile names statlocker's refusal; the rest of the section
+  still draws, because the Deadlock API numbers do not depend on it.
 - **Block missing** — a different tooltip layout, or a mod conflict: the script
   logs once and leaves the card alone.
 
@@ -43,7 +41,7 @@ questioned, not for the first read.
   fractions; weapon power is shown as the integer the game's own tooltips use.
 - Buy time is `m:ss`, the game's own clock, not a minute count.
 - Ratios that would divide by zero are `null` in the data and a refusal in the
-  strip. There is no `∞` and no `0`.
+  section. There is no `∞` and no `0`.
 
 ## 2026-11-22 — the WPA row is the recommendation row
 
@@ -71,7 +69,27 @@ None is a zero, and none borrows a neighbour's figure.
 
 The placed item is the one the card names at the moment it is read, not the one it
 was created with, and the hero is the one the shop header names on that same read —
-which is why the strip re-renders on a slow tick as well as on a card change.
+which is why the section re-renders on a slow tick as well as on a card change.
+
+## 2026-11-23 — the stats are a passive block, not raw lines
+
+The six key/value rows were readable but not part of the card's language: they
+read as a debug strip under a native passive. The section now uses the same
+hierarchy the game uses for a passive: a 32px `offBlack&90` header with an italic
+half-opacity `ActivePassiveLabel`, a `ModInfoLabel` sentence that names the hero
+and the headline, and a two-column grid of stat boxes on the card's `#00000060`
+ground. The values keep their units and their source in the note line; a refusal
+is still a value, not a blank.
+
+The sentence is not decorative. It states the hero the numbers belong to, the
+matches they come from when the Deadlock API supplied them, the WPA and its
+souls-per-point price, and the measured buy time. A negative or refused WPA is a
+sentence too, so the section never looks like a passive with a missing effect.
+
+This supersedes the 2026-11-22 shape that deliberately had no title, no tags and
+no type of its own. That shape was a reaction to the gold-panel overlay; the
+answer to "it does not look like the card" is to use the card's passive classes,
+not to flatten the numbers into bare lines.
 
 ## 2026-11-22 — the copy is checked, not trusted
 

@@ -1,12 +1,12 @@
 // The Soul Lens harness: run the shipped script against a fake Panorama tree.
 //
-// The strip is card content now, so the behaviour that matters is small: fill the
-// six rows with real numbers from the source that owns each one, collapse a row
-// that has nothing to say, refuse a build with no terms snapshot, and never throw
-// into the game's own card.
+// The section is card content now, so the behaviour that matters is small: fill
+// the six tiles with real numbers from the source that owns each one, collapse a
+// tile that has nothing to say, refuse a build with no terms snapshot, and never
+// throw into the game's own card.
 //
 // The last block is the regression that matters most: the card is one panel reused
-// for every hover, and the two recommendation rows must follow the card's current
+// for every hover, and the two recommendation tiles must follow the card's current
 // item and the shop header's current hero — never the item or hero that was there
 // when the tick loop started.
 "use strict";
@@ -86,14 +86,28 @@ function tree(itemName, cost, hero, recommendNames) {
     name.text = itemName;
     const costLabel = new Panel("ItemCost", "", card);
     costLabel.text = String(cost);
+
     const lens = new Panel("SoulLens", "SoulLens", contents);
-    for (const [key, valueId] of [["power", "SoulLensWp"], ["wpa", "SoulLensWpa"],
-                                  ["dps", "SoulLensDps"], ["buy", "SoulLensBuy"],
-                                  ["shop", "SoulLensShop"], ["sl", "SoulLensSl"]]) {
-        const row = new Panel(valueId + "Row", "SoulLensRow", lens);
-        const label = new Panel("", "SoulLensKey", row);
-        label.text = key;
-        new Panel(valueId, "SoulLensValue", row);
+    const header = new Panel("SoulLensHeader", "SoulLensHeader", lens);
+    const head = new Panel("SoulLensHead", "ActivePassiveLabel", header);
+    head.text = "Soul Lens";
+    const body = new Panel("SoulLensBody", "SoulLensBody", lens);
+    new Panel("SoulLensSummary", "SoulLensSummary ModInfoLabel", body);
+    const grid = new Panel("SoulLensGrid", "SoulLensGrid", body);
+    for (const [valueId, label] of [
+        ["SoulLensWp", "Weapon Power"],
+        ["SoulLensWpa", "WPA"],
+        ["SoulLensDps", "Standing DPS"],
+        ["SoulLensBuy", "Average Buy"],
+        ["SoulLensShop", "Shop List"],
+        ["SoulLensSl", "Statlocker"],
+    ]) {
+        const tile = new Panel(valueId + "Tile", "SoulLensTile", grid);
+        const content = new Panel("", "ImportantStatContent", tile);
+        new Panel(valueId, "SoulLensTileValue", content);
+        const labelPanel = new Panel("", "SoulLensTileLabel", content);
+        labelPanel.text = label;
+        new Panel(valueId + "Note", "SoulLensTileNote", content);
     }
     return { root, lens };
 }
@@ -128,9 +142,22 @@ function load(panel, dataSource, liveBuild, ticks) {
     return { panel, queue };
 }
 
-function row(lens, id) { return lens.FindChildTraverse(id + "Row"); }
+function tile(lens, id) { return lens.FindChildTraverse(id + "Tile"); }
 function value(lens, id) { return lens.FindChildTraverse(id).text; }
-function shown(lens, id) { return !row(lens, id).HasClass("SoulLensHidden"); }
+function note(lens, id) { return lens.FindChildTraverse(id + "Note").text; }
+function shown(lens, id) { const found = tile(lens, id); return !!found && !found.HasClass("SoulLensHidden"); }
+function hidden(lens) { return lens.HasClass("SoulLensHidden"); }
+function summary(lens) { return lens.FindChildTraverse("SoulLensSummary").text; }
+
+function points(number) {
+    const digits = Math.abs(number) < 10 ? 2 : 1;
+    const sign = number > 0 ? "+" : (number < 0 ? "" : "+");
+    return sign + Number(number).toFixed(digits);
+}
+
+function commas(number) {
+    return String(number).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 let failures = 0;
 function check(name, condition, detail) {
@@ -141,15 +168,17 @@ function check(name, condition, detail) {
 const data = JSON.parse(fs.readFileSync(path.join(ROOT, "data/items.json"), "utf8"));
 const minMatches = data.model.min_matches;
 
-// Statlocker's own row, rendered the way the script renders it, so a test compares
+// Statlocker's own tile, rendered the way the script renders it, so a test compares
 // against the bake rather than against a number copied into this file.
-function slText(hero, itemKey) {
+function slValue(hero, itemKey) {
     const ranked = hero && hero.sl ? hero.sl[itemKey] : null;
-    if (!ranked) return null;
-    const pick = typeof ranked.pick === "number"
-        ? (ranked.pick < 10 ? ranked.pick.toFixed(1) : String(Math.round(ranked.pick)))
-        : null;
-    return "#" + ranked.rank + "/" + ranked.of + (pick === null ? "" : " \u00b7 " + pick + "%");
+    return ranked ? "#" + ranked.rank + "/" + ranked.of : null;
+}
+
+function slPick(hero, itemKey) {
+    const ranked = hero && hero.sl ? hero.sl[itemKey] : null;
+    if (!ranked || typeof ranked.pick !== "number") return null;
+    return (ranked.pick < 10 ? ranked.pick.toFixed(1) : String(Math.round(ranked.pick))) + "% picked";
 }
 
 const worked = (() => {
@@ -168,31 +197,38 @@ const worked = (() => {
     check("the bake has a worked example", worked !== null);
     const { root, lens } = tree(worked.item.name, worked.item.cost, worked.hero.name);
     load(root, data);
+    check("the passive has a header", value(lens, "SoulLensHead") === "Soul Lens", value(lens, "SoulLensHead"));
+    check("the section has six tiles", lens.FindChildrenWithClassTraverse("SoulLensTile").length === 6,
+        String(lens.FindChildrenWithClassTraverse("SoulLensTile").length));
     const wp = value(lens, "SoulLensWp");
-    check("the weapon row is a number, not a sentence", wp.includes("+" + worked.item.wp + "%"), wp);
-    check("the weapon row carries souls per point", wp.includes("/1%"), wp);
-    check("the weapon row is shown", shown(lens, "SoulLensWp"));
+    check("the weapon tile carries the item's term", wp === "+" + worked.item.wp + "%", wp);
+    check("the weapon tile carries souls per point", note(lens, "SoulLensWp").includes("souls / +1%"), note(lens, "SoulLensWp"));
+    check("the weapon tile is shown", shown(lens, "SoulLensWp"));
+    check("the weapon tile reads as a gain", tile(lens, "SoulLensWp").HasClass("SoulLensGain"));
     const wpa = value(lens, "SoulLensWpa");
-    check("the wpa row carries the measured points", wpa.includes("% · "), wpa);
-    check("the wpa ratio is cost over the measured wpa",
-        wpa.includes(String(Math.round(worked.item.cost / worked.measured.wpa))), wpa);
-    const dump = value(lens, "SoulLensDps");
-    check("the dps row carries souls per point", dump.includes("/1%"), dump);
+    check("the wpa tile carries the measured points", wpa === points(worked.measured.wpa) + "%", wpa);
+    check("the wpa tile note is cost over the measured wpa",
+        note(lens, "SoulLensWpa").includes(String(Math.round(worked.item.cost / worked.measured.wpa))),
+        note(lens, "SoulLensWpa"));
+    check("the wpa tile names its source", note(lens, "SoulLensWpa").includes("dl-api"), note(lens, "SoulLensWpa"));
+    const dump = note(lens, "SoulLensDps");
+    check("the dps tile carries souls per point", dump.includes("souls / +1%"), dump);
     const buy = value(lens, "SoulLensBuy");
-    check("the buy row is just the minute", /^\d+:\d\d$/.test(buy), buy);
-    check("there is no title row in the shipped tree",
-        lens.FindChildTraverse("SoulLensHead") === null);
+    check("the buy tile is just the minute", /^\d+:\d\d$/.test(buy), buy);
+    check("the summary is a sentence for this hero",
+        summary(lens).includes(worked.hero.name) && summary(lens).includes("souls per +1%") && summary(lens).endsWith("."),
+        summary(lens));
 }
 
 {
-    // A spirit item has no weapon or dps term: those rows collapse instead of
+    // A spirit item has no weapon or dps term: those tiles collapse instead of
     // printing "none".
     const spirit = Object.values(data.items).find((row) => row.wp === 0 && row.dps === 0 && row.cost);
     const { root, lens } = tree(spirit.name, spirit.cost);
     load(root, data);
     check("a missing weapon term is collapsed", !shown(lens, "SoulLensWp"));
     check("a missing dps term is collapsed", !shown(lens, "SoulLensDps"));
-    check("the wpa row still draws", shown(lens, "SoulLensWpa"), value(lens, "SoulLensWpa"));
+    check("the wpa tile still draws", shown(lens, "SoulLensWpa"), value(lens, "SoulLensWpa"));
 }
 
 {
@@ -200,6 +236,8 @@ const worked = (() => {
     load(root, data);
     check("an unknown hero is one phrase", value(lens, "SoulLensWpa") === "no hero rows",
         value(lens, "SoulLensWpa"));
+    check("an unknown hero says where the rows come from", note(lens, "SoulLensWpa").includes("this hero has no item rows"),
+        note(lens, "SoulLensWpa"));
     check("an unknown hero has no statlocker rank", value(lens, "SoulLensSl") === "no hero rows",
         value(lens, "SoulLensSl"));
 }
@@ -216,21 +254,25 @@ const worked = (() => {
     if (small) {
         const { root, lens } = tree(data.items[small.itemKey].name, data.items[small.itemKey].cost, small.hero.name);
         load(root, data);
-        check("a small sample prints count against floor",
-            value(lens, "SoulLensWpa").includes(small.measured.matches + "m<" + minMatches),
+        check("a small sample prints its count",
+            value(lens, "SoulLensWpa") === commas(small.measured.matches) + " matches",
             value(lens, "SoulLensWpa"));
+        check("a small sample refuses the figure against the floor",
+            note(lens, "SoulLensWpa").includes("under " + commas(minMatches)) && note(lens, "SoulLensWpa").includes("no WPA"),
+            note(lens, "SoulLensWpa"));
     }
 }
 
 {
-    // The installed build has no terms snapshot: the weapon and dps rows refuse
-    // with the build number, and the match-measured wpa row still draws.
+    // The installed build has no terms snapshot: the weapon and dps tiles refuse
+    // with the build number, and the match-measured wpa tile still draws.
     const { root, lens } = tree(worked.item.name, worked.item.cost, worked.hero.name);
     load(root, data, "9999");
     check("a stale build refuses the weapon terms", value(lens, "SoulLensWp") === "no 9999",
         value(lens, "SoulLensWp"));
-    check("the stale dps row is collapsed", !shown(lens, "SoulLensDps"));
-    check("the measured wpa row still draws", shown(lens, "SoulLensWpa"), value(lens, "SoulLensWpa"));
+    check("the stale refusal reads as a refusal", tile(lens, "SoulLensWp").HasClass("SoulLensRefused"));
+    check("the stale dps tile is collapsed", !shown(lens, "SoulLensDps"));
+    check("the measured wpa tile still draws", shown(lens, "SoulLensWpa"), value(lens, "SoulLensWpa"));
 }
 
 {
@@ -243,11 +285,11 @@ const worked = (() => {
     };
     const { root, lens } = tree(worked.item.name, worked.item.cost, worked.hero.name);
     load(root, archived, "6800");
-    check("an archived build draws its own number", value(lens, "SoulLensWp").includes("+12.5%"),
+    check("an archived build draws its own number", value(lens, "SoulLensWp") === "+12.5%",
         value(lens, "SoulLensWp"));
     check("the archived ratio uses cost",
-        value(lens, "SoulLensWp").includes(String(Math.round(worked.item.cost / 12.5))),
-        value(lens, "SoulLensWp"));
+        note(lens, "SoulLensWp").includes(String(Math.round(worked.item.cost / 12.5))),
+        note(lens, "SoulLensWp"));
 }
 
 {
@@ -260,9 +302,9 @@ const worked = (() => {
 {
     const { root, lens } = tree("An Item From A Later Patch", 3200);
     load(root, data);
-    check("an unknown item writes nothing", value(lens, "SoulLensWp") === ""
-        && !shown(lens, "SoulLensWp"));
-    check("an unknown item hides the buy row", !shown(lens, "SoulLensBuy"));
+    check("an unknown item collapses the section", hidden(lens));
+    check("an unknown item writes nothing", value(lens, "SoulLensWp") === "");
+    check("an unknown item hides the buy tile", !shown(lens, "SoulLensBuy"));
 }
 
 {
@@ -270,12 +312,14 @@ const worked = (() => {
     load(root, null);
     check("a missing data file is a refusal, not a crash",
         value(lens, "SoulLensWp") === "no data", value(lens, "SoulLensWp"));
+    check("a missing data file says so in the summary", summary(lens).includes("no baked data"), summary(lens));
 }
 
 {
     const { root, lens } = tree("", 0);
     load(root, data);
-    check("an unfilled card writes no row", value(lens, "SoulLensWp") === "");
+    check("an unfilled card writes no tile", value(lens, "SoulLensWp") === "");
+    check("an unfilled card leaves the section collapsed", hidden(lens));
 }
 
 // ---- the shop's own recommended list -------------------------------------------
@@ -283,11 +327,11 @@ const worked = (() => {
     const names = [worked.item.name, "Burst Fire", "Extra Spirit"];
     const { root, lens } = tree(worked.item.name, worked.item.cost, worked.hero.name, names);
     const { queue } = load(root, data, undefined, 3);
-    check("the shop row is the item's place in the shop's own list",
+    check("the shop tile is the item's place in the shop's own list",
         value(lens, "SoulLensShop") === "#1/3", value(lens, "SoulLensShop"));
-    // A reading is a report, not a refusal: the row must draw. Collapsing it on success
+    // A reading is a report, not a refusal: the tile must draw. Collapsing it on success
     // is the same blank card as having no source at all, which is what shipped once.
-    check("the shop row draws when it has a reading", shown(lens, "SoulLensShop"),
+    check("the shop tile draws when it has a reading", shown(lens, "SoulLensShop"),
         value(lens, "SoulLensShop"));
 
     // The same card, reused for an item further down that list: the running loop must
@@ -295,7 +339,7 @@ const worked = (() => {
     root.FindChildTraverse("ModName").text = "Extra Spirit";
     root.FindChildTraverse("ItemCost").text = "1000";
     for (let step = 0; step < 3 && queue.length; step += 1) queue.shift()();
-    check("the shop row follows the reused card", value(lens, "SoulLensShop") === "#3/3",
+    check("the shop tile follows the reused card", value(lens, "SoulLensShop") === "#3/3",
         value(lens, "SoulLensShop"));
 }
 
@@ -331,21 +375,24 @@ const rankedHero = (() => {
         const second = data.items[secondKey];
         const { root, lens } = tree(first.name, first.cost, rankedHero.hero.name);
         const { queue } = load(root, data, undefined, 3);
-        check("the statlocker row is the hero's own rank and pick rate",
-            value(lens, "SoulLensSl") === slText(rankedHero.hero, firstKey),
-            value(lens, "SoulLensSl") + " expected " + slText(rankedHero.hero, firstKey));
-        check("the statlocker row draws when it has a reading", shown(lens, "SoulLensSl"),
+        check("the statlocker tile is the hero's own rank",
+            value(lens, "SoulLensSl") === slValue(rankedHero.hero, firstKey),
+            value(lens, "SoulLensSl") + " expected " + slValue(rankedHero.hero, firstKey));
+        check("the statlocker tile carries the pick rate",
+            note(lens, "SoulLensSl").includes(slPick(rankedHero.hero, firstKey)),
+            note(lens, "SoulLensSl") + " expected " + slPick(rankedHero.hero, firstKey));
+        check("the statlocker tile draws when it has a reading", shown(lens, "SoulLensSl"),
             value(lens, "SoulLensSl"));
 
         // The card is reused for another item: the rank must be that item's, not the
-        // one the strip drew a moment ago.
+        // one the section drew a moment ago.
         const before = value(lens, "SoulLensSl");
         root.FindChildTraverse("ModName").text = second.name;
         root.FindChildTraverse("ItemCost").text = String(second.cost);
         for (let step = 0; step < 3 && queue.length; step += 1) queue.shift()();
         const after = value(lens, "SoulLensSl");
-        check("the statlocker row follows the reused card to the new item",
-            after === slText(rankedHero.hero, secondKey) && after !== before,
+        check("the statlocker tile follows the reused card to the new item",
+            after === slValue(rankedHero.hero, secondKey) && after !== before,
             before + " -> " + after);
     }
 }
@@ -363,17 +410,17 @@ const rankedHero = (() => {
         const item = data.items[itemKey];
         const { root, lens } = tree(item.name, item.cost, otherHero.name);
         const { queue } = load(root, data, undefined, 3);
-        const expected = slText(otherHero, itemKey);
-        check("the statlocker row is the header hero's, not the first hero's",
+        const expected = slValue(otherHero, itemKey);
+        check("the statlocker tile is the header hero's, not the first hero's",
             value(lens, "SoulLensSl") === (expected || "not listed"),
             value(lens, "SoulLensSl") + " expected " + (expected || "not listed"));
 
         // Now change the header under the running loop: after the slow re-render the
-        // row must be the new hero's.
+        // tile must be the new hero's.
         root.FindChildTraverse("HeroFavoritesHeaderLabel").text = rankedHero.hero.name + "'s Recommended Mods";
         for (let step = 0; step < 700 && queue.length; step += 1) queue.shift()();
         check("a hero change under the same hovered item re-reads the ranking",
-            value(lens, "SoulLensSl") === (slText(rankedHero.hero, itemKey) || "not listed"),
+            value(lens, "SoulLensSl") === (slValue(rankedHero.hero, itemKey) || "not listed"),
             value(lens, "SoulLensSl"));
     }
 }
@@ -391,7 +438,7 @@ const rankedHero = (() => {
 
 {
     // The old tick budget froze every card after it; the loop is unbounded now and the
-    // rows must still be this card's after 40 s of shop uptime (700 ticks at 0.1 s).
+    // tiles must still be this card's after 40 s of shop uptime (700 ticks at 0.1 s).
     const first = worked.item;
     const second = Object.values(data.items).find((item) =>
         item.souls_per_wp && item.name !== first.name && item.cost &&
@@ -403,17 +450,16 @@ const rankedHero = (() => {
     const beforeShop = value(lens, "SoulLensShop");
     const namePanel = root.FindChildTraverse("ModName");
     const costPanel = root.FindChildTraverse("ItemCost");
-    const secondKey = Object.keys(data.items).find((k) => data.items[k] === second);
     namePanel.text = second.name;
     costPanel.text = String(second.cost);
     for (let step = 0; step < 700 && queue.length; step += 1) queue.shift()();
     const after = value(lens, "SoulLensWp");
-    check("the strip keeps ticking past the old 40 s budget", after !== "" && after !== before,
+    check("the section keeps ticking past the old 40 s budget", after !== "" && after !== before,
         before + " -> " + after);
-    check("the strip follows the reused card to the new item",
-        Math.abs(second.wp - first.wp) < 1e-9 || after.includes(String(second.wp)),
+    check("the section follows the reused card to the new item",
+        Math.abs(second.wp - first.wp) < 1e-9 || after === "+" + second.wp + "%",
         after);
-    check("the shop row is the new item's after 40 s, not the first item's",
+    check("the shop tile is the new item's after 40 s, not the first item's",
         value(lens, "SoulLensShop") === "#2/3" && beforeShop === "#1/3",
         beforeShop + " -> " + value(lens, "SoulLensShop"));
 }
@@ -423,7 +469,7 @@ const rankedHero = (() => {
     new Panel("", "ModHoverContents", root);
     let threw = null;
     try { load(root, data); } catch (error) { threw = error; }
-    check("a layout without the block is untouched", threw === null, threw && String(threw));
+    check("a layout without the section is untouched", threw === null, threw && String(threw));
 }
 
 console.log(failures ? `harness: FAIL (${failures})` : "harness: PASS");

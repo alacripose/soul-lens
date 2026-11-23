@@ -1,4 +1,4 @@
-// Soul Lens: fill the strip under the built-in shop item hover card.
+// Soul Lens: fill the mod's passive section under the built-in shop item card.
 //
 // This file is included by the mod's copy of panorama/layout/tooltips/
 // citadel_tooltip_mod_details.xml, so it runs once per hover card and shares that
@@ -8,13 +8,13 @@
 //
 // What it reads, in order:
 //   1. the card itself (`#ModView`) - item name and price, live values
-//   2. window.SoulLensData, baked by tools/ingest.py - weapon terms, per-hero
+//   2. the SoulLensData global, baked by tools/ingest.py - weapon terms, per-hero
 //      measured WPA and purchase times, and Statlocker's per-hero ranking
 //   3. the open shop, when it can be found - the hero the header names, and the
 //      hovered item's place in the shop's own recommended list (`#ShopModsRecommended`)
 //
-// Every row carries the source of its number. A number that a source cannot
-// answer for is a sentence in the row, never a zero or a blank, and never another
+// Every tile carries the source of its number. A number that a source cannot
+// answer for is a sentence in the tile, never a zero or a blank, and never another
 // item's or another hero's number.
 (function () {
     "use strict";
@@ -155,11 +155,6 @@
         return m + ":" + (rest < 10 ? "0" + rest : String(rest));
     }
 
-    function souls(value) {
-        if (value === null || value === undefined || !isFinite(value)) return "";
-        return Math.round(Number(value)) + " souls";
-    }
-
     // WPA is a percentage-point figure; below one point the first decimal would
     // read as zero, so it keeps two.
     function points(value) {
@@ -168,6 +163,21 @@
         var digits = Math.abs(number) < 10 ? 2 : 1;
         var sign = number > 0 ? "+" : (number < 0 ? "" : "+");
         return sign + number.toFixed(digits);
+    }
+
+    function commas(value) {
+        return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function escapeHtml(value) {
+        return String(value == null ? "" : value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
+    function span(className, value) {
+        return '<span class="' + className + '">' + escapeHtml(value) + "</span>";
     }
 
     // A tooltip is its own popup tree, and the shop is not an ancestor of the card
@@ -244,27 +254,9 @@
         return { value: "#" + (index + 1) + "/" + names.length };
     }
 
-    function setRow(node, value, missing, tag, tagText, tagMissing) {
-        if (node) {
-            node.text = value;
-            try {
-                node.RemoveClass("SoulLensHave");
-                node.RemoveClass("SoulLensNone");
-                node.AddClass(missing ? "SoulLensNone" : "SoulLensHave");
-            } catch (e) {}
-        }
-        if (tag) {
-            tag.text = tagText || "";
-            try {
-                tag.RemoveClass("SoulLensTagNone");
-                if (tagMissing) tag.AddClass("SoulLensTagNone");
-            } catch (e) {}
-        }
-    }
-
-    // Which WPA the strip may print: statlocker's when its keyed answer carried the
-    // item, otherwise the measured one for this hero, and otherwise the reason the
-    // measured one is not there.
+    // Which WPA the section may print: statlocker's when its keyed answer carried
+    // the item, otherwise the measured one for this hero, and otherwise the reason
+    // the measured one is not there.
     function wpaReading(document, hero, heroRow, key, row, cost) {
         var sources = document.sources || {};
         var sl = sources["statlocker"] || {};
@@ -273,6 +265,7 @@
                 source: "sl",
                 value: row.wpa,
                 matches: null,
+                minimum: null,
                 ratio: cost && row.wpa > 0 ? Math.round(cost / row.wpa) : null,
             };
         }
@@ -288,27 +281,31 @@
         }
         var minimum = (document.model && document.model.min_matches) || 0;
         if (measured.matches < minimum) {
-            return { refusal: measured.matches + "m<" + minimum, source: "api" };
+            return { refusal: measured.matches + "m<" + minimum, source: "api",
+                     matches: measured.matches, minimum: minimum };
         }
         return {
             source: "dl-api",
             value: measured.wpa,
             matches: measured.matches,
+            minimum: minimum,
             ratio: cost && measured.wpa > 0 ? Math.round(cost / measured.wpa) : null,
         };
     }
 
-    // Terse by construction: no title, no tags, no sentence. Each row is a
-    // number or a one-word refusal, and a row with nothing to say is collapsed so
-    // an item with no weapon term does not print "none".
     // Souls paid per one percentage point of the effect, and the unit says so:
     // a small measured effect gives a large price per point (a bad-value signal),
     // which read as a payout when the unit was only implied.
     function ratio(cost, gain) {
         if (!cost || !gain || gain <= 0) return "";
+        return perPoint(cost, gain) + " souls / +1%";
+    }
+
+    function perPoint(cost, gain) {
+        if (!cost || !gain || gain <= 0) return "";
         var souls = cost / gain;
         var shown = souls >= 1000 ? (souls / 1000).toFixed(1) + "k" : String(Math.round(souls));
-        return shown + "/1%";
+        return shown;
     }
 
     // Statlocker's own per-hero ranking, baked by tools/ingest.py from the endpoint its
@@ -322,43 +319,93 @@
         if (!heroRow) return { refusal: "no hero rows" };
         var row = heroRow.sl ? heroRow.sl[key] : null;
         if (!row) return { refusal: "not listed" };
-        // A pick rate under ten percent keeps a decimal: rounding 1.27% to "1%" erases the
-        // difference between a niche item and one nobody buys.
-        var pick = typeof row.pick === "number"
-            ? (row.pick < 10 ? row.pick.toFixed(1) : String(Math.round(row.pick)))
-            : null;
-        return { value: "#" + row.rank + "/" + row.of + (pick === null ? "" : " \u00b7 " + pick + "%") };
+        return {
+            value: "#" + row.rank + "/" + row.of,
+            rank: row.rank,
+            of: row.of,
+            pick: typeof row.pick === "number" ? row.pick : null,
+        };
     }
 
-    function fill(rowPanel, valuePanel, value, has) {
-        if (valuePanel) valuePanel.text = value || "";
-        if (!rowPanel) return;
+    function pickText(value) {
+        if (typeof value !== "number") return "";
+        // A pick rate under ten percent keeps a decimal: rounding 1.27% to "1%" erases the
+        // difference between a niche item and one nobody buys.
+        return (value < 10 ? value.toFixed(1) : String(Math.round(value))) + "% picked";
+    }
+
+    function sourceName(source) {
+        return source === "sl" || source === "statlocker" ? "statlocker" : "dl-api";
+    }
+
+    // The passive section reads as one block: a header, a sentence that states the
+    // headline, and tiles that hold the numbers. A tile is collapsed only when it
+    // has nothing to say; a refusal is a tile value, never a blank.
+    function setTile(tile, valueNode, noteNode, value, note, has, tone) {
+        if (valueNode) valueNode.text = value || "";
+        if (noteNode) noteNode.text = note || "";
+        if (!tile) return;
         try {
-            if (rowPanel.SetHasClass) rowPanel.SetHasClass("SoulLensHidden", !has);
-            else if (has) rowPanel.RemoveClass("SoulLensHidden");
-            else rowPanel.AddClass("SoulLensHidden");
+            tile.SetHasClass("SoulLensHidden", !has);
+            tile.SetHasClass("SoulLensGain", tone === "gain");
+            tile.SetHasClass("SoulLensLoss", tone === "loss");
+            tile.SetHasClass("SoulLensRefused", tone === "refused");
         } catch (e) {}
     }
 
-    function render(block, card, document) {
-        var wpRow = byId(block, "SoulLensWpRow");
-        var wpaRow = byId(block, "SoulLensWpaRow");
-        var dpsRow = byId(block, "SoulLensDpsRow");
-        var buyRow = byId(block, "SoulLensBuyRow");
-        var shopRow = byId(block, "SoulLensShopRow");
-        var slRow = byId(block, "SoulLensSlRow");
+    function setBlock(block, visible) {
+        if (!block) return;
+        try { block.SetHasClass("SoulLensHidden", !visible); } catch (e) {}
+    }
 
+    function tileParts(block, id) {
+        return {
+            tile: byId(block, id + "Tile"),
+            value: byId(block, id),
+            note: byId(block, id + "Note"),
+        };
+    }
+
+    function clearTile(block, id) {
+        var parts = tileParts(block, id);
+        setTile(parts.tile, parts.value, parts.note, "", "", false, "");
+    }
+
+    // The sentence a native passive would carry: who the numbers are for, what the
+    // item does for them, and what one point costs. It never states a figure that
+    // the tile does not also carry.
+    function summaryLine(hero, reading, cost, buy) {
+        if (!hero) {
+            return "Open the shop as a hero to price this item. The tiles below read the item catalogue only.";
+        }
+        var name = span("highlight", hero);
+        if (reading.refusal) {
+            return "Soul Lens has no WPA for " + name + " here: " + span("isNegative", reading.refusal) + ".";
+        }
+        if (reading.value <= 0) {
+            return "For " + name + ", the measured WPA is " + span("isNegative", points(reading.value) + "%") +
+                ", so there is no souls-per-point reading.";
+        }
+        var basis = reading.source === "sl"
+            ? "Statlocker measures"
+            : "Across " + commas(reading.matches) + " recorded matches,";
+        var line = basis + " this item adds " + span("highlight", points(reading.value) + "% WPA") +
+            " for " + name + " at " + span("highlight", perPoint(cost, reading.value)) + " souls per +1%";
+        if (buy) line += ", bought at " + span("highlight", buy);
+        return line + ".";
+    }
+
+    function render(block, card, document) {
         var key = normalize(card.name);
         var row = key && document && document.items ? document.items[key] : null;
+        var ids = ["SoulLensWp", "SoulLensWpa", "SoulLensDps", "SoulLensBuy", "SoulLensShop", "SoulLensSl"];
+
         if (!row) {
-            fill(wpRow, byId(block, "SoulLensWp"), "", false);
-            fill(wpaRow, byId(block, "SoulLensWpa"), "", false);
-            fill(dpsRow, byId(block, "SoulLensDps"), "", false);
-            fill(buyRow, byId(block, "SoulLensBuy"), "", false);
-            fill(shopRow, byId(block, "SoulLensShop"), "", false);
-            fill(slRow, byId(block, "SoulLensSl"), "", false);
+            setBlock(block, false);
+            for (var i = 0; i < ids.length; i += 1) clearTile(block, ids[i]);
             return;
         }
+        setBlock(block, true);
 
         var live = liveBuild();
         var picked = termsFor(document, live);
@@ -366,53 +413,88 @@
         var termCost = term && term.cost ? term.cost : null;
         var cost = card.cost || termCost || row.cost;
 
+        var wp = tileParts(block, "SoulLensWp");
+        var dps = tileParts(block, "SoulLensDps");
         if (picked.refusal) {
-            fill(wpRow, byId(block, "SoulLensWp"), live ? "no " + live : "no build", true);
-            fill(dpsRow, byId(block, "SoulLensDps"), "", false);
+            setTile(wp.tile, wp.value, wp.note, live ? "no " + live : "no build",
+                "no terms snapshot", true, "refused");
+            setTile(dps.tile, dps.value, dps.note, "", "", false, "");
         } else {
-            fill(wpRow, byId(block, "SoulLensWp"),
-                term && term.wp > 0 ? "+" + term.wp + "% \u00b7 " + ratio(cost, term.wp) : "", term && term.wp > 0);
-            fill(dpsRow, byId(block, "SoulLensDps"),
-                term && term.dps > 0 ? "+" + term.dps.toFixed(1) + "% \u00b7 " + ratio(cost, term.dps) : "",
-                term && term.dps > 0);
+            var hasWp = !!(term && term.wp > 0);
+            setTile(wp.tile, wp.value, wp.note,
+                hasWp ? "+" + term.wp + "%" : "",
+                hasWp ? ratio(cost, term.wp) : "",
+                hasWp, "gain");
+            var hasDps = !!(term && term.dps > 0);
+            setTile(dps.tile, dps.value, dps.note,
+                hasDps ? "+" + term.dps.toFixed(1) + "%" : "",
+                hasDps ? ratio(cost, term.dps) : "",
+                hasDps, "gain");
         }
 
         var hero = heroName();
         var heroRow = hero && document.heroes ? document.heroes[normalize(hero)] : null;
         var reading = wpaReading(document, hero, heroRow, key, row, cost);
+        var wpa = tileParts(block, "SoulLensWpa");
         if (reading.refusal) {
-            fill(wpaRow, byId(block, "SoulLensWpa"), reading.refusal, true);
+            if (reading.matches !== null && reading.matches !== undefined) {
+                setTile(wpa.tile, wpa.value, wpa.note,
+                    commas(reading.matches) + " matches",
+                    "under " + commas(reading.minimum) + " · no WPA",
+                    true, "refused");
+            } else {
+                var why = reading.refusal === "no hero" ? "open the shop as a hero"
+                    : reading.refusal === "no hero rows" ? "this hero has no item rows"
+                    : reading.refusal === "no item row" ? "this item has no row"
+                    : "WPA";
+                setTile(wpa.tile, wpa.value, wpa.note, reading.refusal, why, true, "refused");
+            }
         } else if (reading.value <= 0) {
-            fill(wpaRow, byId(block, "SoulLensWpa"), points(reading.value) + "% \u00b7 no gain", true);
+            setTile(wpa.tile, wpa.value, wpa.note,
+                points(reading.value) + "%",
+                "no gain · " + sourceName(reading.source),
+                true, "loss");
         } else {
-            fill(wpaRow, byId(block, "SoulLensWpa"),
-                points(reading.value) + "% \u00b7 " + ratio(cost, reading.value), true);
+            setTile(wpa.tile, wpa.value, wpa.note,
+                points(reading.value) + "%",
+                ratio(cost, reading.value) + " · " + sourceName(reading.source),
+                true, "gain");
         }
 
         var heroBuy = heroRow && heroRow.buy ? heroRow.buy[key] : null;
         var minute = clock(heroBuy || row.avg_buy_s);
-        fill(buyRow, byId(block, "SoulLensBuy"), minute, !!minute);
+        var buy = tileParts(block, "SoulLensBuy");
+        setTile(buy.tile, buy.value, buy.note, minute,
+            heroBuy ? "measured for " + hero : "all matches", !!minute, "");
 
         // A throw in either recommendation read must not take the card with it, and it
-        // must not leave an empty row that reads as "no opinion": the row says which
+        // must not leave an empty tile that reads as "no opinion": the tile says which
         // reader refused.
         var shop = null;
         try { shop = shopRecommendation(card.name); } catch (e) {
             shop = { refusal: "shop err" };
             log("shop read refused: " + String(e));
         }
-        // A row is collapsed only when it has nothing to say. Hiding it on "no refusal"
-        // collapsed every row that succeeded, which is the report it exists to make.
-        fill(shopRow, byId(block, "SoulLensShop"), shop.refusal || shop.value,
-            !!(shop.refusal || shop.value));
+        var shopTile = tileParts(block, "SoulLensShop");
+        setTile(shopTile.tile, shopTile.value, shopTile.note,
+            shop.refusal || shop.value,
+            shop.refusal ? "shop list" : "this shop",
+            !!(shop.refusal || shop.value), shop.refusal ? "refused" : "");
 
         var locker = null;
         try { locker = slReading(document, hero, heroRow, key); } catch (e) {
             locker = { refusal: "sl err" };
             log("statlocker read refused: " + String(e));
         }
-        fill(slRow, byId(block, "SoulLensSl"), locker.refusal || locker.value,
-            !!(locker.refusal || locker.value));
+        var sl = tileParts(block, "SoulLensSl");
+        var picked2 = locker.refusal ? "" : pickText(locker.pick);
+        setTile(sl.tile, sl.value, sl.note,
+            locker.refusal || locker.value,
+            locker.refusal ? "statlocker" : (picked2 ? picked2 + " · statlocker" : "statlocker"),
+            !!(locker.refusal || locker.value), locker.refusal ? "refused" : "");
+
+        var summary = byId(block, "SoulLensSummary");
+        if (summary) summary.text = summaryLine(hero, reading, cost, minute);
     }
 
     function start() {
@@ -421,17 +503,22 @@
         if (!root) { log("no context panel; hover card untouched"); return; }
 
         var block = byId(root, "SoulLens");
-        if (!block) { log("no SoulLens block in the layout; hover card untouched"); return; }
+        if (!block) { log("no SoulLens section in the layout; hover card untouched"); return; }
 
         var document = data();
         if (!document) {
-            setRow(byId(block, "SoulLensWp"), "no data", true);
+            var summary = byId(block, "SoulLensSummary");
+            if (summary) summary.text = "Soul Lens has no baked data; the card is untouched.";
+            var ids = ["SoulLensWpa", "SoulLensDps", "SoulLensBuy", "SoulLensShop", "SoulLensSl"];
+            for (var i = 0; i < ids.length; i += 1) clearTile(block, ids[i]);
+            var wp = tileParts(block, "SoulLensWp");
+            setTile(wp.tile, wp.value, wp.note, "no data", "baked catalogue", true, "refused");
             log("data refused: no SoulLensData global");
             return;
         }
 
-        // State the reading row before the card is filled, so a strip that never
-        // receives a name says so instead of showing an empty line.
+        // State the reading section before the card is filled, so a section that never
+        // receives a name says so instead of showing an empty block.
         render(block, { name: "", cost: 0 }, document);
 
         var lastKey = "";
@@ -441,7 +528,7 @@
                 var card = readCard(root);
                 var key = normalize(card.name) + "|" + card.cost;
                 // The card is filled after it is created, so the first few ticks see
-                // an empty name; once it holds a name the strip is written, and it is
+                // an empty name; once it holds a name the section is written, and it is
                 // rewritten only when the card is reused for another item. The slow
                 // re-render catches the one case the card cannot: the same item hovered
                 // across a hero change (a new match's shop), which must not keep the
@@ -452,7 +539,7 @@
                 }
                 ticks += 1;
                 // The card is one panel reused for every hover and lives as long as the
-                // tooltip, so this loop is not bounded: a fixed budget froze the strip on
+                // tooltip, so this loop is not bounded: a fixed budget froze the section on
                 // whichever item was hovered when the budget ran out.
                 $.Schedule(0.1, tick);
             } catch (e) {
