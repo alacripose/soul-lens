@@ -500,19 +500,24 @@
         // section uses the same split: four visible tiles keep the 2x2 shape, while
         // three, five or six use the 3-up row. Counting the tiles that survived the
         // render is the only reliable source: a refusal is still a visible tile.
+        var visibleTiles = 0;
+        for (var t = 0; t < ids.length; t += 1) {
+            var parts = tileParts(block, ids[t]);
+            try {
+                if (parts.tile && !parts.tile.HasClass("SoulLensHidden")) visibleTiles += 1;
+            } catch (e) {}
+        }
+        var threeUp = visibleTiles === 3 || visibleTiles === 5 || visibleTiles === 6;
         var grid = byId(block, "SoulLensGrid");
         if (grid) {
-            var visibleTiles = 0;
-            for (var t = 0; t < ids.length; t += 1) {
-                var parts = tileParts(block, ids[t]);
-                try {
-                    if (parts.tile && !parts.tile.HasClass("SoulLensHidden")) visibleTiles += 1;
-                } catch (e) {}
-            }
-            try {
-                grid.SetHasClass("SoulLensThreeUp",
-                    visibleTiles === 3 || visibleTiles === 5 || visibleTiles === 6);
-            } catch (e) {}
+            try { grid.SetHasClass("SoulLensThreeUp", threeUp); } catch (e) {}
+        }
+        // The width rides on the tile itself: a compound grid selector did not apply
+        // in the game, while SetHasClass on the tile is the same mechanism the
+        // hidden and tone classes already use.
+        for (var u = 0; u < ids.length; u += 1) {
+            var upTile = tileParts(block, ids[u]).tile;
+            try { if (upTile) upTile.SetHasClass("SoulLensThreeUpTile", threeUp); } catch (e) {}
         }
     }
 

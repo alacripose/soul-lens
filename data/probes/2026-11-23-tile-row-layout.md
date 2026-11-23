@@ -35,10 +35,13 @@ fighting that layout instead of using its grouping.
 - The tile's padding moved to `.SoulLensTile .ImportantStatContent`, so `49%` (and
   `32.5%`) is the whole box and two or three fit without overflow.
 - `soul_lens.js` counts the tiles that survived the render and sets
-  `SoulLensThreeUp` for three, five or six visible tiles; four stay 2x2. Refusals
-  count as visible because the tile is still shown.
-- `.SoulLensGrid.SoulLensThreeUp .SoulLensTile` is `width: 32.5%`, matching the
-  card's 3-up important-attribute row; the default stays `49%`.
+  `SoulLensThreeUpTile` on each tile for three, five or six visible tiles; four
+  stay 2x2. Refusals count as visible because the tile is still shown.
+- `.SoulLensThreeUpTile` is `width: 32.5%`, matching the card's 3-up
+  important-attribute row; the default stays `49%`. The grid also carries
+  `SoulLensThreeUp`, but the width rides on the tile: the first v0.2.1 build used
+  `.SoulLensGrid.SoulLensThreeUp .SoulLensTile`, and that compound grid selector
+  did not apply in the game, so five and six tiles stayed two across.
 - The grid gained `id="SoulLensGrid"` so the script can set that class.
 
 ## Measured
@@ -48,7 +51,7 @@ fighting that layout instead of using its grouping.
 - `node tools/tests/test_soul_lens.js`: PASS, including “four visible tiles stay
   two across” and “six visible tiles use three across”.
 - `tools/build_addon.py`: `OK: 5 compiled, 0 failed`; 9 files packed;
-  2,998,251 bytes; sha256 `bafbf5dc40ff3be2c1ef1cfa796f65450ed4a2c98cd89f70008d1773bfa252cd`.
+  2,998,969 bytes; sha256 `2fbf83a649f0fcbd1245636bcb53061103b515b18be8993a7a3b2ccd97cd8b6f`.
 - `tools/verify_vpk.py`: every required path mounted. The compiled stylesheet
   carries `.SoulLensGrid.SoulLensThreeUp .SoulLensTile { width: 32.5%; }` and the
   inner `padding: 5px 6px 6px 6px`.
@@ -64,7 +67,7 @@ Copy-Item : The process cannot access the file
 ```
 
 After the game closed, the retry succeeded. The installed archive is byte-identical
-to `dist/`: 2,998,251 bytes, sha256
-`bafbf5dc40ff3be2c1ef1cfa796f65450ed4a2c98cd89f70008d1773bfa252cd`. The two
-screenshots are the old build; the fixed row is installed and the next in-game
-hover is the witness.
+to `dist/`: 2,998,969 bytes, sha256
+`2fbf83a649f0fcbd1245636bcb53061103b515b18be8993a7a3b2ccd97cd8b6f`. The two
+screenshots are the v0.2.1 two-across build; this build is installed and the next
+in-game hover is the witness for the three-up row.
